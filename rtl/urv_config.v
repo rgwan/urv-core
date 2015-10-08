@@ -24,4 +24,5 @@
 // GENERIC - Generic, HW-independent
 
 `define URV_PLATFORM_SPARTAN6 1
+//`define URV_PLATFORM_ALTERA 1
 

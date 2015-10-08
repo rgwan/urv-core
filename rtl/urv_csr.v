@@ -98,7 +98,7 @@ module urv_csr
 
       
       for (i=0;i<32;i=i+1) 
-	begin
+	begin : gen_csr_bits
 
 	   always@*
 	     case(d_fun_i) // synthesis full_case parallel_case

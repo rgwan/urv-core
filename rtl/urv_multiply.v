@@ -136,13 +136,13 @@ module urv_mult18x18
 			.clken (!stall_i),
 			.sum (1'b0));
    defparam
-     lpm_mult_component.lpm_hint = "DEDICATED_MULTIPLIER_CIRCUITRY=YES,MAXIMIZE_SPEED=5",
-     lpm_mult_component.lpm_pipeline = 1,
-     lpm_mult_component.lpm_representation = "SIGNED",
-     lpm_mult_component.lpm_type = "LPM_MULT",
-     lpm_mult_component.lpm_widtha = 18,
-     lpm_mult_component.lpm_widthb = 18,
-     lpm_mult_component.lpm_widthp = 36;
+     multiplier.lpm_hint = "DEDICATED_MULTIPLIER_CIRCUITRY=YES,MAXIMIZE_SPEED=5",
+     multiplier.lpm_pipeline = 1,
+     multiplier.lpm_representation = "SIGNED",
+     multiplier.lpm_type = "LPM_MULT",
+     multiplier.lpm_widtha = 18,
+     multiplier.lpm_widthb = 18,
+     multiplier.lpm_widthp = 36;
 
 endmodule // urv_mult18x18
 

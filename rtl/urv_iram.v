@@ -127,7 +127,12 @@ module urv_iram
  	    `RAM_INST(16K_6, RAMB16_S4_S4, 13:2, 27:24, 3)
 	    `RAM_INST(16K_7, RAMB16_S4_S4, 13:2, 31:28, 3)
 	 end else begin
-	    $fatal("Unsupported Spartan-6 IRAM size: %d", g_size);
+	    initial begin
+	       $error("Unsupported Spartan-6 IRAM size: %d", g_size);
+	       $stop;
+	    end
+	    
+	    
 	 end // else: !if(g_size == 16384)
 	 
 	 
@@ -188,7 +193,8 @@ module urv_iram
 
    
    
-   integer 		     f, addr, data;
+   integer 		     f, addr;
+   reg[31:0] data;
    reg [8*20-1:0]	     cmd;
    
    
@@ -212,7 +218,10 @@ module urv_iram
               $fscanf(f,"%s %08x %08x", cmd,addr,data);
               if(cmd == "write")
 		begin
-                   mem[addr % g_size] = data;
+                   mem[addr % g_size][7:0] = data[31:24];
+                   mem[addr % g_size][15:8] = data[23:16];
+                   mem[addr % g_size][23:16] = data[15:8];
+                   mem[addr % g_size][31:24] = data[7:0];
 		end
            end
       end // if (g_simulation && g_init_file != "")
@@ -327,7 +336,7 @@ module urv_iram
     output [31:0] qb_o
     );
 
-   localparam g_addr_width = $clogb2(g_size);
+   localparam g_addr_width = (g_size==65536?14:0);
       
    	altsyncram
 	  ram (
@@ -355,36 +364,36 @@ module urv_iram
 				.rden_a (1'b1),
 				.rden_b (1'b1));
 	defparam
-		altsyncram_component.address_reg_b = "CLOCK0",
-		altsyncram_component.byteena_reg_b = "CLOCK0",
-		altsyncram_component.byte_size = 8,
-		altsyncram_component.clock_enable_input_a = "BYPASS",
-		altsyncram_component.clock_enable_input_b = "BYPASS",
-		altsyncram_component.clock_enable_output_a = "BYPASS",
-		altsyncram_component.clock_enable_output_b = "BYPASS",
-		altsyncram_component.indata_reg_b = "CLOCK0",
-		altsyncram_component.init_file = g_init_file,
-		altsyncram_component.intended_device_family = "Cyclone IV E",
-		altsyncram_component.lpm_type = "altsyncram",
-		altsyncram_component.numwords_a = 16384,
-		altsyncram_component.numwords_b = 16384,
-		altsyncram_component.operation_mode = "BIDIR_DUAL_PORT",
-		altsyncram_component.outdata_aclr_a = "NONE",
-		altsyncram_component.outdata_aclr_b = "NONE",
-		altsyncram_component.outdata_reg_a = "UNREGISTERED",
-		altsyncram_component.outdata_reg_b = "UNREGISTERED",
-		altsyncram_component.power_up_uninitialized = "FALSE",
-		altsyncram_component.ram_block_type = "M9K",
-		altsyncram_component.read_during_write_mode_mixed_ports = "DONT_CARE",
-		altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_WITH_NBE_READ",
-		altsyncram_component.read_during_write_mode_port_b = "NEW_DATA_WITH_NBE_READ",
-		altsyncram_component.widthad_a = 16,
-		altsyncram_component.widthad_b = 16,
-		altsyncram_component.width_a = 32,
-		altsyncram_component.width_b = 32,
-		altsyncram_component.width_byteena_a = 4,
-		altsyncram_component.width_byteena_b = 4,
-		altsyncram_component.wrcontrol_wraddress_reg_b = "CLOCK0";
+		ram.address_reg_b = "CLOCK0",
+		ram.byteena_reg_b = "CLOCK0",
+		ram.byte_size = 8,
+		ram.clock_enable_input_a = "BYPASS",
+		ram.clock_enable_input_b = "BYPASS",
+		ram.clock_enable_output_a = "BYPASS",
+		ram.clock_enable_output_b = "BYPASS",
+		ram.indata_reg_b = "CLOCK0",
+		ram.init_file = g_init_file,
+		ram.intended_device_family = "Cyclone IV E",
+		ram.lpm_type = "altsyncram",
+		ram.numwords_a = 16384,
+		ram.numwords_b = 16384,
+		ram.operation_mode = "BIDIR_DUAL_PORT",
+		ram.outdata_aclr_a = "NONE",
+		ram.outdata_aclr_b = "NONE",
+		ram.outdata_reg_a = "UNREGISTERED",
+		ram.outdata_reg_b = "UNREGISTERED",
+		ram.power_up_uninitialized = "FALSE",
+		ram.ram_block_type = "M9K",
+		ram.read_during_write_mode_mixed_ports = "DONT_CARE",
+		ram.read_during_write_mode_port_a = "NEW_DATA_WITH_NBE_READ",
+		ram.read_during_write_mode_port_b = "NEW_DATA_WITH_NBE_READ",
+		ram.widthad_a = 14,
+		ram.widthad_b = 14,
+		ram.width_a = 32,
+		ram.width_b = 32,
+		ram.width_byteena_a = 4,
+		ram.width_byteena_b = 4,
+		ram.wrcontrol_wraddress_reg_b = "CLOCK0";
 
 
 
