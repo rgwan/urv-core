@@ -125,7 +125,7 @@ module urv_regfile
        begin
           rs1_bypass_w <= 0;
 	  rs2_bypass_w <= 0;
-       end else begin
+       end else if(!d_stall_i) begin
 	  rs1_bypass_w <= write && (rf_rs1_i == w_rd_i);
 	  rs2_bypass_w <= write && (rf_rs2_i == w_rd_i);
        end
