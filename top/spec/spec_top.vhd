@@ -1,7 +1,8 @@
 -- 
--- DSI Shield
--- Copyright (C) 2013-2014 twl <twlostow@printf.cc>
---
+-- uRV - a tiny and dumb RISC-V core
+-- Copyright (c) 2015 CERN
+-- Author: Tomasz Włostowski <tomasz.wlostowski@cern.ch>
+
 -- This library is free software; you can redistribute it and/or
 -- modify it under the terms of the GNU Lesser General Public
 -- License as published by the Free Software Foundation; either
@@ -30,8 +31,6 @@ use work.wishbone_pkg.all;
 
 library unisim;
 use unisim.vcomponents.all;
-
-
 
 entity spec_top is
   generic (
