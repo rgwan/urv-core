@@ -78,6 +78,25 @@ module urv_iram
 	     .WEB(web_i & bweb_i[range_bw]) \
 	    );
 
+`define RAM_INST_MUXED(id, entity, range_a, range_d, range_bw, qa_def, qb_def, ena, enb) \
+	 entity RV_IRAM_BLK_``id \
+	    ( \
+	     .CLKA(clk_i), \
+	     .CLKB(clk_i), \
+	     .ADDRA(aa_i[range_a]), \
+	     .ADDRB(ab_i[range_a]), \
+	     .DOA(qa_def[range_d]), \
+	     .DOB(qb_def[range_d]), \
+	     .DIA(da_i[range_d]), \
+	     .DIB(db_i[range_d]), \
+	     .SSRA(1'b0), \
+	     .SSRB(1'b0), \
+	     .ENA((ena) & ena_i), \
+	     .ENB((enb) & enb_i), \
+	     .WEA((ena) & wea_i & bwea_i[range_bw]), \
+	     .WEB((enb) & web_i & bweb_i[range_bw]) \
+	    );
+
    
    
    generate 
@@ -116,8 +135,38 @@ module urv_iram
 	    `RAM_INST(64K_30, RAMB16_S1_S1, 15:2, 30, 3)
 	    `RAM_INST(64K_31, RAMB16_S1_S1, 15:2, 31, 3)
 	 end // if (g_size == 65536)
+	 else if(g_size == 32768) begin
+	    wire[31:0] qa_h, qb_h, qa_l, qb_l;
+	    reg        a14a_d, a14b_d;
+	    
+	    `RAM_INST_MUXED(32K_H0, RAMB16_S4_S4, 13:2, 3:0, 0, qa_h, qb_h, aa_i[14], ab_i[14])
+	    `RAM_INST_MUXED(32K_H1, RAMB16_S4_S4, 13:2, 7:4, 0, qa_h, qb_h, aa_i[14], ab_i[14])
+	    `RAM_INST_MUXED(32K_H2, RAMB16_S4_S4, 13:2, 11:8, 1, qa_h, qb_h, aa_i[14], ab_i[14])
+	    `RAM_INST_MUXED(32K_H3, RAMB16_S4_S4, 13:2, 15:12, 1, qa_h, qb_h, aa_i[14], ab_i[14])
+	    `RAM_INST_MUXED(32K_H4, RAMB16_S4_S4, 13:2, 19:16, 2, qa_h, qb_h, aa_i[14], ab_i[14])
+	    `RAM_INST_MUXED(32K_H5, RAMB16_S4_S4, 13:2, 23:20, 2, qa_h, qb_h, aa_i[14], ab_i[14])
+ 	    `RAM_INST_MUXED(32K_H6, RAMB16_S4_S4, 13:2, 27:24, 3, qa_h, qb_h, aa_i[14], ab_i[14])
+	    `RAM_INST_MUXED(32K_H7, RAMB16_S4_S4, 13:2, 31:28, 3, qa_h, qb_h, aa_i[14], ab_i[14])
+	 
+	    `RAM_INST_MUXED(32K_L0, RAMB16_S4_S4, 13:2, 3:0, 0, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+	    `RAM_INST_MUXED(32K_L1, RAMB16_S4_S4, 13:2, 7:4, 0, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+	    `RAM_INST_MUXED(32K_L2, RAMB16_S4_S4, 13:2, 11:8, 1, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+	    `RAM_INST_MUXED(32K_L3, RAMB16_S4_S4, 13:2, 15:12, 1, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+	    `RAM_INST_MUXED(32K_L4, RAMB16_S4_S4, 13:2, 19:16, 2, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+	    `RAM_INST_MUXED(32K_L5, RAMB16_S4_S4, 13:2, 23:20, 2, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+ 	    `RAM_INST_MUXED(32K_L6, RAMB16_S4_S4, 13:2, 27:24, 3, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
+	    `RAM_INST_MUXED(32K_L7, RAMB16_S4_S4, 13:2, 31:28, 3, qa_l, qb_l, ~aa_i[14], ~ab_i[14])
 
-	 else if(g_size == 16384) begin
+	    always@(posedge clk_i)
+	      begin
+		   a14a_d <= aa_i[14];
+		   a14b_d <= ab_i[14];
+	      end
+
+	    assign qa_o = a14a_d ? qa_h : qa_l;
+	    assign qb_o = a14b_d ? qb_h : qb_l;
+	    
+	 end else if(g_size == 16384) begin
 	    `RAM_INST(16K_0, RAMB16_S4_S4, 13:2, 3:0, 0)
 	    `RAM_INST(16K_1, RAMB16_S4_S4, 13:2, 7:4, 0)
 	    `RAM_INST(16K_2, RAMB16_S4_S4, 13:2, 11:8, 1)
@@ -201,8 +250,12 @@ module urv_iram
    
    initial begin
       if(g_simulation && g_init_file != "") begin : init_ram_contents
+	 $display("Initializing RAM contents from %s", g_init_file);
+	 
 	 f = $fopen(g_init_file,"r");
 
+
+	 
 	 if( f == 0)
 	   begin
 	      $error("can't open: %s", g_init_file);
