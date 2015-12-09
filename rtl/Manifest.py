@@ -14,4 +14,3 @@ files = [ "urv_cpu.v",
           "urv_exceptions.v",
           "urv_iram.v",
           "xurv_core.vhd" ];
-#	  "../sim/rv_icache_model.sv"];
