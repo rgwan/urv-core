@@ -89,7 +89,29 @@ endmodule // urv_mult18x18
 `endif //  `ifdef PLATFORM_SPARTAN6
 
 
-`ifdef URV_PLATFORM_GENERIC
+`ifdef URV_PLATFORM_GENERIC 
+module urv_mult18x18
+  (
+   input 	 clk_i,
+   input 	 rst_i,
+   
+   input 	 stall_i,
+   
+   input [17:0]  x_i,
+   input [17:0]  y_i,
+
+   output reg [35:0] q_o
+   );
+
+
+   always@(posedge clk_i)
+     if(!stall_i)
+       q_o <= x_i * y_i;
+   
+endmodule // urv_mult18x18
+`endif //  `ifdef URV_PLATFORM_GENERIC
+
+`ifdef URV_PLATFORM_IVERILOG
 module urv_mult18x18
   (
    input 	 clk_i,

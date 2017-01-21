@@ -1,20 +1,28 @@
 # and don't touch the rest unless you know what you're doing.
-CROSS_COMPILE ?= /opt/gcc-riscv-5.2.0/bin/riscv64-unknown-elf-
+WINDOWS ?=
 
-CC =		$(CROSS_COMPILE)gcc
-LD =		$(CROSS_COMPILE)ld
-OBJDUMP =	$(CROSS_COMPILE)objdump
-OBJCOPY =	$(CROSS_COMPILE)objcopy
-SIZE =		$(CROSS_COMPILE)size
+CROSS_COMPILE ?= /opt/riscv32i/bin/riscv32-unknown-elf-
 
-ARCH = RV32IM
+ifdef WINE
+CC =	wine	$(CROSS_COMPILE)gcc$(WINDOWS)
+LD =	wine	$(CROSS_COMPILE)ld$(WINDOWS)
+OBJDUMP =wine	$(CROSS_COMPILE)objdump$(WINDOWS)
+OBJCOPY =wine	$(CROSS_COMPILE)objcopy$(WINDOWS)
+SIZE =	wine	$(CROSS_COMPILE)size$(WINDOWS)
+else
+CC =            $(CROSS_COMPILE)gcc$(WINDOWS)
+LD =            $(CROSS_COMPILE)ld$(WINDOWS)
+OBJDUMP =       $(CROSS_COMPILE)objdump$(WINDOWS)
+OBJCOPY =       $(CROSS_COMPILE)objcopy$(WINDOWS)
+SIZE =          $(CROSS_COMPILE)size$(WINDOWS)
 
-CFLAGS = -g  -m32  -O2  -msoft-float -march=$(ARCH)  -I. -I../common -ffunction-sections -fdata-sections -DFLAGS_STR="\"\"" -I../coremark_v1.0/barebones -I../coremark_v1.0
-OBJS = ../common/crtuser.o main.o ../common/uart.o ../common/printf.o ../common/vsprintf-xint.o \
-../coremark_v1.0/core_list_join.o  ../coremark_v1.0/core_matrix.o  ../coremark_v1.0/core_state.o  ../coremark_v1.0/barebones/cvt.o \
-../coremark_v1.0/core_main.o ../coremark_v1.0/barebones/core_portme.o ../coremark_v1.0/core_util.o ../coremark_v1.0/barebones/ee_printf.o ../coremark_v1.0/fmod.o
+endif
 
-LDS = ../common/user.ld
+ARCH = RV32I
+
+CFLAGS = -g  -m32  -O2  -msoft-float -march=$(ARCH)  -I. -I../common -ffunction-sections -fdata-sections 
+OBJS = crt0.o main.o
+LDS = ram.ld
 OUTPUT=hello
 
 
@@ -30,4 +38,4 @@ clean:
 	rm -f $(OUTPUT).elf $(OUTPUT).bin $(OBJS)
 
 %.o:	%.S
-	${CC} -c -m32 -march=RV32IM $^ -o $@
+	${CC} -c -m32 -march=$(ARCH) $^ -o $@

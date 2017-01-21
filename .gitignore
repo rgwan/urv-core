@@ -1,0 +1,6 @@
+*.run
+*~
+*.vcd
+*.ram
+*.o
+disasm.S
