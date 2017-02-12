@@ -361,7 +361,7 @@ module urv_iram
 	 
 	// synthesis translate_on
 
-      end // else: !if(!g_simulation)
+      endmodule // else: !if(!g_simulation)
    
 `endif
 

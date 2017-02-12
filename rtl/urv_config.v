@@ -23,6 +23,7 @@
 // SPARTAN6 - Xilinx Spartan-6 FPGA
 // GENERIC - Generic, HW-independent
 
-`define URV_PLATFORM_SPARTAN6 1
+//`define URV_PLATFORM_SPARTAN6 1
 //`define URV_PLATFORM_ALTERA 1
 
+`define URV_PLATFORM_GENERIC 1

@@ -1,0 +1,10 @@
+*.run
+*~
+*.vcd
+*.ram
+*.o
+disasm.S
+*.hex
+*.elf
+
+*.map
