@@ -128,7 +128,8 @@ module urv_cpu
    wire  	 rf_bypass_rd_write = rf_rd_write && !x2w_load; // multiply/shift too?
    
    // misc stuff
-   wire [39:0] 	 csr_time, csr_cycles;
+   wire [39:0] 	 csr_time;
+   wire [63:0]    csr_cycles;
    
    urv_fetch fetch
      (

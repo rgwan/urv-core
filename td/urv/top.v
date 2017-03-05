@@ -89,7 +89,7 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
     .clka(clk_i),
    .cea(memory_sel),
    .ocea(1'b1),
-   .wea(dm_data_select[0] && !io_sel && dm_write),
+   .wea(dm_data_select[0] && dm_write && memory_sel),
    .rsta(!rst));
       mem_ml sysmem_ml_d(.doa(memory_do[15:8]),
    .addra(dm_addr[11:2]),
@@ -97,7 +97,7 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
     .clka(clk_i),
    .cea(memory_sel),
    .ocea(1'b1),
-   .wea(dm_data_select[1] && !io_sel && dm_write),
+   .wea(dm_data_select[1]  && dm_write && memory_sel),
    .rsta(!rst));
       mem_mh sysmem_mh_d(.doa(memory_do[23:16]),
    .addra(dm_addr[11:2]),
@@ -105,7 +105,7 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
     .clka(clk_i),
    .cea(memory_sel),
    .ocea(1'b1),
-   .wea(dm_data_select[2] && !io_sel && dm_write),
+   .wea(dm_data_select[2] && dm_write && memory_sel),
    .rsta(!rst));
       mem_hi sysmem_hi_d(.doa(memory_do[31:24]),
    .addra(dm_addr[11:2]),
@@ -113,7 +113,7 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
     .clka(clk_i),
    .cea(memory_sel),
    .ocea(1'b1),
-   .wea(dm_data_select[3] && !io_sel && dm_write),
+   .wea(dm_data_select[3] && dm_write && memory_sel),
    .rsta(!rst));
    
    wire [31:0] uart_data_o;

@@ -29,7 +29,7 @@ module urv_timer
    input 	 rst_i,
 
    output [39:0] csr_time_o,
-   output [39:0] csr_cycles_o,
+   output [63:0] csr_cycles_o,
   
    output 	 sys_tick_o
    );
@@ -42,7 +42,7 @@ module urv_timer
    reg [23:0] 	 presc;
    reg 		 presc_tick;
    
-   reg [39:0] 	 cycles;
+   reg [63:0] 	 cycles;
    reg [39:0] 	 ticks;
    
    always@(posedge clk_i or negedge rst_i)
@@ -60,13 +60,13 @@ module urv_timer
 	  end // else: !if(rst_i)
        end // else: !if(rst_i)
 
-   always @(posedge clk_i)
+   always @(posedge clk_i or negedge rst_i)
      if (!rst_i)
        ticks <= 0;
      else if (presc_tick)
        ticks <= ticks + 1;
    
-   always @(posedge clk_i)
+   always @(posedge clk_i or negedge rst_i)
      if (!rst_i)
        cycles <= 0;
      else

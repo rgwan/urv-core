@@ -1,24 +1,22 @@
 al3_10
-13 23 616 3254 3049202 199 0
-1Da8gh 4=e3d Gs!p 7nd25? uIrb9E wgH4m{ 8 1
+13 23 604 3430 3085416 145 0
+1Da4ce 4=f7g Gs!p 7nd25? uIrb9E wgH4m{ 8 1
 clock: clk
-13 3049202 3254 4
+13 3085416 3430 4
 Setup check
 23 3
-Endpoint: uart_u33_b2/uart_u33_b5/FFD
-23 -5.668000 15990 3
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->uart_u33_b2/uart_u33_b5/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-uart_u33_b2/uart_u33_b5/FFD
-25 -5.668000 10.767000 16.435000 25 25
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[0]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+Endpoint: uart_u33_b7/uart_u33_b2/FFD
+23 -5.225000 16410 3
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b7/uart_u33_b2/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b7/uart_u33_b2/FFD
+25 -5.225000 10.767000 15.992000 23 23
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[0]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -28,27 +26,25 @@ DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
 DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
-dm_addr[22] DUT_execute_u289_b22/_al_u1600/d[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o uart_sel_d_reg/_al_u1830/d[0]
-uart_sel_pad uart_u32_b0/_al_u1605/e[1]
-_al_u1605_o uart_uart_trigger_tx_reg/_al_u1610/a[0]
-_al_n0_d_al_n439 _al_u1831/_al_u1673/c[0]
-uart_u35_b0_sel_is_2_o uart_u33_b2/uart_u33_b5/ce
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+dm_addr[24] DUT_execute_u289_b27/_al_u1643/a[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b7/uart_u33_b2/ce
 
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->uart_u33_b2/uart_u33_b5/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-uart_u33_b2/uart_u33_b5/FFD
-92 -5.668000 10.767000 16.435000 25 25
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[1]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b7/uart_u33_b2/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b7/uart_u33_b2/FFD
+88 -5.225000 10.767000 15.992000 23 23
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[1]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -58,59 +54,25 @@ DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
 DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
-dm_addr[22] DUT_execute_u289_b22/_al_u1600/d[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o uart_sel_d_reg/_al_u1830/d[0]
-uart_sel_pad uart_u32_b0/_al_u1605/e[1]
-_al_u1605_o uart_uart_trigger_tx_reg/_al_u1610/a[0]
-_al_n0_d_al_n439 _al_u1831/_al_u1673/c[0]
-uart_u35_b0_sel_is_2_o uart_u33_b2/uart_u33_b5/ce
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+dm_addr[24] DUT_execute_u289_b27/_al_u1643/a[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b7/uart_u33_b2/ce
 
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->uart_u33_b2/uart_u33_b5/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-uart_u33_b2/uart_u33_b5/FFD
-159 -5.503000 10.767000 16.270000 24 24
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[0]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
-DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
-DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
-DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
-DUT_execute_u24_c11 DUT_execute_u24_11/DUT_execute_u24_12/fci
-DUT_execute_u24_c13 DUT_execute_u24_13/DUT_execute_u24_14/fci
-DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
-DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
-DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
-dm_addr[20] DUT_execute_u289_b22/_al_u1600/e[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o uart_sel_d_reg/_al_u1830/d[0]
-uart_sel_pad uart_u32_b0/_al_u1605/e[1]
-_al_u1605_o uart_uart_trigger_tx_reg/_al_u1610/a[0]
-_al_n0_d_al_n439 _al_u1831/_al_u1673/c[0]
-uart_u35_b0_sel_is_2_o uart_u33_b2/uart_u33_b5/ce
-
-
-Endpoint: sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-224 -5.603000 40015 3
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-226 -5.603000 10.633000 16.236000 24 24
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[0]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b7/uart_u33_b2/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b7/uart_u33_b2/FFD
+151 -5.222000 10.767000 15.989000 24 24
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[0]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -120,26 +82,29 @@ DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
 DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
-dm_addr[22] DUT_execute_u289_b22/_al_u1600/d[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o DUT_execute_u289_b28/_al_u1668/a[1]
-io_sel_pad DUT_decode_u52_b1/_al_u1672/b[1]
-_al_u1672_o _al_u1674/_al_u1675/c[1]
-n34 sysmem_lo_d_inst_1024x8_sub_000000_000/wea
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+DUT_execute_u24_c25 DUT_execute_u24_25/DUT_execute_u24_26/fci
+dm_addr[26] DUT_execute_u289_b27/_al_u1643/e[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b7/uart_u33_b2/ce
 
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-291 -5.603000 10.633000 16.236000 24 24
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[1]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+
+Endpoint: uart_u33_b4/_al_u1833/FFD
+216 -5.213000 16410 3
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b4/_al_u1833/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b4/_al_u1833/FFD
+218 -5.213000 10.767000 15.980000 23 23
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[0]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -149,57 +114,25 @@ DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
 DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
-dm_addr[22] DUT_execute_u289_b22/_al_u1600/d[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o DUT_execute_u289_b28/_al_u1668/a[1]
-io_sel_pad DUT_decode_u52_b1/_al_u1672/b[1]
-_al_u1672_o _al_u1674/_al_u1675/c[1]
-n34 sysmem_lo_d_inst_1024x8_sub_000000_000/wea
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+dm_addr[24] DUT_execute_u289_b27/_al_u1643/a[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b4/_al_u1833/ce
 
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-sysmem_lo_d_inst_1024x8_sub_000000_000/FFD
-356 -5.438000 10.633000 16.071000 23 23
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[0]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
-DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
-DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
-DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
-DUT_execute_u24_c11 DUT_execute_u24_11/DUT_execute_u24_12/fci
-DUT_execute_u24_c13 DUT_execute_u24_13/DUT_execute_u24_14/fci
-DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
-DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
-DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
-dm_addr[20] DUT_execute_u289_b22/_al_u1600/e[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o DUT_execute_u289_b28/_al_u1668/a[1]
-io_sel_pad DUT_decode_u52_b1/_al_u1672/b[1]
-_al_u1672_o _al_u1674/_al_u1675/c[1]
-n34 sysmem_lo_d_inst_1024x8_sub_000000_000/wea
-
-
-Endpoint: sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-419 -5.602000 40455 3
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-421 -5.602000 10.633000 16.235000 24 24
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[0]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b4/_al_u1833/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b4/_al_u1833/FFD
+281 -5.213000 10.767000 15.980000 23 23
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[1]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -209,26 +142,25 @@ DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
 DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
-dm_addr[22] DUT_execute_u289_b22/_al_u1600/d[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o DUT_execute_u289_b28/_al_u1668/a[1]
-io_sel_pad DUT_decode_u52_b1/_al_u1672/b[1]
-_al_u1672_o _al_u1676/_al_u1677/c[1]
-n37 sysmem_ml_d_inst_1024x8_sub_000000_000/wea
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+dm_addr[24] DUT_execute_u289_b27/_al_u1643/a[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b4/_al_u1833/ce
 
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-486 -5.602000 10.633000 16.235000 24 24
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[1]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b4/_al_u1833/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b4/_al_u1833/FFD
+344 -5.210000 10.767000 15.977000 24 24
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[0]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -238,26 +170,29 @@ DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
 DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
-dm_addr[22] DUT_execute_u289_b22/_al_u1600/d[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o DUT_execute_u289_b28/_al_u1668/a[1]
-io_sel_pad DUT_decode_u52_b1/_al_u1672/b[1]
-_al_u1672_o _al_u1676/_al_u1677/c[1]
-n37 sysmem_ml_d_inst_1024x8_sub_000000_000/wea
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+DUT_execute_u24_c25 DUT_execute_u24_25/DUT_execute_u24_26/fci
+dm_addr[26] DUT_execute_u289_b27/_al_u1643/e[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b4/_al_u1833/ce
 
-Timing path: DUT_execute_u290_b0/_al_u1844/clk->sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-DUT_execute_u290_b0/_al_u1844/clk
-sysmem_ml_d_inst_1024x8_sub_000000_000/FFD
-551 -5.437000 10.633000 16.070000 23 23
-DUT_x2w_rd[0] DUT_execute_u290_b1/DUT_execute_u290_b3/a[0]
-_al_u589_o DUT_execute_u290_b1/DUT_execute_u290_b3/b[1]
-_al_u590_o DUT_decode_u47_b4/DUT_decode_u47_b2/d[0]
-_al_u593_o _al_u601/_al_u1886/a[0]
-DUT_x_rs1_value[0] _al_u997/_al_u995/e[1]
-DUT_execute_n288[0] DUT_execute_u24_cin/DUT_execute_u299_b0/b[1]
-DUT_execute_u24_c1 DUT_execute_u299_b1/DUT_execute_u24_2/fci
-DUT_execute_u24_c3 DUT_execute_u24_3/DUT_execute_u24_4/fci
+
+Endpoint: uart_u33_b6/_al_u1832/FFD
+409 -5.191000 16410 3
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b6/_al_u1832/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b6/_al_u1832/FFD
+411 -5.191000 10.767000 15.958000 23 23
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[0]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
 DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
 DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
 DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
@@ -266,145 +201,204 @@ DUT_execute_u24_c13 DUT_execute_u24_13/DUT_execute_u24_14/fci
 DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
 DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
 DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
-dm_addr[20] DUT_execute_u289_b22/_al_u1600/e[1]
-_al_u1600_o DUT_execute_u289_b23/_al_u1601/c[1]
-_al_u1601_o DUT_execute_u289_b31/_al_u1603/a[1]
-_al_u1603_o DUT_execute_u289_b28/_al_u1668/a[1]
-io_sel_pad DUT_decode_u52_b1/_al_u1672/b[1]
-_al_u1672_o _al_u1676/_al_u1677/c[1]
-n37 sysmem_ml_d_inst_1024x8_sub_000000_000/wea
+DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+dm_addr[24] DUT_execute_u289_b27/_al_u1643/a[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b6/_al_u1832/ce
+
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b6/_al_u1832/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b6/_al_u1832/FFD
+474 -5.191000 10.767000 15.958000 23 23
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[1]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
+DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
+DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
+DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
+DUT_execute_u24_c11 DUT_execute_u24_11/DUT_execute_u24_12/fci
+DUT_execute_u24_c13 DUT_execute_u24_13/DUT_execute_u24_14/fci
+DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
+DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
+DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
+DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+dm_addr[24] DUT_execute_u289_b27/_al_u1643/a[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b6/_al_u1832/ce
+
+Timing path: DUT_execute_u290_b2/_al_u491/clk->uart_u33_b6/_al_u1832/FFD
+DUT_execute_u290_b2/_al_u491/clk
+uart_u33_b6/_al_u1832/FFD
+537 -5.188000 10.767000 15.955000 24 24
+DUT_x2w_rd[2] DUT_execute_u290_b1/DUT_execute_u290_b3/c[0]
+_al_u613_o DUT_execute_u290_b1/DUT_execute_u290_b3/d[1]
+_al_u614_o DUT_decode_u47_b4/DUT_decode_u47_b1/b[0]
+_al_u617_o _al_u676/_al_u1911/a[0]
+DUT_x_rs1_value[4] DUT_decode_u32_b4/_al_u1071/a[1]
+DUT_execute_n264[4] DUT_execute_u24_3/DUT_execute_u24_4/b[1]
+DUT_execute_u24_c5 DUT_execute_u24_5/DUT_execute_u24_6/fci
+DUT_execute_u24_c7 DUT_execute_u24_7/DUT_execute_u24_8/fci
+DUT_execute_u24_c9 DUT_execute_u24_9/DUT_execute_u24_10/fci
+DUT_execute_u24_c11 DUT_execute_u24_11/DUT_execute_u24_12/fci
+DUT_execute_u24_c13 DUT_execute_u24_13/DUT_execute_u24_14/fci
+DUT_execute_u24_c15 DUT_execute_u24_15/DUT_execute_u24_16/fci
+DUT_execute_u24_c17 DUT_execute_u24_17/DUT_execute_u24_18/fci
+DUT_execute_u24_c19 DUT_execute_u24_19/DUT_execute_u24_20/fci
+DUT_execute_u24_c21 DUT_execute_u24_21/DUT_execute_u24_22/fci
+DUT_execute_u24_c23 DUT_execute_u24_23/DUT_execute_u24_24/fci
+DUT_execute_u24_c25 DUT_execute_u24_25/DUT_execute_u24_26/fci
+dm_addr[26] DUT_execute_u289_b27/_al_u1643/e[1]
+_al_u1643_o DUT_execute_u289_b31/_al_u1644/a[1]
+_al_u1644_o uart_sel_d_reg/_al_u1646/a[0]
+uart_sel_pad uart_u32_b0/_al_u1648/e[1]
+_al_u1648_o uart_uart_trigger_tx_reg/_al_u1653/a[0]
+_al_n0_d_al_n384 _al_u1874/_al_u1649/b[0]
+uart_u35_b0_sel_is_2_o uart_u33_b6/_al_u1832/ce
 
 
 
 Hold check
-614 3
-Endpoint: DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-616 0.213000 848 3
-Timing path: DUT_execute_u290_b1/DUT_execute_u290_b3/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-DUT_execute_u290_b1/DUT_execute_u290_b3/clk
-DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-618 0.213000 1.083000 1.296000 1 1
-DUT_x2w_rd[1] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/addrb[4]
-
-Timing path: DUT_execute_u290_b2/_al_u467/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-DUT_execute_u290_b2/_al_u467/clk
-DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-637 0.233000 1.083000 1.316000 1 1
-DUT_x2w_rd[2] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/addrb[5]
-
-Timing path: DUT_execute_u290_b1/DUT_execute_u290_b3/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-DUT_execute_u290_b1/DUT_execute_u290_b3/clk
-DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/FFD
-656 0.345000 1.083000 1.428000 1 1
-DUT_x2w_rd[3] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/addrb[6]
-
-
-Endpoint: DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-675 0.345000 5 3
-Timing path: DUT_fetch_u27_b17/DUT_fetch_u27_b24/clk->DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-DUT_fetch_u27_b17/DUT_fetch_u27_b24/clk
-DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-677 0.345000 1.083000 1.428000 1 1
-DUT_f2d_ir[17] DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/addra[5]
-
-Timing path: DUT_fetch_u27_b19/DUT_fetch_u27_b9/clk->DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-DUT_fetch_u27_b19/DUT_fetch_u27_b9/clk
-DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-696 0.478000 1.083000 1.561000 1 1
-DUT_f2d_ir[19] DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/addra[7]
-
-Timing path: DUT_fetch_u27_b15/DUT_fetch_u27_b21/clk->DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-DUT_fetch_u27_b15/DUT_fetch_u27_b21/clk
-DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/FFD
-715 0.489000 1.083000 1.572000 1 1
-DUT_f2d_ir[15] DUT_regfile_bank0_regmem_inst_32x32_sub_000000_027/addra[3]
-
-
+602 3
 Endpoint: DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-734 0.345000 5 3
-Timing path: DUT_fetch_u27_b15/DUT_fetch_u27_b21/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-DUT_fetch_u27_b15/DUT_fetch_u27_b21/clk
+604 0.356000 1372 3
+Timing path: DUT_execute_u290_b2/_al_u491/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
+DUT_execute_u290_b2/_al_u491/clk
 DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-736 0.345000 1.083000 1.428000 1 1
-DUT_f2d_ir[21] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/addra[4]
+606 0.356000 1.083000 1.439000 1 1
+DUT_x2w_rd[2] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/addrb[5]
 
-Timing path: DUT_fetch_u27_b16/DUT_fetch_u27_b22/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-DUT_fetch_u27_b16/DUT_fetch_u27_b22/clk
+Timing path: DUT_execute_u290_b0/_al_u1886/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
+DUT_execute_u290_b0/_al_u1886/clk
 DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-755 0.460000 1.083000 1.543000 1 1
-DUT_f2d_ir[22] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/addra[5]
+625 0.381000 1.083000 1.464000 1 1
+DUT_x2w_rd[0] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/addrb[3]
 
-Timing path: DUT_fetch_u27_b17/DUT_fetch_u27_b24/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-DUT_fetch_u27_b17/DUT_fetch_u27_b24/clk
+Timing path: DUT_execute_u290_b1/DUT_execute_u290_b3/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
+DUT_execute_u290_b1/DUT_execute_u290_b3/clk
 DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/FFD
-774 0.744000 1.083000 1.827000 1 1
-DUT_f2d_ir[24] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/addra[7]
+644 0.507000 1.083000 1.590000 1 1
+DUT_x2w_rd[3] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_018/addrb[6]
+
+
+Endpoint: DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+663 0.389000 1477 3
+Timing path: DUT_execute_u290_b2/_al_u491/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+DUT_execute_u290_b2/_al_u491/clk
+DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+665 0.389000 1.083000 1.472000 1 1
+DUT_x2w_rd[2] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/addrb[5]
+
+Timing path: DUT_execute_u290_b0/_al_u1886/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+DUT_execute_u290_b0/_al_u1886/clk
+DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+684 0.550000 1.083000 1.633000 1 1
+DUT_x2w_rd[0] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/addrb[3]
+
+Timing path: DUT_execute_u290_b1/DUT_execute_u290_b3/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+DUT_execute_u290_b1/DUT_execute_u290_b3/clk
+DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/FFD
+703 0.655000 1.083000 1.738000 1 1
+DUT_x2w_rd[1] DUT_regfile_bank1_regmem_inst_32x32_sub_000000_027/addrb[4]
+
+
+Endpoint: DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+722 0.389000 727 3
+Timing path: DUT_execute_u290_b0/_al_u1886/clk->DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+DUT_execute_u290_b0/_al_u1886/clk
+DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+724 0.389000 1.083000 1.472000 1 1
+DUT_x2w_rd[0] DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/addrb[3]
+
+Timing path: DUT_execute_u290_b2/_al_u491/clk->DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+DUT_execute_u290_b2/_al_u491/clk
+DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+743 0.507000 1.083000 1.590000 1 1
+DUT_x2w_rd[2] DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/addrb[5]
+
+Timing path: DUT_execute_u290_b1/DUT_execute_u290_b3/clk->DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+DUT_execute_u290_b1/DUT_execute_u290_b3/clk
+DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/FFD
+762 0.550000 1.083000 1.633000 1 1
+DUT_x2w_rd[1] DUT_regfile_bank0_regmem_inst_32x32_sub_000000_000/addrb[4]
 
 
 
 Recovery check
-793 3
-Endpoint: uart_u32_b29/_al_u1052/SR
-795 5.534000 1 1
-Timing path: u22_b1/u22_b0/clk->uart_u32_b29/_al_u1052/SR
+781 3
+Endpoint: uart_u130_b1/uart_u130_b0/SR
+783 6.546000 1 1
+Timing path: u22_b1/u22_b0/clk->uart_u130_b1/uart_u130_b0/SR
 u22_b1/u22_b0/clk
-uart_u32_b29/_al_u1052/SR
-797 5.534000 10.583000 5.049000 2 2
-rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/c[0]
-rst uart_u32_b29/_al_u1052/sr
+uart_u130_b1/uart_u130_b0/SR
+785 6.546000 10.583000 4.037000 2 2
+rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/b[0]
+rst uart_u130_b1/uart_u130_b0/sr
 
 
-Endpoint: DUT_execute_u288_b21/DUT_execute_u288_b22/SR
-818 6.226000 1 1
-Timing path: u22_b1/u22_b0/clk->DUT_execute_u288_b21/DUT_execute_u288_b22/SR
+Endpoint: uart_u32_b21/uart_u32_b17/SR
+806 6.613000 1 1
+Timing path: u22_b1/u22_b0/clk->uart_u32_b21/uart_u32_b17/SR
 u22_b1/u22_b0/clk
-DUT_execute_u288_b21/DUT_execute_u288_b22/SR
-820 6.226000 10.583000 4.357000 2 2
-rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/c[0]
-rst DUT_execute_u288_b21/DUT_execute_u288_b22/sr
+uart_u32_b21/uart_u32_b17/SR
+808 6.613000 10.583000 3.970000 2 2
+rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/b[0]
+rst uart_u32_b21/uart_u32_b17/sr
 
 
-Endpoint: DUT_execute_u288_b19/DUT_execute_u288_b20/SR
-841 6.226000 1 1
-Timing path: u22_b1/u22_b0/clk->DUT_execute_u288_b19/DUT_execute_u288_b20/SR
+Endpoint: DUT_execute_csr_regs_u118_b8/_al_u990/SR
+829 6.661000 1 1
+Timing path: u22_b1/u22_b0/clk->DUT_execute_csr_regs_u118_b8/_al_u990/SR
 u22_b1/u22_b0/clk
-DUT_execute_u288_b19/DUT_execute_u288_b20/SR
-843 6.226000 10.583000 4.357000 2 2
-rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/c[0]
-rst DUT_execute_u288_b19/DUT_execute_u288_b20/sr
+DUT_execute_csr_regs_u118_b8/_al_u990/SR
+831 6.661000 10.583000 3.922000 2 2
+rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/b[0]
+rst DUT_execute_csr_regs_u118_b8/_al_u990/sr
 
 
 
 Removal check
-864 3
-Endpoint: DUT_execute_exception_unit_exception_pending_reg/_al_u728/SR
-866 1.028000 1 1
-Timing path: u22_b1/u22_b0/clk->DUT_execute_exception_unit_exception_pending_reg/_al_u728/SR
+852 3
+Endpoint: DUT_ctimer_u13_b9/DUT_ctimer_u13_b10/SR
+854 0.764000 1 1
+Timing path: u22_b1/u22_b0/clk->DUT_ctimer_u13_b9/DUT_ctimer_u13_b10/SR
 u22_b1/u22_b0/clk
-DUT_execute_exception_unit_exception_pending_reg/_al_u728/SR
-868 1.028000 1.183000 2.211000 2 2
-rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/c[0]
-rst DUT_execute_exception_unit_exception_pending_reg/_al_u728/sr
+DUT_ctimer_u13_b9/DUT_ctimer_u13_b10/SR
+856 0.764000 1.183000 1.947000 2 2
+rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/b[0]
+rst DUT_ctimer_u13_b9/DUT_ctimer_u13_b10/sr
 
 
-Endpoint: DUT_execute_csr_regs_u118_b0/_al_u783/SR
-889 1.028000 1 1
-Timing path: u22_b1/u22_b0/clk->DUT_execute_csr_regs_u118_b0/_al_u783/SR
+Endpoint: DUT_ctimer_u13_b7/DUT_ctimer_u13_b8/SR
+877 0.764000 1 1
+Timing path: u22_b1/u22_b0/clk->DUT_ctimer_u13_b7/DUT_ctimer_u13_b8/SR
 u22_b1/u22_b0/clk
-DUT_execute_csr_regs_u118_b0/_al_u783/SR
-891 1.028000 1.183000 2.211000 2 2
-rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/c[0]
-rst DUT_execute_csr_regs_u118_b0/_al_u783/sr
+DUT_ctimer_u13_b7/DUT_ctimer_u13_b8/SR
+879 0.764000 1.183000 1.947000 2 2
+rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/b[0]
+rst DUT_ctimer_u13_b7/DUT_ctimer_u13_b8/sr
 
 
-Endpoint: DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/SR
-912 1.103000 1 1
-Timing path: u22_b1/u22_b0/clk->DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/SR
+Endpoint: DUT_fetch_u31_b5/DUT_fetch_u31_b13/SR
+900 0.769000 1 1
+Timing path: u22_b1/u22_b0/clk->DUT_fetch_u31_b5/DUT_fetch_u31_b13/SR
 u22_b1/u22_b0/clk
-DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/SR
-914 1.103000 1.133000 2.236000 2 2
-rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/c[0]
-rst DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/rsta
+DUT_fetch_u31_b5/DUT_fetch_u31_b13/SR
+902 0.769000 1.183000 1.952000 2 2
+rstcounter[1] DUT_decode_u52_b2/DUT_decode_u47_b0/b[0]
+rst DUT_fetch_u31_b5/DUT_fetch_u31_b13/sr
 
 
 
@@ -413,7 +407,7 @@ rst DUT_regfile_bank1_regmem_inst_32x32_sub_000000_000/rsta
 Timing group statistics: 
 	Clock constraints: 
 	   Clock Name                             Min Period     Max Freq           Skew      Fanout
-	   clk (10.000 ns)                          15.668ns      63.824MHz        0.020ns      1228
+	   clk (10.000 ns)                          15.225ns      65.681MHz        0.020ns      1274
 	Minimum input arrival time before clock: no constraint path
 	Maximum output required time after clock: no constraint path
 	Maximum combinational path delay: no constraint path

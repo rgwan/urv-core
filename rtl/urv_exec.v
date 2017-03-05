@@ -105,7 +105,7 @@ module urv_exec
    input 	     dm_ready_i,
 
    input [39:0]      csr_time_i,
-   input [39:0]      csr_cycles_i,
+   input [63:0]      csr_cycles_i,
    input 	     timer_tick_i
    
    );
@@ -141,7 +141,7 @@ module urv_exec
    wire [31:0] 	 csr_mie, csr_mip, csr_mepc, csr_mstatus,csr_mcause;
    wire [31:0] 	 csr_write_value;
    wire [31:0] 	 exception_address, exception_vector;
-   reg [39:0] csr_instrs;
+   reg [63:0] csr_instrs;
    
    urv_csr csr_regs
      (

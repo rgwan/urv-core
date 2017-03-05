@@ -108,6 +108,7 @@ void main()
 {
 	char input_entry[32];
 	unsigned int num_cycles, num_instr;
+	unsigned int num_cyclesh, num_instrh;
 	int i = 0; //输入指针
 	char a = 0;
 	UART_BSRR = 69; //24M晶振，波特率115200
@@ -161,12 +162,21 @@ void main()
 		if(memcmp(input_entry, "uptime", 6))
 		{
 			__asm__("rdcycle %0; rdinstret %1;" : "=r"(num_cycles), "=r"(num_instr));
+			__asm__("rdcycleh %0; rdinstreth %1;" : "=r"(num_cyclesh), "=r"(num_instrh));
 			puts("System cycle counter: 0x");
+			printhex(num_cyclesh >> 24);
+			printhex(num_cyclesh >> 16);
+			printhex(num_cyclesh >> 8);
+			printhex(num_cyclesh & 0xff);
 			printhex(num_cycles >> 24);
 			printhex(num_cycles >> 16);
 			printhex(num_cycles >> 8);
 			printhex(num_cycles & 0xff);	
 			puts("\r\nSystem instruction counter: 0x");	;
+			printhex(num_instrh >> 24);
+			printhex(num_instrh >> 16);
+			printhex(num_instrh >> 8);
+			printhex(num_instrh & 0xff);
 			printhex(num_instr >> 24);
 			printhex(num_instr >> 16);
 			printhex(num_instr >> 8);

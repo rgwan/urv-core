@@ -42,8 +42,8 @@ module urv_csr
    output reg [31:0] x_rd_o,
    
    input [39:0]      csr_time_i,
-   input [39:0]      csr_cycles_i,
-   input [39:0]		 csr_instrs_i,
+   input [63:0]      csr_cycles_i,
+   input [63:0]		 csr_instrs_i,
 
    // interrupt management
 
@@ -67,10 +67,10 @@ module urv_csr
    always@*
      case(d_csr_sel_i) // synthesis full_case parallel_case
        `CSR_ID_CYCLESL: csr_in1 <= csr_cycles_i[31:0];
-       `CSR_ID_CYCLESH: csr_in1 <= { 24'h0, csr_cycles_i[39:32] };
+       `CSR_ID_CYCLESH: csr_in1 <= { csr_cycles_i[63:32] };
        `CSR_ID_TIMEL: csr_in1 <= csr_time_i[31:0];
        `CSR_ID_TIMEH: csr_in1 <= { 24'h0, csr_time_i[39:32] };
-       `CSR_ID_INSTRRETH: csr_in1 <= { 24'h0, csr_instrs_i[39:32] };
+       `CSR_ID_INSTRRETH: csr_in1 <= { csr_instrs_i[63:32] };
        `CSR_ID_INSTRRETL: csr_in1 <= csr_instrs_i[31:0];
        `CSR_ID_MSCRATCH: csr_in1 <= csr_mscratch;
        `CSR_ID_MEPC: csr_in1 <= csr_mepc_i;
