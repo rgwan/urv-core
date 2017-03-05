@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+    <Project_Created_Time>2017-03-05 13:18:09</Project_Created_Time>
+    <TD_Version>3.1.131</TD_Version>
+    <Name>urv</Name>
+    <HardWare>
+        <Family>AL3</Family>
+        <Device>AL3A10BG256C7</Device>
+    </HardWare>
+    <Source_Files>
+        <Verilog>
+            <File>../../rtl/urv_config.v</File>
+            <File>../../rtl/urv_cpu.v</File>
+            <File>../../rtl/urv_csr.v</File>
+            <File>../../rtl/urv_decode.v</File>
+            <File>../../rtl/urv_defs.v</File>
+            <File>../../rtl/urv_exceptions.v</File>
+            <File>../../rtl/urv_exec.v</File>
+            <File>../../rtl/urv_fetch.v</File>
+            <File>../../rtl/urv_multiply.v</File>
+            <File>../../rtl/urv_regfile.v</File>
+            <File>../../rtl/urv_shifter.v</File>
+            <File>../../rtl/urv_timer.v</File>
+            <File>../../rtl/urv_writeback.v</File>
+            <File>al_ip/regfile_dp_m.v</File>
+            <File>top.v</File>
+            <File>al_ip/mem_lo.v</File>
+            <File>al_ip/bregmem.v</File>
+        </Verilog>
+        <ADC_FILE>io.adc</ADC_FILE>
+        <SDC_FILE>urv.sdc</SDC_FILE>
+        <CWC_FILE/>
+    </Source_Files>
+    <TOP_MODULE>
+        <LABEL/>
+        <MODULE>top</MODULE>
+        <CREATEINDEX>user</CREATEINDEX>
+    </TOP_MODULE>
+    <Property>
+        <GlobalProperty/>
+        <DesignProperty/>
+        <RtlProperty/>
+        <GateProperty/>
+        <PlaceProperty/>
+        <RouteProperty/>
+        <BitgenProperty::GeneralOption>
+            <bin>off</bin>
+            <c>off</c>
+            <s>off</s>
+            <version>0x0000</version>
+        </BitgenProperty::GeneralOption>
+        <TimingProperty>
+            <net_info>on</net_info>
+        </TimingProperty>
+    </Property>
+</Project>

@@ -8,3 +8,11 @@ disasm.S
 *.elf
 
 *.map
+*.bit
+*.log
+*.vec
+*.area
+*.db
+*.bid
+*.timing
+*.mif

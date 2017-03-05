@@ -1,5 +1,52 @@
 
 `timescale 1ns/1ps
+module regfile_dp_m(di, waddr, we, wclk, do, raddr);
+	input [31:0] di;
+	input [4:0] waddr;
+	input [4:0] raddr;
+	input we;
+	input wclk;
+	output [31:0] do;
+	
+	reg [31:0]ram[0:31];
+	
+	always @(posedge wclk)
+		if(we)
+			ram[waddr] <= di;
+	assign do = ram[raddr];
+	wire [31:0]cpureg_zero = ram[0];
+  	wire [31:0]cpureg_1 = ram[1];
+	wire [31:0]cpureg_2 = ram[2];
+	wire [31:0]cpureg_3 = ram[3];
+	wire [31:0]cpureg_4 = ram[4];
+	wire [31:0]cpureg_5 = ram[5];
+	wire [31:0]cpureg_6 = ram[6];
+	wire [31:0]cpureg_7 = ram[7];
+	wire [31:0]cpureg_8 = ram[8];
+	wire [31:0]cpureg_9 = ram[9];
+	wire [31:0]cpureg_10 = ram[10];
+	wire [31:0]cpureg_11 = ram[11];
+	wire [31:0]cpureg_12 = ram[12];
+	wire [31:0]cpureg_13 = ram[13];
+	wire [31:0]cpureg_14 = ram[14];
+	wire [31:0]cpureg_15 = ram[15];
+	wire [31:0]cpureg_16 = ram[16];
+	wire [31:0]cpureg_17 = ram[17];
+	wire [31:0]cpureg_18 = ram[18];
+	wire [31:0]cpureg_19 = ram[19];
+	wire [31:0]cpureg_20 = ram[20];
+	wire [31:0]cpureg_21 = ram[21];
+	wire [31:0]cpureg_22 = ram[22];
+	wire [31:0]cpureg_23 = ram[23];
+	wire [31:0]cpureg_24 = ram[24];
+	wire [31:0]cpureg_25 = ram[25];
+	wire [31:0]cpureg_26 = ram[26];
+	wire [31:0]cpureg_27 = ram[27];
+	wire [31:0]cpureg_28 = ram[28];
+	wire [31:0]cpureg_29 = ram[29];
+	wire [31:0]cpureg_30 = ram[30];
+	wire [31:0]cpureg_31 = ram[31];
+endmodule
 
 module top;
 

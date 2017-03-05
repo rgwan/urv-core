@@ -291,7 +291,7 @@ module urv_exec
 
    wire divider_stall_req = 0;
 
-   urv_multiply multiplier 
+/*   urv_multiply multiplier 
      (
       .clk_i(clk_i),
       .rst_i(rst_i),
@@ -301,7 +301,7 @@ module urv_exec
       .d_rs2_i(rs2),
       .d_fun_i(d_fun),
       .w_rd_o (w_rd_multiply_o)
-      );
+      );*/
 
 /*   wire divider_stall_req;
    wire [31:0] rd_divide;

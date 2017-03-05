@@ -30,6 +30,61 @@ module urv_regmem
 
    input 	     en1_i,
    input [4:0] 	     a1_i,
+   output [31:0] q1_o,
+
+   input [4:0] 	     a2_i,
+   input [31:0]      d2_i,
+   input 	     we2_i
+   );
+
+bregmem regmem ( 
+	.doa(q1_o), 
+	.dia(32'h0), 
+	.addra(a1_i), .cea(en1_i), .clka(clk_i), .wea(1'b0), .rsta(~rst_i), .ocea(1'b1), 
+	.dob(), .dib(d2_i), .addrb(a2_i), .ceb(1'b1), .clkb(clk_i), .web(a2_i != 5'b0 && we2_i), .rstb(~rst_i), .oceb(1'b0)
+	);
+   
+endmodule
+
+/*
+module urv_regmem
+  (
+   input 	     clk_i,
+   input 	     rst_i,
+
+   input 	     en1_i,
+   input [4:0] 	     a1_i,
+   output reg [31:0] q1_o,
+
+   input [4:0] 	     a2_i,
+   input [31:0]      d2_i,
+   input 	     we2_i
+   );
+   
+   wire [31:0]do;
+   regfile_dp_m ram(	.di(d2_i),
+   			.waddr(a2_i),
+   			.wclk(clk_i),
+   			.we(we2_i),
+   			
+   			.raddr(a1_i),
+   			.do(do));
+   			
+
+   
+   always@(posedge clk_i)
+     if(en1_i)
+       q1_o <= a1_i? do: 32'h0;
+   
+endmodule
+*/
+/*module urv_regmem
+  (
+   input 	     clk_i,
+   input 	     rst_i,
+
+   input 	     en1_i,
+   input [4:0] 	     a1_i,
    output reg [31:0] q1_o,
 
    input [4:0] 	     a2_i,
@@ -89,6 +144,7 @@ module urv_regmem
    // synthesis translate_on
    
 endmodule
+*/
 
 module urv_regfile
 (

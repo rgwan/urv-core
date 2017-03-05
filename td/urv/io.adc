@@ -1,0 +1,12 @@
+set_pin_assignment {clk_i} { LOCATION = M15; SLEWRATE = SLOW; DRIVESTRENGTH = NA;  }
+set_pin_assignment {io_out[3]} { LOCATION = R4; SLEWRATE = SLOW;  }
+set_pin_assignment {io_out[2]} { LOCATION = R5; SLEWRATE = SLOW;  }
+set_pin_assignment {io_out[1]} { LOCATION = R6; SLEWRATE = SLOW;  }
+set_pin_assignment {io_out[0]} { LOCATION = R7; SLEWRATE = SLOW;  }
+set_pin_assignment {rst_i} { LOCATION = K7; SLEWRATE = SLOW; DRIVESTRENGTH = NA;  }
+set_pin_assignment {io_out[4]} { LOCATION = T4; SLEWRATE = SLOW;  }
+set_pin_assignment {io_out[5]} { LOCATION = T5; SLEWRATE = SLOW;  }
+set_pin_assignment {io_out[6]} { LOCATION = T6; SLEWRATE = SLOW;  }
+set_pin_assignment {io_out[7]} { LOCATION = T7; SLEWRATE = SLOW;  }
+set_pin_assignment {tap} { LOCATION = P6; SLEWRATE = SLOW;  }
+set_pin_assignment {io_sel} { LOCATION = T8; SLEWRATE = SLOW;  }
