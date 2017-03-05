@@ -130,8 +130,8 @@ module urv_decode
    reg 	inserting_nop;
 
    // bubble insertion following a hazzard
-   always@(posedge clk_i)
-     if(rst_i)
+   always@(posedge clk_i or negedge rst_i)
+     if(!rst_i)
        inserting_nop <= 0;
      else if (!d_stall_i)
        begin
@@ -146,8 +146,8 @@ module urv_decode
    
    assign x_valid_o = x_valid;
    
-   always@(posedge clk_i)
-     if(rst_i || d_kill_i )
+   always@(posedge clk_i or negedge rst_i)
+     if(!rst_i || d_kill_i )
        begin
 	  x_pc_o <= 0;
 	  x_valid <= 0;

@@ -97,8 +97,8 @@ module urv_exceptions
    
    
    
-   always@(posedge clk_i)
-     if (rst_i)
+   always@(posedge clk_i or negedge rst_i)
+     if (!rst_i)
        except_vec_masked <= 0;
      else begin
 	if(!x_stall_i && !x_kill_i && d_is_csr_i && d_csr_sel_i == `CSR_ID_MIP) begin
@@ -150,8 +150,8 @@ module urv_exceptions
      else
        cause <= `EXCEPT_IRQ;
    
-   always@(posedge clk_i)
-     if(rst_i) 
+   always@(posedge clk_i or negedge rst_i)
+     if(!rst_i) 
        begin
 	  csr_mepc <= 0;
 	  csr_mie <= 0;

@@ -3,6 +3,7 @@
  uRV - a tiny and dumb RISC-V core
  Copyright (c) 2015 CERN
  Author: Tomasz Włostowski <tomasz.wlostowski@cern.ch>
+ Compressed_ISA_supporter Zhiyuan Wan <h@iloli.bid>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -62,10 +63,10 @@ module urv_fetch
    assign im_addr_o = pc_next;
        
    
-   always@(posedge clk_i)
-     if (rst_i) begin
+   always@(posedge clk_i or negedge rst_i)
+     if (!rst_i) begin
 	pc <= 0;
-	pc_plus_4 <= 4;
+	pc_plus_4 <= 0;
 	
 	ir <= 0;
 	f_valid_o <= 0;

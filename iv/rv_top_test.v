@@ -8,6 +8,7 @@ module top;
   
    reg clk_i = 0;
    reg rst_i = 0;
+   reg rst;
    reg [7:0]io_o;
  
       reg [31:0]  mem[0:mem_size- 1];
@@ -27,8 +28,8 @@ module top;
    reg 		  dm_ready = 1;
    initial
    begin
-   	#0  rst_i = 1;
-   	#22.5 rst_i = 0;
+   	#0  rst = 0;
+   	#22.5 rst = 1;
    	#200000 $stop;
    end
 
@@ -48,7 +49,11 @@ module top;
 	im_data <= mem[im_addr[mem_addr_bits-1:2] ];
 	im_valid <= 1;
      end
-
+     
+   always @(posedge clk_i or negedge rst)
+   begin
+   	rst_i <= rst;
+   end
    wire mem_sel = !io_sel;
    wire io_sel =  (dm_addr == 32'h1000_0000);
    

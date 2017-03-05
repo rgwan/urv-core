@@ -355,8 +355,8 @@ module urv_cpu
    // pipeline invalidation logic after a branch
    reg 		 x2f_bra_d0, x2f_bra_d1;
 
-   always@(posedge clk_i)
-     if(rst_i) begin
+   always@(posedge clk_i or negedge rst_i)
+     if(!rst_i) begin
 	x2f_bra_d0 <= 0;
 	x2f_bra_d1 <= 0;
      end else if (!x_stall) begin

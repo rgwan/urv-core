@@ -45,8 +45,8 @@ module urv_timer
    reg [39:0] 	 cycles;
    reg [39:0] 	 ticks;
    
-   always@(posedge clk_i)
-     if(rst_i)
+   always@(posedge clk_i or negedge rst_i)
+     if(!rst_i)
        begin
 	  presc <= 0;
 	  presc_tick <= 0;

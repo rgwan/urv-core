@@ -387,8 +387,8 @@ module urv_exec
 	  
 	  default:
 	    begin
-	       dm_data_s <= 32'hx;
-	       dm_select_s <= 4'hx;
+	       dm_data_s <= 32'h0;
+	       dm_select_s <= 4'h0;
 	    end
 	endcase // case (d_fun_i)
      end
@@ -419,8 +419,8 @@ module urv_exec
    
 
    // X/W pipeline registers
-   always@(posedge clk_i) 
-     if (rst_i) begin
+   always@(posedge clk_i or negedge rst_i) 
+     if (!rst_i) begin
 	f_branch_take   <= 0;
 	w_load_o <= 0;
 	w_store_o <= 0;

@@ -75,7 +75,7 @@ module urv_csr
        `CSR_ID_MCAUSE: csr_in1 <= csr_mcause_i;
        `CSR_ID_MIP: csr_in1 <= csr_mip_i;
        `CSR_ID_MIE: csr_in1 <= csr_mie_i;
-       default: csr_in1 <= 32'hx;
+       default: csr_in1 <= 32'h0;
      endcase // case (d_csr_sel_i)
 
    always@*
@@ -119,8 +119,8 @@ module urv_csr
       endgenerate
    
    
-   always@(posedge clk_i)
-     if(rst_i) 
+   always@(posedge clk_i or negedge rst_i)
+     if(!rst_i) 
        csr_mscratch <= 0;
      else if(!x_stall_i && !x_kill_i && d_is_csr_i) 
        case (d_csr_sel_i)
