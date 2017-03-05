@@ -10,3 +10,6 @@ set_pin_assignment {io_out[6]} { LOCATION = T6; SLEWRATE = SLOW;  }
 set_pin_assignment {io_out[7]} { LOCATION = T7; SLEWRATE = SLOW;  }
 set_pin_assignment {tap} { LOCATION = P6; SLEWRATE = SLOW;  }
 set_pin_assignment {io_sel} { LOCATION = T8; SLEWRATE = SLOW;  }
+set_pin_assignment {rxd} { LOCATION = R8; SLEWRATE = SLOW; DRIVESTRENGTH = NA;  }
+set_pin_assignment {txd} { LOCATION = M6; SLEWRATE = SLOW;  }
+set_pin_assignment {uart_sel} { LOCATION = R3; SLEWRATE = SLOW;  }

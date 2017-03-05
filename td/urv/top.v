@@ -1,4 +1,4 @@
-module top(rst_i, clk_i, io_out, tap, io_sel);
+module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
    input rst_i;
    input clk_i;
    output reg [7:0]io_out;
@@ -7,22 +7,23 @@ module top(rst_i, clk_i, io_out, tap, io_sel);
    wire [31:0] 	  im_addr;
    wire [31:0] 	  im_data;
    reg 		  im_valid;
-   
-
+   input rxd;
+   output txd;
    wire [31:0] 	  dm_addr;
    wire [31:0] 	  dm_data_s;
    wire [31:0] 	  dm_data_l;
+   output uart_sel;
    wire [3:0] 	  dm_data_select; 
    reg [4:0] counter;
    output tap;
    assign tap = counter[4];
    reg [1:0] rstcounter = 0;
 	wire 	  dm_write;
-	output io_sel;
+	output io_sel; 
    reg 		  dm_valid_l = 1;
    reg 		  dm_ready = 1;
    
-   wire rst = rst_i && rstcounter[1];
+   wire rst = rst_i && rstcounter[1]; 
    
    always @(posedge clk_i)
    begin
@@ -44,7 +45,7 @@ module top(rst_i, clk_i, io_out, tap, io_sel);
 
      end
      
-   assign io_sel =  (dm_addr == 32'h1000_0000);
+
 
    mem_lo sysmem_lo(.doa(im_data[7:0]),
    .addra(im_addr[11:2]),
@@ -75,39 +76,63 @@ module top(rst_i, clk_i, io_out, tap, io_sel);
    .wea(1'b0),
    .rsta(!rst));
    
-      mem_lo sysmem_lo_d(.doa(dm_data_l[7:0]),
+    assign io_sel =  (dm_addr == 32'h1000_0000);  
+    
+    assign uart_sel = (dm_addr[31:16] ==16'h1001);  
+    
+    wire memory_sel = (dm_addr[31:16] == 16'h0000);
+    
+    wire [31:0] memory_do;
+      mem_lo sysmem_lo_d(.doa(memory_do[7:0]),
    .addra(dm_addr[11:2]),
    .dia(dm_data_s[7:0]),
     .clka(clk_i),
-   .cea(!io_sel),
+   .cea(memory_sel),
    .ocea(1'b1),
    .wea(dm_data_select[0] && !io_sel && dm_write),
    .rsta(!rst));
-      mem_ml sysmem_ml_d(.doa(dm_data_l[15:8]),
+      mem_ml sysmem_ml_d(.doa(memory_do[15:8]),
    .addra(dm_addr[11:2]),
    .dia(dm_data_s[15:8]),
     .clka(clk_i),
-   .cea(!io_sel),
+   .cea(memory_sel),
    .ocea(1'b1),
    .wea(dm_data_select[1] && !io_sel && dm_write),
    .rsta(!rst));
-      mem_mh sysmem_mh_d(.doa(dm_data_l[23:16]),
+      mem_mh sysmem_mh_d(.doa(memory_do[23:16]),
    .addra(dm_addr[11:2]),
    .dia(dm_data_s[23:16]),
     .clka(clk_i),
-   .cea(!io_sel),
+   .cea(memory_sel),
    .ocea(1'b1),
    .wea(dm_data_select[2] && !io_sel && dm_write),
    .rsta(!rst));
-      mem_hi sysmem_hi_d(.doa(dm_data_l[31:24]),
+      mem_hi sysmem_hi_d(.doa(memory_do[31:24]),
    .addra(dm_addr[11:2]),
    .dia(dm_data_s[31:24]),
     .clka(clk_i),
-   .cea(!io_sel),
+   .cea(memory_sel),
    .ocea(1'b1),
    .wea(dm_data_select[3] && !io_sel && dm_write),
    .rsta(!rst));
+   
+   wire [31:0] uart_data_o;
+   simple_uart uart(.rst_i(rst),
+   	.txd_o(txd),
+   	.rxd_i(rxd),
+   	.clk_i(clk_i),
+   	.sel_i(uart_sel),
+   	.addr_i(dm_addr[3:2]),
+   	.data_i(dm_data_s),
+   	.data_o(uart_data_o),
+   	.we_i(dm_write));
+	reg uart_sel_d;
+	assign dm_data_l = uart_sel_d? uart_data_o: memory_do;
 
+   always @(posedge clk_i)
+   begin
+	uart_sel_d <= uart_sel;
+   end
    always@(posedge clk_i)
      if(dm_write && io_sel)
      begin

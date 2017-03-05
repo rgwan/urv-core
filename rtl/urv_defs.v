@@ -75,6 +75,9 @@
 `define CSR_ID_CYCLESL 12'hc00 
 `define CSR_ID_TIMEH 12'hc81
 `define CSR_ID_TIMEL 12'hc01 
+`define CSR_ID_INSTRRETH 12'hc82
+`define CSR_ID_INSTRRETL 12'hc02
+
 `define CSR_ID_MSCRATCH 12'h340
 `define CSR_ID_MEPC 12'h341
 `define CSR_ID_MSTATUS 12'h300

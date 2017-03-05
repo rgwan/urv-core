@@ -68,16 +68,24 @@ module top;
 
    wire [31:0] 	  dm_addr;
    wire [31:0] 	  dm_data_s;
-   reg [31:0] 	  dm_data_l;
+   wire [31:0] 	  dm_data_l;
    wire [3:0] 	  dm_data_select;
    wire 	  dm_write;
    reg 		  dm_valid_l = 1;
    reg 		  dm_ready = 1;
+   
+   wire txd;
+   reg rxd = 1;
+   
    initial
    begin
    	#0  rst = 0;
    	#22.5 rst = 1;
    	#200000 $stop;
+   end
+   initial begin
+   	#6605 rxd = 0;
+   	#1600 rxd = 1;
    end
 
    initial begin
@@ -104,6 +112,7 @@ module top;
    wire mem_sel = !io_sel;
    wire io_sel =  (dm_addr == 32'h1000_0000);
    
+   reg [31:0]mem_data_l;
 	
    always@(posedge clk_i)
      begin
@@ -117,7 +126,7 @@ module top;
 	if(dm_write && dm_data_select[3] && mem_sel)
 	  mem [dm_addr[mem_addr_bits-1:2]][31:24] <= dm_data_s[31:24];
 
-	dm_data_l <= mem [dm_addr[mem_addr_bits-1:2]];
+	mem_data_l <= mem [dm_addr[mem_addr_bits-1:2]];
 	
 	
      end // always@ (posedge clk)
@@ -130,7 +139,31 @@ module top;
        if(io_o == 8'hFF)
        	$finish;
      end
-   
+    
+	wire [31:0] uart_data_o;
+   	wire uart_sel;
+   	wire dm_load;
+   	
+   	assign uart_sel = (dm_addr[31:16] == 16'h1001 && (dm_load || dm_write));
+	
+   simple_uart uart(.rst_i(rst),
+   	.txd_o(txd),
+   	.rxd_i(rxd),
+   	.clk_i(clk_i),
+   	.sel_i(uart_sel),
+   	.addr_i(dm_addr[3:2]),
+   	.data_i(dm_data_s),
+   	.data_o(uart_data_o),
+   	.we_i(dm_write));
+   	
+	reg uart_sel_d;
+	assign dm_data_l = uart_sel_d? uart_data_o: mem_data_l;
+
+	always @(posedge clk_i)
+	begin
+		uart_sel_d <= uart_sel;
+	end
+
    urv_cpu DUT
      (
       .clk_i(clk_i),
@@ -147,7 +180,7 @@ module top;
       .dm_data_l_i(dm_data_l),
       .dm_data_select_o(dm_data_select),
       .dm_store_o(dm_write),
-      .dm_load_o(),
+      .dm_load_o(dm_load),
       .dm_store_done_i(1'b1),
       .dm_load_done_i(1'b1),
       .dm_ready_i(dm_ready)

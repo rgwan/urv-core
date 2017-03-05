@@ -3,5 +3,5 @@
 # ## Date	:	05 03 2017
 
 #Created Clock
-create_clock -name clk -period 10 [get_ports clk_i]
+create_clock -name clk -period 10 -waveform {0 5} [get_ports clk_i]
 

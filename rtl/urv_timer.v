@@ -61,13 +61,13 @@ module urv_timer
        end // else: !if(rst_i)
 
    always @(posedge clk_i)
-     if (rst_i)
+     if (!rst_i)
        ticks <= 0;
      else if (presc_tick)
        ticks <= ticks + 1;
    
    always @(posedge clk_i)
-     if (rst_i)
+     if (!rst_i)
        cycles <= 0;
      else
        cycles <= cycles + 1;

@@ -16,3 +16,4 @@ disasm.S
 *.bid
 *.timing
 *.mif
+rom2mif

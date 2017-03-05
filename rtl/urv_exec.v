@@ -141,6 +141,7 @@ module urv_exec
    wire [31:0] 	 csr_mie, csr_mip, csr_mepc, csr_mstatus,csr_mcause;
    wire [31:0] 	 csr_write_value;
    wire [31:0] 	 exception_address, exception_vector;
+   reg [39:0] csr_instrs;
    
    urv_csr csr_regs
      (
@@ -163,6 +164,7 @@ module urv_exec
 
       .csr_time_i(csr_time_i),
       .csr_cycles_i(csr_cycles_i),
+      .csr_instrs_i(csr_instrs),
 
       .csr_mstatus_i(csr_mstatus),
       .csr_mip_i(csr_mip),
@@ -291,7 +293,7 @@ module urv_exec
 
    wire divider_stall_req = 0;
 
-/*   urv_multiply multiplier 
+   urv_multiply multiplier 
      (
       .clk_i(clk_i),
       .rst_i(rst_i),
@@ -301,7 +303,7 @@ module urv_exec
       .d_rs2_i(rs2),
       .d_fun_i(d_fun),
       .w_rd_o (w_rd_multiply_o)
-      );*/
+      );
 
 /*   wire divider_stall_req;
    wire [31:0] rd_divide;
@@ -417,7 +419,7 @@ module urv_exec
    assign dm_load_o =  d_is_load_i & d_valid_i & !x_kill_i & !x_stall_i & !exception;
    assign dm_store_o = d_is_store_i & d_valid_i & !x_kill_i & !x_stall_i & !exception;
    
-
+   
    // X/W pipeline registers
    always@(posedge clk_i or negedge rst_i) 
      if (!rst_i) begin
@@ -425,6 +427,7 @@ module urv_exec
 	w_load_o <= 0;
 	w_store_o <= 0;
 	w_valid_o <= 0;
+	csr_instrs <= 0;
 	
      end else if (!x_stall_i) begin
 	f_branch_target_o <= branch_target;
@@ -440,6 +443,9 @@ module urv_exec
 	w_fun_o <= d_fun_i;
 	w_dm_addr_o <= dm_addr;
 	w_valid_o <= !exception; 
+	
+	if(!x_kill_i)
+		csr_instrs <= csr_instrs + 1;
      end // else: !if(rst_i)
 
    assign f_branch_take_o = f_branch_take;

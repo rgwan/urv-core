@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
     <Project_Created_Time>2017-03-05 13:18:09</Project_Created_Time>
-    <TD_Version>3.1.131</TD_Version>
+    <TD_Version>3.1.156</TD_Version>
     <Name>urv</Name>
     <HardWare>
         <Family>AL3</Family>
@@ -26,6 +26,7 @@
             <File>top.v</File>
             <File>al_ip/mem_lo.v</File>
             <File>al_ip/bregmem.v</File>
+            <File>uart.v</File>
         </Verilog>
         <ADC_FILE>io.adc</ADC_FILE>
         <SDC_FILE>urv.sdc</SDC_FILE>
@@ -46,11 +47,17 @@
         <BitgenProperty::GeneralOption>
             <bin>off</bin>
             <c>off</c>
-            <s>off</s>
+            <s>on</s>
             <version>0x0000</version>
         </BitgenProperty::GeneralOption>
         <TimingProperty>
             <net_info>on</net_info>
         </TimingProperty>
     </Property>
+    <Project_Settings>
+        <Current_Step>60</Current_Step>
+        <SRC-Last-Read>2017-03-05 18:53:16</SRC-Last-Read>
+        <SLC-Last-Read>2017-03-05 18:53:19</SLC-Last-Read>
+        <SDC-Last-Read>2017-03-05 18:53:58</SDC-Last-Read>
+    </Project_Settings>
 </Project>
