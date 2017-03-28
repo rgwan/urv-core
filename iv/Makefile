@@ -1,7 +1,7 @@
-SRCs = ../rtl/ ../rtl/urv_csr.v     ../rtl/urv_divide.v      ../rtl/urv_iram.v    ../rtl/urv_timer.v \
-../rtl/urv_exceptions.v  ../rtl/urv_multiply.v  ../rtl/urv_writeback.v \
-../rtl/urv_config.v  ../rtl/urv_decode.v  ../rtl/urv_exec.v        ../rtl/urv_regfile.v  \
-../rtl/urv_cpu.v     ../rtl/urv_defs.v    ../rtl/urv_fetch.v       ../rtl/urv_shifter.v uart.v
+SRCs = ../rtl/ ../rtl/kmkz_csr.v     ../rtl/kmkz_divide.v      ../rtl/kmkz_iram.v    ../rtl/kmkz_timer.v \
+../rtl/kmkz_exceptions.v  ../rtl/kmkz_multiply.v  ../rtl/kmkz_writeback.v \
+../rtl/kmkz_config.v  ../rtl/kmkz_decode.v  ../rtl/kmkz_exec.v        ../rtl/kmkz_regfile.v  \
+../rtl/kmkz_cpu.v     ../rtl/kmkz_defs.v    ../rtl/kmkz_fetch.v       ../rtl/kmkz_shifter.v uart.v
 	
 
 TOOLCHAIN_PREFIX = /opt/riscv32i/bin/riscv32-unknown-elf-
