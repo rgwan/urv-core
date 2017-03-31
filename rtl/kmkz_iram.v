@@ -1,8 +1,11 @@
 /*
 
- uRV - a tiny and dumb RISC-V core
+ Kamikaze-uRV - a tiny and dumb RISC-V core
  Copyright (c) 2015 CERN
  Author: Tomasz Włostowski <tomasz.wlostowski@cern.ch>
+ 
+ Copyright (c) 2017 Anlogic Technology
+ Author: Zhiyuan Wan <h@iloli.bid>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -21,7 +24,7 @@
 
 `timescale 1ns/1ps
 
-`include "urv_defs.v"
+`include "kmkz_defs.v"
 
 `ifdef URV_PLATFORM_SPARTAN6
 

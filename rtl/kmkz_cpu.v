@@ -1,8 +1,11 @@
 /*
- 
- uRV - a tiny and dumb RISC-V core
+
+ Kamikaze-uRV - a tiny and dumb RISC-V core
  Copyright (c) 2015 CERN
  Author: Tomasz Włostowski <tomasz.wlostowski@cern.ch>
+ 
+ Copyright (c) 2017 Anlogic Technology
+ Author: Zhiyuan Wan <h@iloli.bid>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -19,18 +22,11 @@
  
 */
 
-`include "urv_defs.v"
+`include "kmkz_defs.v"
 
 `timescale 1ns/1ps
 
 module urv_cpu
-  #(
-    parameter g_timer_frequency = 1000,
-    parameter g_clock_frequency = 100000000,
-    parameter g_with_hw_divide = 0,
-    parameter g_with_hw_debug = 0,
-    parameter g_debug_breakpoints = 6
-   ) 
    (
    input 	 clk_i,
    input 	 rst_i,

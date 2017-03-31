@@ -1,8 +1,11 @@
 /*
 
- uRV - a tiny and dumb RISC-V core
+ Kamikaze-uRV - a tiny and dumb RISC-V core
  Copyright (c) 2015 CERN
  Author: Tomasz Włostowski <tomasz.wlostowski@cern.ch>
+ 
+ Copyright (c) 2017 Anlogic Technology
+ Author: Zhiyuan Wan <h@iloli.bid>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -19,7 +22,7 @@
  
 */
 
-`include "urv_config.v"
+`include "kmkz_config.v"
 
 `define OPC_OP_IMM 5'b00100
 `define OPC_LUI 5'b01101

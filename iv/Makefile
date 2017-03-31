@@ -4,7 +4,7 @@ SRCs = ../rtl/ ../rtl/kmkz_csr.v     ../rtl/kmkz_divide.v      ../rtl/kmkz_iram.
 ../rtl/kmkz_cpu.v     ../rtl/kmkz_defs.v    ../rtl/kmkz_fetch.v       ../rtl/kmkz_shifter.v uart.v
 	
 
-TOOLCHAIN_PREFIX = /opt/riscv32i/bin/riscv32-unknown-elf-
+TOOLCHAIN_PREFIX ?= riscv32-anlogic-elf-
 
 run: core_test
 	vvp -n core_test.run
@@ -19,7 +19,7 @@ clean:
 
 
 firmware.hex: firmware.S firmware.c firmware.lds
-	$(TOOLCHAIN_PREFIX)gcc -Os -m32 -march=RV32I -ffreestanding -nostdlib -o firmware.elf firmware.S firmware.c \
+	$(TOOLCHAIN_PREFIX)gcc -Os -march=rv32i -ffreestanding -nostdlib -o firmware.elf firmware.S firmware.c \
 		 --std=gnu99 -Wl,-Bstatic,-T,firmware.lds,-Map,firmware.map,--strip-debug -lgcc
 	$(TOOLCHAIN_PREFIX)objcopy -O binary firmware.elf firmware.bin
 	$(TOOLCHAIN_PREFIX)objdump -d firmware.elf > disasm.S

@@ -1,8 +1,11 @@
 /*
- 
- uRV - a tiny and dumb RISC-V core
+
+ Kamikaze-uRV - a tiny and dumb RISC-V core
  Copyright (c) 2015 CERN
  Author: Tomasz Włostowski <tomasz.wlostowski@cern.ch>
+ 
+ Copyright (c) 2017 Anlogic Technology
+ Author: Zhiyuan Wan <h@iloli.bid>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Lesser General Public
@@ -19,10 +22,10 @@
  
 */
 
-`include "urv_defs.v"
+`include "kmkz_defs.v"
 
 `timescale 1ns/1ps
-
+/*
 module urv_regmem
   (
    input 	     clk_i,
@@ -45,8 +48,8 @@ bregmem regmem (
 	);
    
 endmodule
+*/
 
-/*
 module urv_regmem
   (
    input 	     clk_i,
@@ -77,7 +80,7 @@ module urv_regmem
        q1_o <= a1_i? do: 32'h0;
    
 endmodule
-*/
+
 /*module urv_regmem
   (
    input 	     clk_i,
@@ -176,6 +179,7 @@ module urv_regfile
    wire [31:0] rs2_regfile;
    wire        write  = (w_rd_store_i && (w_rd_i != 0));
 
+	/* 这里应用2R1W同步RAM替换掉 */
    urv_regmem bank0 
      (
       .clk_i(clk_i),
@@ -201,7 +205,8 @@ module urv_regfile
       .d2_i (w_rd_value_i),
       .we2_i (write)
       );
-   
+      
+   /* 流水线结果前递 */   
    wire        rs1_bypass_x = w_bypass_rd_write_i && (w_rd_i == d_rs1_i) && (w_rd_i != 0);
    wire        rs2_bypass_x = w_bypass_rd_write_i && (w_rd_i == d_rs2_i) && (w_rd_i != 0);
 
@@ -217,11 +222,12 @@ module urv_regfile
 	  rs2_bypass_w <= write && (rf_rs2_i == w_rd_i);
        end
    
+
    reg [31:0] 	  bypass_w;
 
    always@(posedge clk_i)
      if(write)
-       bypass_w <= w_rd_value_i;
+       bypass_w <= w_rd_value_i; /* 来自 EX输出 */
 
    always@*
      begin

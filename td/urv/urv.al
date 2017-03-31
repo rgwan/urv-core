@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
     <Project_Created_Time>2017-03-05 13:18:09</Project_Created_Time>
-    <TD_Version>3.1.156</TD_Version>
+    <TD_Version>3.1.169</TD_Version>
     <Name>urv</Name>
     <HardWare>
         <Family>AL3</Family>
@@ -55,9 +55,9 @@
         </TimingProperty>
     </Property>
     <Project_Settings>
-        <Current_Step>60</Current_Step>
-        <SRC-Last-Read>2017-03-05 18:53:16</SRC-Last-Read>
-        <SLC-Last-Read>2017-03-05 18:53:19</SLC-Last-Read>
-        <SDC-Last-Read>2017-03-05 18:53:58</SDC-Last-Read>
+        <Current_Step>0</Current_Step>
+        <SRC-Last-Read>2017-03-07 17:03:34</SRC-Last-Read>
+        <SLC-Last-Read>2017-03-07 17:03:36</SLC-Last-Read>
+        <SDC-Last-Read>2017-03-07 17:04:24</SDC-Last-Read>
     </Project_Settings>
 </Project>
