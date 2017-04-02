@@ -118,18 +118,18 @@ module top;
      begin
 
 	if(dm_write && dm_data_select[0] && mem_sel)
-	  mem [dm_addr / 4] <= dm_data_s[7:0];
+	  mem [{dm_addr[31:2], 2'b00} ] <= dm_data_s[7:0];
 	if(dm_write && dm_data_select[1] && mem_sel)
-	  mem [dm_addr / 4 + 1] <= dm_data_s[15:8];
+	  mem [{dm_addr[31:2], 2'b00}  + 1] <= dm_data_s[15:8];
 	if(dm_write && dm_data_select[2] && mem_sel)
-	  mem [dm_addr / 4 + 2] <= dm_data_s[23:16];
+	  mem [{dm_addr[31:2], 2'b00}  + 2] <= dm_data_s[23:16];
 	if(dm_write && dm_data_select[3] && mem_sel)
-	  mem [dm_addr / 4 + 3] <= dm_data_s[31:24];
+	  mem [{dm_addr[31:2], 2'b00} + 3] <= dm_data_s[31:24];
 
-	mem_data_l[7:0] <= mem [dm_addr / 4];
-	mem_data_l[15:8] <= mem [dm_addr / 4 + 1];
-	mem_data_l[23:16] <= mem [dm_addr / 4 + 2];
-	mem_data_l[31:24] <= mem [dm_addr / 4 + 3];
+	mem_data_l[7:0] <= mem [{dm_addr[31:2], 2'b00}];
+	mem_data_l[15:8] <= mem [{dm_addr[31:2], 2'b00} + 1];
+	mem_data_l[23:16] <= mem [{dm_addr[31:2], 2'b00} + 2];
+	mem_data_l[31:24] <= mem [{dm_addr[31:2], 2'b00} + 3];
 	
 	
 	
