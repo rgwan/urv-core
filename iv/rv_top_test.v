@@ -58,7 +58,7 @@ module top;
    reg rst;
    reg [7:0]io_o;
  
-      reg [31:0]  mem[0:mem_size- 1];
+      reg [7:0]  mem[0:mem_size- 1];
 
    
    wire [31:0] 	  im_addr;
@@ -118,18 +118,24 @@ module top;
      begin
 
 	if(dm_write && dm_data_select[0] && mem_sel)
-	  mem [dm_addr[mem_addr_bits-1:2]][7:0] <= dm_data_s[7:0];
+	  mem [dm_addr / 4] <= dm_data_s[7:0];
 	if(dm_write && dm_data_select[1] && mem_sel)
-	  mem [dm_addr[mem_addr_bits-1:2]][15:8] <= dm_data_s[15:8];
+	  mem [dm_addr / 4 + 1] <= dm_data_s[15:8];
 	if(dm_write && dm_data_select[2] && mem_sel)
-	  mem [dm_addr[mem_addr_bits-1:2]][23:16] <= dm_data_s[23:16];
+	  mem [dm_addr / 4 + 2] <= dm_data_s[23:16];
 	if(dm_write && dm_data_select[3] && mem_sel)
-	  mem [dm_addr[mem_addr_bits-1:2]][31:24] <= dm_data_s[31:24];
+	  mem [dm_addr / 4 + 3] <= dm_data_s[31:24];
 
-	mem_data_l <= mem [dm_addr[mem_addr_bits-1:2]];
+	mem_data_l[7:0] <= mem [dm_addr / 4];
+	mem_data_l[15:8] <= mem [dm_addr / 4 + 1];
+	mem_data_l[23:16] <= mem [dm_addr / 4 + 2];
+	mem_data_l[31:24] <= mem [dm_addr / 4 + 3];
+	
 	
 	
      end // always@ (posedge clk)
+     
+     wire test_3f4 = mem[16'h3f4];
 
    always@(posedge clk_i)
      if(dm_write && io_sel)

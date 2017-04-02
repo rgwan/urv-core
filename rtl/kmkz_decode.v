@@ -40,6 +40,7 @@ module urv_decode
  input [31:0] 	   f_ir_i,
  input [31:0] 	   f_pc_i,
  input 		   f_valid_i,
+ input		f_is_compressed_i,
 
  // to Register File
  output [4:0] 	   rf_rs1_o,
@@ -94,6 +95,7 @@ module urv_decode
    reg 	      x_is_shift;
    reg 	      x_rd_write;
    
+   reg invalid_ir;
    
    assign x_rs1_o = x_rs1;
    assign x_rs2_o = x_rs2;
@@ -227,7 +229,7 @@ module urv_decode
 	      end
 	    `OPC_JAL, `OPC_JALR:
 	      begin
-		 x_alu_op1_o <= 4; 
+		 x_alu_op1_o <= f_is_compressed_i? 4'h2: 4'h4; 
 		 x_use_op1_o <= 1;
 	      end
 	    
@@ -321,16 +323,25 @@ module urv_decode
    
 	
    // CSR/supervisor instructions
-   always@(posedge clk_i)
-	if (!d_stall_i)
-	  begin
-	     x_csr_imm_o <= f_ir_i[19:15];
-	     x_csr_sel_o <= f_ir_i[31:20];
-	     x_is_csr_o <= (d_opcode == `OPC_SYSTEM) && (d_fun != 0);
-	     x_is_eret_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] == 12'b000100000010);
-//	     x_is_ebreak_o 直接当无法处理的指令,ecall同理
-	     x_is_wfi_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000100000101);
-	  end
+	
+	always @(posedge clk_i or negedge rst_i)
+	begin
+		if(!rst_i)
+		begin
+			invalid_ir <= 0;
+		end
+		else
+			if (!d_stall_i)
+			  begin
+			     x_csr_imm_o <= f_ir_i[19:15];
+			     x_csr_sel_o <= f_ir_i[31:20];
+			     x_is_csr_o <= (d_opcode == `OPC_SYSTEM) && (d_fun != 0);
+			     x_is_eret_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] == 12'b000100000010);
+			     invalid_ir <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000000000001);
+
+			     x_is_wfi_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000100000101);
+			  end
+	end
    
    assign x_is_shift_o = x_is_shift;
    assign x_rd_write_o = x_rd_write;

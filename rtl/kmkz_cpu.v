@@ -90,6 +90,7 @@ module urv_cpu
    wire [31:0] 	 f2d_pc, f2d_ir;
    wire 	 f2d_ir_valid;
    wire 	 f2d_valid;
+   wire		 f2d_is_compressed;
 
    // D->RF interface
    wire [4:0] 	 rf_rs1, rf_rs2;
@@ -178,6 +179,7 @@ module urv_cpu
       .f_valid_o(f2d_valid),
       .f_ir_o(f2d_ir),
       .f_pc_o(f2d_pc),
+      .f_is_compressed_o(f2d_is_compressed),
 
       // from X1 stage (jumps)
       .x_pc_bra_i(x2f_pc_bra),
@@ -199,6 +201,7 @@ module urv_cpu
       .f_ir_i(f2d_ir),
       .f_pc_i(f2d_pc),
       .f_valid_i(f2d_valid),
+      .f_is_compressed_i(f2d_is_compressed),
 
       // to RF (regfile)
       .rf_rs1_o(rf_rs1),

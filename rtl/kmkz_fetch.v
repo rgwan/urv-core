@@ -50,8 +50,9 @@ module kamikaze_fetch
 	
 	/* 指令输出 */
 	
-	output reg 	   f_valid_o,
+	output  reg	   f_valid_o,
 	output		f_ir_valid_o,
+	output  reg	f_is_compressed_o,
 	output reg [31:0] f_ir_o,
 	output reg [31:0] f_pc_o,
   
@@ -73,7 +74,7 @@ module kamikaze_fetch
 	
 	reg [31:0] instr_t_p;
 		
-	reg [31:0] pc_4, pc;
+	reg [31:0] pc_4, pc, pc_4_prev;
 	reg [2:0] pc_add, pc_add_prev;
 	
 	wire stall_fetching;
@@ -86,11 +87,16 @@ module kamikaze_fetch
 	assign stall_fetching = (pc_add_prev == 2) && (pc[1:0] == 2'b00); /* 16位对齐等待，防止冲数据 */
 	
 	
+	
 	always @*
 	begin
 		if(x_bra_i)
 		begin
 			HADDR <= {x_pc_bra_i[31:2], 2'b00};
+		end
+		else if(f_stall_i)
+		begin
+			HADDR <= {pc_4_prev[31:2], 2'b00};
 		end
 		else
 		begin
@@ -109,12 +115,12 @@ module kamikaze_fetch
 			pc_add_prev <= 4;
 			prev_ir <= 32'h0;
 			f_valid_o <= 0;
+			f_is_compressed_o <= 0;
 			align_wait <= 0;
 			f_branch <= 0;
 		end
 		else
 		begin
-			f_valid_o <= 1'b0;
 			if(!f_stall_i)
 			begin	
 				if(fetch_start == 1'b0)
@@ -139,8 +145,7 @@ module kamikaze_fetch
 							
 							if(x_pc_bra_i[1:0] == 2'b10)
 								align_wait <= 1;
-								
-							//prev_ir <= HRDATA;
+
 						end
 						else
 						begin
@@ -154,10 +159,10 @@ module kamikaze_fetch
 							end
 						end
 						
-						if(!align_wait)	
-							f_valid_o <= 1'b1;
 						
 					end
+					
+					f_valid_o <= !f_kill_i & !illegal_instr_c && !align_wait && HREADY;
 				
 					if(!stall_fetching || f_branch)
 						prev_ir <= HRDATA;
@@ -168,6 +173,10 @@ module kamikaze_fetch
 					f_ir_o <= expand_ir;
 					
 					instr_t_p <= instr_t;
+					
+					f_is_compressed_o <= is_compressed_instr;
+					
+					pc_4_prev <= pc_4;
 					
 				end
 			end
