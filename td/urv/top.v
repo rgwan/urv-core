@@ -145,9 +145,18 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
       .rst_i(rst),
 
       // instruction mem I/F
-      .im_addr_o(im_addr),
-      .im_data_i(im_data),
-      .im_valid_i(im_valid),
+	.HADDR_I(im_addr),
+	.HBURST_I(),
+	.HMASTLOCK_I(),
+	.HPROT_I(),
+	.HSIZE_I(),
+	.HTRANS_I(),
+	.HWDATA_I(),
+	.HWRITE_I(),
+	
+	.HRDATA_I(im_data),
+	.HREADY_I(1'b1),
+	.HRESP_I(1'b1),
 
       // data mem I/F
       .dm_addr_o(dm_addr),

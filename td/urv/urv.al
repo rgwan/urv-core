@@ -9,24 +9,30 @@
     </HardWare>
     <Source_Files>
         <Verilog>
-            <File>../../rtl/urv_config.v</File>
-            <File>../../rtl/urv_cpu.v</File>
-            <File>../../rtl/urv_csr.v</File>
-            <File>../../rtl/urv_decode.v</File>
-            <File>../../rtl/urv_defs.v</File>
-            <File>../../rtl/urv_exceptions.v</File>
-            <File>../../rtl/urv_exec.v</File>
-            <File>../../rtl/urv_fetch.v</File>
-            <File>../../rtl/urv_multiply.v</File>
-            <File>../../rtl/urv_regfile.v</File>
-            <File>../../rtl/urv_shifter.v</File>
-            <File>../../rtl/urv_timer.v</File>
-            <File>../../rtl/urv_writeback.v</File>
             <File>al_ip/regfile_dp_m.v</File>
             <File>top.v</File>
             <File>al_ip/mem_lo.v</File>
             <File>al_ip/bregmem.v</File>
             <File>uart.v</File>
+            <File>../../rtl/kmkz_busmatrix.v</File>
+            <File>../../rtl/kmkz_compd.v</File>
+            <File>../../rtl/kmkz_config.v</File>
+            <File>../../rtl/kmkz_cpu.v</File>
+            <File>../../rtl/kmkz_csr.v</File>
+            <File>../../rtl/kmkz_decode.v</File>
+            <File>../../rtl/kmkz_defs.v</File>
+            <File>../../rtl/kmkz_divide.v</File>
+            <File>../../rtl/kmkz_exceptions.v</File>
+            <File>../../rtl/kmkz_exec.v</File>
+            <File>../../rtl/kmkz_fetch.v</File>
+            <File>../../rtl/kmkz_iram.v</File>
+            <File>../../rtl/kmkz_multiply.v</File>
+            <File>../../rtl/kmkz_regfile.v</File>
+            <File>../../rtl/kmkz_shifter.v</File>
+            <File>../../rtl/kmkz_timer.v</File>
+            <File>../../rtl/kmkz_twdi.v</File>
+            <File>../../rtl/kmkz_uart2bus.v</File>
+            <File>../../rtl/kmkz_writeback.v</File>
         </Verilog>
         <ADC_FILE>io.adc</ADC_FILE>
         <SDC_FILE>urv.sdc</SDC_FILE>
