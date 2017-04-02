@@ -164,16 +164,57 @@ module top;
 		uart_sel_d <= uart_sel;
 	end
 
+	wire [31:0]	HADDR_I;
+	wire [2:0] 	HBURST_I;
+	wire 		HMASTLOCK_I;
+	wire [3:0] 	HPROT_I;
+	wire [2:0] 	HSIZE_I;
+	wire [1:0] 	HTRANS_I;
+	wire [31:0]	HWDATA_I;
+	wire 		HWRITE_I;
+
+	wire [31:0] 	HRDATA_I;
+	wire 		HREADY_I;
+	wire 		HRESP_I;
+
+	cmsdk_ahb_ram_beh i_ram
+	(
+	.HCLK(clk_i),    // Clock
+	.HRESETn(rst_i), // Reset
+	.HSEL(1'b1),    // Device select
+	.HADDR(HADDR_I),   // Address
+	.HTRANS(HTRANS_I),  // Transfer control
+	.HSIZE(HSIZE_I),   // Transfer size
+	.HWRITE(HWRITE_I),  // Write control
+	.HWDATA(HWDATA_I),  // Write data
+	.HREADY(HREADY_I),  // Transfer phase done
+	.HREADYOUT(HREADY_I), // Device ready
+	.HRDATA(HRDATA_I),  // Read data output
+	.HRESP(HRESP_i)
+	); 
+
    urv_cpu DUT
      (
       .clk_i(clk_i),
       .rst_i(rst_i),
 
       // instruction mem I/F
-      .im_addr_o(im_addr),
-      .im_data_i(im_data),
-      .im_valid_i(im_valid),
 
+	.HADDR_I(HADDR_I),
+	.HBURST_I(HBURST_I),
+	.HMASTLOCK_I(HMASTLOCK_I),
+	.HPROT_I(HPROT_I),
+	.HSIZE_I(HSIZE_I),
+	.HTRANS_I(HTRANS_I),
+	.HWDATA_I(HWDATA_I),
+	.HWRITE_I(HWRITE_I),
+	
+	.HRDATA_I(HRDATA_I),
+	.HREADY_I(HREADY_I),
+	.HRESP_I(HRESP_I),
+	
+	.STARTUP_BASE(32'h0),
+	
       // data mem I/F
       .dm_addr_o(dm_addr),
       .dm_data_s_o(dm_data_s),

@@ -27,6 +27,13 @@
 `timescale 1ns/1ps
 
 module urv_cpu
+  #(
+    parameter g_timer_frequency = 1000,
+    parameter g_clock_frequency = 100000000,
+    parameter g_with_hw_divide = 0,
+    parameter g_with_hw_debug = 0,
+    parameter g_debug_breakpoints = 6
+   ) 
    (
    input 	 clk_i,
    input 	 rst_i,
@@ -34,9 +41,20 @@ module urv_cpu
    input 	 irq_i,
    
    // instruction mem I/F
-   output [31:0] im_addr_o,
-   input [31:0]  im_data_i,
-   input 	 im_valid_i,
+	output [31:0]	HADDR_I,
+	output [2:0] 	HBURST_I,
+	output 		HMASTLOCK_I,
+	output [3:0] 	HPROT_I,
+	output [2:0] 	HSIZE_I,
+	output [1:0] 	HTRANS_I,
+	output [31:0]	HWDATA_I,
+	output 		HWRITE_I,
+
+	input [31:0] 	HRDATA_I,
+	input 		HREADY_I,
+	input 		HRESP_I,
+	
+	input [31:0]	STARTUP_BASE,
 
    // data mem I/F
    output [31:0] dm_addr_o,
@@ -127,14 +145,31 @@ module urv_cpu
    wire [39:0] 	 csr_time;
    wire [63:0]    csr_cycles;
    
-   urv_fetch fetch
+   /* debug/system management stuff */
+   reg [1:0] cpu_state; /* 00 = 正常运行，01 = 调试中断或自陷，10为等待中断输入（WFI） */
+   
+   kamikaze_fetch fetch
      (
       .clk_i(clk_i),
       .rst_i(rst_i),
-      .im_addr_o(im_addr_o),
-      .im_data_i(im_data_i),
-      .im_valid_i(im_valid_i),
+      
+      /* AHB lite 总线 */
 
+	.HADDR(HADDR_I),
+	.HBURST(HBURST_I),
+	.HMASTLOCK(HMASTLOCK_I),
+	.HPROT(HPROT_I),
+	.HSIZE(HSIZE_I),
+	.HTRANS(HTRANS_I),
+	.HWDATA(HWDATA_I),
+	.HWRITE(HWRITE_I),
+
+	.HRDATA(HRDATA_I),
+	.HREADY(HREADY_I),
+	.HRESP(HRESP_I),
+	
+	.STARTUP_BASE(STARTUP_BASE),
+	
       // pipe control
       .f_stall_i(f_stall),
       .f_kill_i(f_kill),

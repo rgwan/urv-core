@@ -16,12 +16,12 @@ with open(binfile, "rb") as f:
     bindata = f.read()
 
 assert len(bindata) < 4*nwords
-assert len(bindata) % 4 == 0
+#assert len(bindata) % 4 == 0
 
-for i in range(nwords):
-    if i < len(bindata) // 4:
-        w = bindata[4*i : 4*i+4]
-        print("%02x%02x%02x%02x" % (w[3], w[2], w[1], w[0]))
+for i in range(4 * nwords):
+    if i < len(bindata):
+        w = bindata[i]
+        print("%02x" % (w))
     else:
         print("0")
 

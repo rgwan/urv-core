@@ -69,6 +69,7 @@ module urv_decode
  output reg [4:0]  x_csr_imm_o,
  output reg 	   x_is_csr_o,
  output reg 	   x_is_eret_o,
+ output reg	   x_is_wfi_o,
  output reg [31:0] x_imm_o,
  output reg [31:0] x_alu_op1_o,
  output reg [31:0] x_alu_op2_o,
@@ -113,7 +114,7 @@ module urv_decode
    reg 	x_is_mul;
    wire d_is_mul = (f_ir_i[25] && d_fun == `FUNC_MUL);
 
-   // hazzard detect combinatorial logic
+   // hazard detect combinatorial logic
    always@*
      if ( x_valid && f_valid_i && ( (f_rs1 == x_rd)  || (f_rs2 == x_rd) ) && (!d_kill_i) )
        begin
@@ -326,7 +327,9 @@ module urv_decode
 	     x_csr_imm_o <= f_ir_i[19:15];
 	     x_csr_sel_o <= f_ir_i[31:20];
 	     x_is_csr_o <= (d_opcode == `OPC_SYSTEM) && (d_fun != 0);
-	     x_is_eret_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] == 12'b000100000000);
+	     x_is_eret_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] == 12'b000100000010);
+//	     x_is_ebreak_o 直接当无法处理的指令,ecall同理
+	     x_is_wfi_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000100000101);
 	  end
    
    assign x_is_shift_o = x_is_shift;
