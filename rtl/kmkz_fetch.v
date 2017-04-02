@@ -52,9 +52,8 @@ module kamikaze_fetch
 	
 	output reg 	   f_valid_o,
 	output		f_ir_valid_o,
-	output [31:0] 	   f_ir_o,
+	output reg [31:0] f_ir_o,
 	output reg [31:0] f_pc_o,
-	output reg [31:0] f_pc_plus_4_o,
   
 	input [31:0] 	   x_pc_bra_i,
 	input 		   x_bra_i
@@ -107,9 +106,12 @@ module kamikaze_fetch
 			fetch_start = 1'b0;
 			pc_add_prev <= 4;
 			prev_ir <= 32'h0;
+			f_valid_o <= 0;
+			align_wait <= 0;
 		end
 		else
 		begin
+			f_valid_o <= 1'b0;
 			if(!f_stall_i)
 			begin	
 				if(fetch_start == 1'b0)
@@ -120,20 +122,44 @@ module kamikaze_fetch
 				end
 				else
 				begin
+				
 					if(align_wait)
 						align_wait <= 0;
 						
-					if(pc[1:0] == 2'b00 || pc_add == 16'h4)
-					begin /* 当pc增4或对齐的时候请求读取 */
-						pc_4 <= pc_4 + 16'h4;
-					end
 						
-					pc <= pc + pc_add;
+					if(HREADY && !align_wait)
+					begin
+						if(x_bra_i)
+						begin
+							pc_4 <= {x_pc_bra_i[31:2], 2'b00} + 16'h4;
+							pc <= x_pc_bra_i;
+							
+							if(x_pc_bra_i[1:0] == 2'b10)
+								align_wait <= 1;
+						end
+						else
+						begin
+							if(pc[1:0] == 2'b00 || pc_add == 16'h4)
+							begin /* 当pc增4或对齐的时候请求读取 */
+								pc_4 <= pc_4 + 16'h4;
+							end
+							pc <= pc + pc_add;
+						end
+						
+							
+						
+						f_valid_o <= 1'b1;
+					end
 				
 					if(!stall_fetching)
 						prev_ir <= HRDATA;
 					
 					pc_add_prev <= pc_add;
+					
+					f_pc_o <= pc;
+					f_ir_o <= expand_ir;
+					
+
 					
 				end
 			end
@@ -141,7 +167,8 @@ module kamikaze_fetch
 	end
 	
 	always @*
-	begin		
+	begin	
+		instr_t = 32'bx;	
 		if(pc[1:0] == 2'b00)
 		begin
 			if(stall_fetching)
