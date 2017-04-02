@@ -70,6 +70,8 @@ module kamikaze_fetch
 	reg [31:0] prev_ir; /* 以前的指令 */
 	wire [31:0] expand_ir;
 	reg [31:0] instr_t;
+	
+	reg [31:0] instr_t_p;
 		
 	reg [31:0] pc_4, pc;
 	reg [2:0] pc_add, pc_add_prev;
@@ -79,7 +81,7 @@ module kamikaze_fetch
 	reg is_compressed_instr;
 	reg fetch_start;
 	
-
+	reg f_branch;
 	
 	assign stall_fetching = (pc_add_prev == 2) && (pc[1:0] == 2'b00); /* 16位对齐等待，防止冲数据 */
 	
@@ -108,6 +110,7 @@ module kamikaze_fetch
 			prev_ir <= 32'h0;
 			f_valid_o <= 0;
 			align_wait <= 0;
+			f_branch <= 0;
 		end
 		else
 		begin
@@ -125,9 +128,9 @@ module kamikaze_fetch
 				
 					if(align_wait)
 						align_wait <= 0;
-						
-						
-					if(HREADY && !align_wait)
+					
+					f_branch <= x_bra_i;
+					if(HREADY)
 					begin
 						if(x_bra_i)
 						begin
@@ -136,22 +139,27 @@ module kamikaze_fetch
 							
 							if(x_pc_bra_i[1:0] == 2'b10)
 								align_wait <= 1;
+								
+							//prev_ir <= HRDATA;
 						end
 						else
 						begin
-							if(pc[1:0] == 2'b00 || pc_add == 16'h4)
+							if(pc[1:0] == 2'b00 || pc_add == 16'h4 || f_branch)
 							begin /* 当pc增4或对齐的时候请求读取 */
 								pc_4 <= pc_4 + 16'h4;
 							end
-							pc <= pc + pc_add;
+							if(!align_wait)
+							begin
+								pc <= pc + pc_add;
+							end
 						end
 						
-							
+						if(!align_wait)	
+							f_valid_o <= 1'b1;
 						
-						f_valid_o <= 1'b1;
 					end
 				
-					if(!stall_fetching)
+					if(!stall_fetching || f_branch)
 						prev_ir <= HRDATA;
 					
 					pc_add_prev <= pc_add;
@@ -159,7 +167,7 @@ module kamikaze_fetch
 					f_pc_o <= pc;
 					f_ir_o <= expand_ir;
 					
-
+					instr_t_p <= instr_t;
 					
 				end
 			end
@@ -171,7 +179,7 @@ module kamikaze_fetch
 		instr_t = 32'bx;	
 		if(pc[1:0] == 2'b00)
 		begin
-			if(stall_fetching)
+			if(stall_fetching && f_branch == 0)
 			begin
 				if(prev_ir[1:0] != 2'b11) /* 对齐的压缩指令 */
 				begin
@@ -200,15 +208,17 @@ module kamikaze_fetch
 		end
 		else
 		begin //pc[1:0] == 10
-			if(prev_ir[17:16] != 2'b11) /* 不对齐的压缩指令 */
 			begin
-				is_compressed_instr <= 1;
-				instr_t = prev_ir[31:16];
-			end
-			else			/* 不对齐的非压缩指令 */
-			begin
-				is_compressed_instr <= 0;
-				instr_t = {HRDATA[15:0], prev_ir[31:16]};
+				if(prev_ir[17:16] != 2'b11) /* 不对齐的压缩指令 */
+				begin
+					is_compressed_instr <= 1;
+					instr_t = prev_ir[31:16];
+				end
+				else			/* 不对齐的非压缩指令 */
+				begin
+					is_compressed_instr <= 0;
+					instr_t = {HRDATA[15:0], prev_ir[31:16]};
+				end
 			end
 		end
 		

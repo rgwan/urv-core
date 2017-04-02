@@ -9,8 +9,4 @@ addi sp, sp, %lo(3*1024)
 jal ra, main
 
 /* break */
-sbreak
-sret
 
-ecall
-wfi

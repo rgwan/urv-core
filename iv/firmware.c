@@ -14,15 +14,11 @@ void *memcpy(void *dest, const void *src, int n)
 
 void main()
 {
-	char temp[]="Hello world!";
-	char *p = temp;
+	char a = 0;
 	while(1)
 	{
-		while(*p)
-		{
-			GPIOA_ODR = *p;
-			p++;
-		}
+		a++;
+		GPIOA_ODR = a;
 	}
 ;
 }
