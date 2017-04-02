@@ -25,7 +25,7 @@
 `include "kmkz_defs.v"
 
 `timescale 1ns/1ps
-
+/*
 module urv_regmem
   (
    input 	     clk_i,
@@ -49,7 +49,7 @@ bregmem regmem (
    
 endmodule
 
-/*
+*/
 module urv_regmem
   (
    input 	     clk_i,
@@ -80,7 +80,7 @@ module urv_regmem
        q1_o <= a1_i? do: 32'h0;
    
 endmodule
-*/
+
 /*module urv_regmem
   (
    input 	     clk_i,
