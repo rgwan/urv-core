@@ -33,7 +33,7 @@ module kamikaze_fetch
 	input 		   f_kill_i, /* 清除 */
 
 					/* AHB_LITE 总线 */
-	output reg [31:0]	HADDR,
+	output [31:0]	HADDR,
 	output [2:0] 		HBURST,
 	output 			HMASTLOCK,
 	output [3:0] 		HPROT,
@@ -68,195 +68,22 @@ module kamikaze_fetch
 	assign HPROT = 4'b0000; /* 指令传输 */
 	
 	assign HSIZE = 3'b010; /* 32bit 访问 */
-	reg [31:0] prev_ir; /* 以前的指令 */
-	wire [31:0] expand_ir;
-	reg [31:0] instr_t;
 	
-	reg [31:0] instr_t_p;
-		
-	reg [31:0] pc_4, pc, pc_4_prev;
-	reg [2:0] pc_add, pc_add_prev;
+	wire [31:0]ir;
 	
-	wire stall_fetching;
-	reg align_wait;
-	reg is_compressed_instr;
-	reg fetch_start;
+	kamikaze_fetch_fifo prefetcher
+	(
+	.clk_i(clk_i),
+	.rst_i(rst_i),
 	
-	reg f_branch;
+	.pc_mem_o(HADDR),
+	.ir_i(HRDATA),
+	.memory_ready_i(HREADY),
 	
-	
-	reg branch_hold;
-	reg [31:0] latched_pc;
-	
-	reg latched_align;
-	
-	assign stall_fetching = (pc_add_prev == 2) && (pc[1:0] == 2'b00); /* 16位对齐等待，防止冲数据 */
-	
-	
-	
-	always @*
-	begin
-		if(f_stall_i)
-		begin
-			HADDR <= {pc_4_prev[31:2], 2'b00};
-		end
-		else
-		begin
-			HADDR <= {pc_4[31:2], 2'b00};
-		end
-		
-	end
-	
-	always @(posedge clk_i or negedge rst_i)
-	begin
-		if(!rst_i)
-		begin
-			pc_4 <= {STARTUP_BASE[31:2], 2'b00};
-			pc <= {STARTUP_BASE[31:2], 2'b00};
-			fetch_start = 1'b0;
-			pc_add_prev <= 4;
-			prev_ir <= 32'h0;
-			f_valid_o <= 0;
-			f_is_compressed_o <= 0;
-			align_wait <= 0;
-			latched_align <= 0;
-			f_branch <= 0;
-			
-			branch_hold <= 0;
-			latched_pc <= 0;
-		end
-		else
-		begin
-			f_valid_o <= !f_kill_i & !illegal_instr_c && !align_wait && HREADY && !latched_align;
-			if(x_bra_i)
-			begin
-				branch_hold <= 1;
-				latched_pc <= x_pc_bra_i;
-			end
-			
-			if(!f_stall_i && HREADY)
-			begin	
-				if(fetch_start == 1'b0)
-				begin
-					fetch_start <= 1'b1; /* 取 0 指令 */
-					pc_4 <= pc + 16'h4;
-					
-				end
-				else
-				begin
-				
-					if(align_wait)
-						align_wait <= 0;
-					
-					latched_align <= align_wait;
-					
-					if(f_branch)
-					begin
-						f_branch <= 0;
-					end
-
-					if(branch_hold)
-					begin
-						pc_4 <= {latched_pc[31:2], 2'b00};
-						pc <= latched_pc;
-							
-						if(latched_pc[1:0] == 2'b10)
-							align_wait <= 1;
-							
-						branch_hold <= 0;
-						f_branch <= 1;
-
-					end
-					else
-					begin
-						if(pc[1:0] == 2'b00 || pc_add == 16'h4 || f_branch || !latched_align)
-						begin /* 当pc增4或对齐的时候请求读取 */
-							pc_4 <= pc_4 + 16'h4;
-						end
-						if(!align_wait && !latched_align)
-						begin
-							pc <= pc + pc_add;
-						end
-					end
-
-					
-					
-				
-					if(!stall_fetching || f_branch)
-						prev_ir <= HRDATA;
-					
-					pc_add_prev <= pc_add;
-					
-					f_pc_o <= pc;
-					f_ir_o <= expand_ir;
-					
-					instr_t_p <= instr_t;
-					
-					f_is_compressed_o <= is_compressed_instr;
-					
-					pc_4_prev <= pc_4;
-					
-				end
-			end
-		end
-	end
-	
-	always @*
-	begin	
-		instr_t = 32'bx;	
-		if(pc[1:0] == 2'b00)
-		begin
-			if(stall_fetching && f_branch == 0)
-			begin
-				if(prev_ir[1:0] != 2'b11) /* 对齐的压缩指令 */
-				begin
-					is_compressed_instr <= 1;
-					instr_t = prev_ir[15:0];
-				end
-				else
-				begin
-					is_compressed_instr <= 0;
-					instr_t = prev_ir[31:0];
-				end
-			end
-			else
-			begin
-				if(HRDATA[1:0] != 2'b11) /* 对齐的压缩指令 */
-				begin
-					is_compressed_instr <= 1;
-					instr_t = HRDATA[15:0];
-				end
-				else
-				begin
-					is_compressed_instr <= 0;
-					instr_t = HRDATA[31:0];
-				end
-			end
-		end
-		else
-		begin //pc[1:0] == 10
-			begin
-				if(prev_ir[17:16] != 2'b11) /* 不对齐的压缩指令 */
-				begin
-					is_compressed_instr <= 1;
-					instr_t = prev_ir[31:16];
-				end
-				else			/* 不对齐的非压缩指令 */
-				begin
-					is_compressed_instr <= 0;
-					instr_t = {HRDATA[15:0], prev_ir[31:16]};
-				end
-			end
-		end
-		
-		if(!rst_i)	
-			pc_add <= 4;
-		else
-			pc_add = is_compressed_instr? 2: 4;
-	end
-	
-	kamikaze_compress_decoder c_dec(.instr_i(instr_t), .instr_o(expand_ir), .illegal_instr_o(illegal_instr_c));
-
+	.ir_o(ir),
+	.fetch_ready_i(1'b1),
+	.pc_set_i(32'b0)
+	);
 
 endmodule // kamikaze_fetch 
 
