@@ -74,8 +74,6 @@ void main()
 {
 	int i;
 	puts("System start\r\n");
-	dump_memory(0, 4096);
-	while(1)
-	{
-	}
+	//dump_memory(0, 0x100);
+	puts("Done\r\n");
 }

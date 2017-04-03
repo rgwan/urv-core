@@ -142,14 +142,22 @@ module top;
      
      wire test_3f4 = mem[16'h3f4];
 
-   always@(posedge clk_i)
-     if(dm_write && io_sel)
-     begin
-       io_o <= dm_data_s[7:0];
-       $write("%c", io_o);
-       if(io_o == 8'hFF)
-       	$finish;
-     end
+	wire trap;
+	always@(posedge clk_i)
+	begin
+		if(dm_write && io_sel)
+		begin
+			io_o <= dm_data_s[7:0];
+			$write("%c", io_o);
+      			if(io_o == 8'hFF)
+       				$finish;
+       		end
+		if(trap)
+		begin
+			$write("TRAPPED!\n");
+			$finish;
+		end
+	end
     
 	wire [31:0] uart_data_o;
    	wire uart_sel;
@@ -230,6 +238,7 @@ module top;
 	.HRESP_I(HRESP_I),
 	
 	.STARTUP_BASE(32'h0),
+	.TRAP(trap),
 	
       // data mem I/F
       .dm_addr_o(dm_addr),
