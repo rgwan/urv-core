@@ -33,7 +33,7 @@ module kamikaze_fetch
 	input 		   f_kill_i, /* 清除 */
 
 					/* AHB_LITE 总线 */
-	output [31:0]	HADDR,
+	output [31:0]		HADDR,
 	output [2:0] 		HBURST,
 	output 			HMASTLOCK,
 	output [3:0] 		HPROT,
@@ -50,11 +50,11 @@ module kamikaze_fetch
 	
 	/* 指令输出 */
 	
-	output  reg	   f_valid_o,
+	output  	   f_valid_o,
 	output		f_ir_valid_o,
-	output  reg	f_is_compressed_o,
-	output reg [31:0] f_ir_o,
-	output reg [31:0] f_pc_o,
+	output  	f_is_compressed_o,
+	output  [31:0] f_ir_o,
+	output  [31:0] f_pc_o,
   
 	input [31:0] 	   x_pc_bra_i,
 	input 		   x_bra_i
@@ -69,7 +69,13 @@ module kamikaze_fetch
 	
 	assign HSIZE = 3'b010; /* 32bit 访问 */
 	
-	wire [31:0]ir;
+	wire prefetcher_ready;
+	
+	reg f_kill;
+	
+	assign f_valid_o = prefetcher_ready && !f_kill;
+	
+	wire [31:0] ir;
 	
 	kamikaze_fetch_fifo prefetcher
 	(
@@ -80,11 +86,31 @@ module kamikaze_fetch
 	.ir_i(HRDATA),
 	.memory_ready_i(HREADY),
 	
-	.ir_o(ir),
-	.fetch_ready_i(1'b1),
-	.pc_set_i(32'b0)
+	.ir_o(f_ir_o),
+	.pc_o(f_pc_o),
+	.ready_o(prefetcher_ready),
+	.fetch_ready_i(!f_stall_i),
+	.ir_comp_o(f_is_compressed_o),
+	
+	.branch_i(x_bra_i),
+	.pc_set_i(x_pc_bra_i),
+	.pc_reset_i(32'h0)
 	);
-
+	
+	always @(posedge clk_i or negedge rst_i)
+	begin
+		if(!rst_i)
+		begin
+			f_kill <= 0;
+		end
+		else
+		begin
+			if(!f_stall_i)
+			begin
+				f_kill <= f_kill_i;
+			end
+		end
+	end
 endmodule // kamikaze_fetch 
 
  

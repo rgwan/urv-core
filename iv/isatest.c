@@ -1,17 +1,30 @@
 #define GPIO_A_ODR (*(volatile char*)0x10000000)
 
+void *memcpy(void *dest, const void *src, int n)
+{
+	while (n) 
+	{
+		n--;
+		((char*)dest)[n] = ((char*)src)[n];
+	}
+	return dest;
+}
+
+
+void puts(char *s)
+{
+	while(1)
+	{
+		GPIO_A_ODR = *s;
+		s++;
+		if(*s == 0)
+			break;
+	}
+}
 void main()
 {
 	int i;
-	volatile char a[10];
-	for(i = 0; i < 10; i++)
-	{
-		a[i] = i + 0x30;
-	}
-	for(i = 0; i < 10; i++)
-	{
-		GPIO_A_ODR = a[i];
-	}
-	GPIO_A_ODR='\n';
+	char a[]="Hello";
+	puts(a);
 	while(1);
 }
