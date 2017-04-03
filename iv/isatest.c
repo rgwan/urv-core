@@ -24,7 +24,7 @@ void puts(char *s)
 void main()
 {
 	int i;
-	char a[]="Hello";
+	char a[]="Hello\n";
 	puts(a);
 	while(1);
 }

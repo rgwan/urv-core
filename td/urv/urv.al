@@ -33,6 +33,7 @@
             <File>../../rtl/kmkz_twdi.v</File>
             <File>../../rtl/kmkz_uart2bus.v</File>
             <File>../../rtl/kmkz_writeback.v</File>
+            <File>../../rtl/kmkz_fifo.v</File>
         </Verilog>
         <ADC_FILE>io.adc</ADC_FILE>
         <SDC_FILE>urv.sdc</SDC_FILE>
