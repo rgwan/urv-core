@@ -24,7 +24,9 @@ void puts(char *s)
 void main()
 {
 	int i;
-	char a[]="Hello\n";
-	puts(a);
-	while(1);
+	while(1)
+	{
+		GPIO_A_ODR = 0x55;
+		GPIO_A_ODR = 0x56;
+	}
 }

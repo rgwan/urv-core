@@ -186,10 +186,14 @@ module kamikaze_fetch_fifo(
 					remains_data <= remains_data + compressed;
 				end
 				
-				if(!fetch_ready_i)
+				if(!fifo_empty)
+				begin
 					ready_o <= 1;
+				end
 				else
+				begin
 					ready_o <= 0;
+				end
 				if(fetch_ready_i && !fifo_empty)
 				begin
 					if(fifo_buffer[read_pointer][1:0] == 2'b11)
@@ -208,7 +212,6 @@ module kamikaze_fetch_fifo(
 					ir_orig_o <= ir_t; /* Just for test */
 					ir_o <= expanded_ir;
 					pc_o <= pc_o + pc_add;
-					ready_o <= 1;
 					
 				end
 			end

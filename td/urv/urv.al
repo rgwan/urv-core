@@ -62,9 +62,9 @@
         </TimingProperty>
     </Property>
     <Project_Settings>
-        <Current_Step>0</Current_Step>
-        <SRC-Last-Read>2017-03-07 17:03:34</SRC-Last-Read>
-        <SLC-Last-Read>2017-03-07 17:03:36</SLC-Last-Read>
-        <SDC-Last-Read>2017-03-07 17:04:24</SDC-Last-Read>
+        <Current_Step>60</Current_Step>
+        <SRC-Last-Read>2017-04-03 23:32:48</SRC-Last-Read>
+        <SLC-Last-Read>2017-04-03 23:32:51</SLC-Last-Read>
+        <SDC-Last-Read>2017-04-03 23:33:42</SDC-Last-Read>
     </Project_Settings>
 </Project>

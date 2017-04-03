@@ -132,6 +132,11 @@ module top;
 	mem_data_l[31:24] <= mem [{dm_addr[31:2], 2'b00} + 3];
 	
 	
+	hrdata[7:0] <= mem [{HADDR_I[31:2], 2'b00}];
+	hrdata[15:8] <= mem [{HADDR_I[31:2], 2'b00} + 1];
+	hrdata[23:16] <= mem [{HADDR_I[31:2], 2'b00} + 2];
+	hrdata[31:24] <= mem [{HADDR_I[31:2], 2'b00} + 3];
+	
 	
      end // always@ (posedge clk)
      
@@ -179,11 +184,16 @@ module top;
 	wire [31:0]	HWDATA_I;
 	wire 		HWRITE_I;
 
+	reg [31:0]	hrdata;
+	
 	wire [31:0] 	HRDATA_I;
 	wire 		HREADY_I;
 	wire 		HRESP_I;
 
-	cmsdk_ahb_ram_beh i_ram
+
+	assign HREADY_I = 1'b1;
+	assign HRDATA_I = hrdata;
+	/*cmsdk_ahb_ram_beh i_ram
 	(
 	.HCLK(clk_i),    // Clock
 	.HRESETn(rst_i), // Reset
@@ -197,7 +207,7 @@ module top;
 	.HREADYOUT(HREADY_I), // Device ready
 	.HRDATA(HRDATA_I),  // Read data output
 	.HRESP(HRESP_i)
-	); 
+	); */
 
    urv_cpu DUT
      (
