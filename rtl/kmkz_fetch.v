@@ -73,7 +73,7 @@ module kamikaze_fetch
 	
 	reg f_kill;
 	
-	assign f_valid_o = prefetcher_ready && !f_kill_i;
+	assign f_valid_o = prefetcher_ready && !f_kill;
 	
 	wire [31:0] ir;
 	

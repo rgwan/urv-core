@@ -95,7 +95,7 @@ module kamikaze_compress_decoder
 
           3'b011: begin
             // c.lui -> lui rd, imm
-            instr_o = {{15 {instr_i[12]}}, instr_i[6:2], instr_i[11:7], `OPC_LUI};
+            instr_o = {{15 {instr_i[12]}}, instr_i[6:2], instr_i[11:7], `OPC_LUI, 2'b11};
 
             if (instr_i[11:7] == 5'h02) begin
               // c.addi16sp -> addi x2, x2, nzimm

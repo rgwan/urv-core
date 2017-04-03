@@ -69,7 +69,7 @@ module kamikaze_fetch_fifo(
 	
 	reg fetch_start;
 	
-	wire fifo_full = remains_data == 8;// || remains_data == 7;
+	wire fifo_full = remains_data == 8  || remains_data == 7;
 	wire fifo_empty = remains_data == 0 || remains_data == 1;
 	
 	reg compressed;
