@@ -42,7 +42,7 @@ module kamikaze_fetch_fifo(
 	input rst_i,
 	
 	/* 输出地址，输入数据 */
-	output reg [31:0]pc_mem_o,
+	output reg [31:0]	pc_mem_o,
 	input  [31:0]	ir_i,
 	input		memory_ready_i, /* 存储器准备好信号 */
 	
@@ -72,12 +72,14 @@ module kamikaze_fetch_fifo(
 	reg [1:0] write_pointer;
 	wire [1:0] fifo_read_pointer = read_pointer[2:1];
 	
-	/*wire fifo_empty = (write_pointer - fifo_read_pointer) == 0;
-	wire fifo_halffull = (write_pointer - fifo_read_pointer) > 1;
-	wire fifo_full = (write_pointer - fifo_read_pointer) == 3;*/
-	reg fifo_empty;
-	reg fifo_halffull;
-	reg fifo_full;
+	wire fifo_empty = (write_pointer - fifo_read_pointer) == 0;
+	wire fifo_halffull = (write_pointer - fifo_read_pointer) == 2;
+	wire fifo_full = (write_pointer - fifo_read_pointer) == 3;
+	
+	/*wire fifo_empty = fifo_remains_data == 0;
+	wire fifo_full = fifo_remains_data == 3;
+	wire fifo_halffull = fifo_remains_data == 2;*/
+
 	
 	reg fetch_start;
 	reg [2:0] pc_add;
@@ -86,102 +88,107 @@ module kamikaze_fetch_fifo(
 	
 	reg compressed_out;
 	
-	/* 对齐 */
+	reg [31:0] pc_mem;
+	reg [31:0] pc_prev;
+	
+	//wire comb_compressed = dbg_ro[1:0] != 2'b11;
+	
+	always @*
+	begin
+		if(fifo_halffull)
+			pc_mem_o <= pc_prev;
+		else
+			pc_mem_o <= pc_mem;
+		
+	end
 	
 	always @(posedge clk_i or negedge rst_i)
 	begin
 		if(!rst_i)
 		begin
-			pc_mem_o <= pc_set_i;
-			pc_o <= pc_set_i;
+			pc_mem <= pc_set_i;
 			fifo_memory[0] <= 0;
 			fifo_memory[1] <= 0;
 			fifo_memory[2] <= 0;
 			fifo_memory[3] <= 0;
 			write_pointer <= 0;
-			read_pointer <= 0;
-			ir_o <= 0;
-			
-			dbg_ro <= 2'b11;
-			
 			compressed_out <= 0;
-			
 			ready_o <= 0;
-			
-			fifo_empty <= 1;
-			fifo_halffull <= 0;
-			fifo_full <= 0;
-			
 			fetch_start <= 0;
-			pc_add = 0;
 		end
 		else
 		begin
+
 			if(fetch_start == 0)
 			begin
 				fetch_start <= 1;
-				pc_mem_o <= pc_mem_o + 16'h4;
+				pc_mem <= pc_mem + 16'h4;
 			end
 			else
 			begin
-			
-			fifo_empty <= (write_pointer - fifo_read_pointer) == 0;
-			fifo_halffull <= (write_pointer - fifo_read_pointer) == 1;
-			fifo_full <= (write_pointer - fifo_read_pointer) > 1;
-			
-				if(memory_ready_i && !fifo_full)
+				if(memory_ready_i && !fifo_halffull)
 				begin
+					pc_prev <= pc_mem;
 					fifo_memory[write_pointer] <= ir_i;
-					pc_mem_o <= pc_mem_o + 16'h4;
+					pc_mem <= pc_mem_o + 16'h4;
 				
 					write_pointer <= write_pointer + 1'b1;
 				end
-				
-				ready_o <= 0;
-				if(fetch_ready_i && fifo_halffull && !fifo_empty)
-				begin /* 对齐 */	
-					pc_add <= 0;
-					if(read_pointer[0] == 1'b0)
-					begin
-
-						if(fifo_memory[fifo_read_pointer][1:0] == 2'b11)
-						begin
-							read_pointer <= read_pointer + 2;
-							compressed_out <= 0;
-							dbg_ro <= fifo_memory[fifo_read_pointer];
-							pc_add <= 4;
-						end
-						else
-						begin
-							read_pointer <= read_pointer + 1;
-							compressed_out <= 1;
-							dbg_ro <= fifo_memory[fifo_read_pointer][15:0];
-							pc_add <= 2;
-						end
-					end
-					else
-					begin
-						if(fifo_memory[fifo_read_pointer][17:16] == 2'b11)
-						begin
-							read_pointer <= read_pointer + 2;
-							compressed_out <= 0;
-							dbg_ro <= {fifo_memory[fifo_read_pointer + 1][15:0], fifo_memory[fifo_read_pointer][31:16]};
-							pc_add <= 4;
-						end
-						else
-						begin
-							read_pointer <= read_pointer + 1;
-							compressed_out <= 1;
-							dbg_ro <= fifo_memory[fifo_read_pointer][31:16];
-							pc_add <= 2;
-						end
-												
-					end
-					pc_o <= pc_o + pc_add;					
-					ready_o <= 1;
-				end
-
 			end
 		end
 	end
+	
+	always @(posedge clk_i or negedge rst_i)
+	begin
+		if(!rst_i)
+		begin
+			pc_o <= pc_set_i;
+			pc_add <= 0;
+			
+			read_pointer <= 0;
+			
+		end
+		else
+			ready_o <= 0;
+			if(fetch_ready_i && !fifo_empty)
+			begin /* 对齐 */	
+				if(read_pointer[0] == 1'b0)
+				begin
+					if(fifo_memory[fifo_read_pointer][1:0] == 2'b11)
+					begin
+						read_pointer <= read_pointer + 2;
+						compressed_out <= 0;
+						dbg_ro <= fifo_memory[fifo_read_pointer];
+						pc_add <= 4;
+					end
+					else
+					begin
+						read_pointer <= read_pointer + 1;
+						compressed_out <= 1;
+						dbg_ro <= fifo_memory[fifo_read_pointer][15:0];
+						pc_add <= 2;
+					end
+				end
+				else /* 非对齐 */
+				begin
+					if(fifo_memory[fifo_read_pointer][17:16] == 2'b11)
+					begin
+						read_pointer <= read_pointer + 2;
+						compressed_out <= 0;
+						dbg_ro <= {fifo_memory[fifo_read_pointer + 1][15:0], fifo_memory[fifo_read_pointer][31:16]};
+						pc_add <= 4;
+					end
+					else
+					begin
+						read_pointer <= read_pointer + 1;
+						compressed_out <= 1;
+						dbg_ro <= fifo_memory[fifo_read_pointer][31:16];
+						pc_add <= 2;
+					end
+											
+				end
+				pc_o <= pc_o + pc_add;					
+				ready_o <= 1;
+			end
+		end
 endmodule
