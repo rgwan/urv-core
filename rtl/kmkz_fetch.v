@@ -84,17 +84,19 @@ module kamikaze_fetch
 	
 	reg f_branch;
 	
+	
+	reg branch_hold;
+	reg [31:0] latched_pc;
+	
+	reg latched_align;
+	
 	assign stall_fetching = (pc_add_prev == 2) && (pc[1:0] == 2'b00); /* 16位对齐等待，防止冲数据 */
 	
 	
 	
 	always @*
 	begin
-		if(x_bra_i)
-		begin
-			HADDR <= {x_pc_bra_i[31:2], 2'b00};
-		end
-		else if(f_stall_i)
+		if(f_stall_i)
 		begin
 			HADDR <= {pc_4_prev[31:2], 2'b00};
 		end
@@ -117,11 +119,22 @@ module kamikaze_fetch
 			f_valid_o <= 0;
 			f_is_compressed_o <= 0;
 			align_wait <= 0;
+			latched_align <= 0;
 			f_branch <= 0;
+			
+			branch_hold <= 0;
+			latched_pc <= 0;
 		end
 		else
 		begin
-			if(!f_stall_i)
+			f_valid_o <= !f_kill_i & !illegal_instr_c && !align_wait && HREADY && !latched_align;
+			if(x_bra_i)
+			begin
+				branch_hold <= 1;
+				latched_pc <= x_pc_bra_i;
+			end
+			
+			if(!f_stall_i && HREADY)
 			begin	
 				if(fetch_start == 1'b0)
 				begin
@@ -135,34 +148,39 @@ module kamikaze_fetch
 					if(align_wait)
 						align_wait <= 0;
 					
-					f_branch <= x_bra_i;
-					if(HREADY)
-					begin
-						if(x_bra_i)
-						begin
-							pc_4 <= {x_pc_bra_i[31:2], 2'b00} + 16'h4;
-							pc <= x_pc_bra_i;
-							
-							if(x_pc_bra_i[1:0] == 2'b10)
-								align_wait <= 1;
-
-						end
-						else
-						begin
-							if(pc[1:0] == 2'b00 || pc_add == 16'h4 || f_branch)
-							begin /* 当pc增4或对齐的时候请求读取 */
-								pc_4 <= pc_4 + 16'h4;
-							end
-							if(!align_wait)
-							begin
-								pc <= pc + pc_add;
-							end
-						end
-						
-						
-					end
+					latched_align <= align_wait;
 					
-					f_valid_o <= !f_kill_i & !illegal_instr_c && !align_wait && HREADY;
+					if(f_branch)
+					begin
+						f_branch <= 0;
+					end
+
+					if(branch_hold)
+					begin
+						pc_4 <= {latched_pc[31:2], 2'b00};
+						pc <= latched_pc;
+							
+						if(latched_pc[1:0] == 2'b10)
+							align_wait <= 1;
+							
+						branch_hold <= 0;
+						f_branch <= 1;
+
+					end
+					else
+					begin
+						if(pc[1:0] == 2'b00 || pc_add == 16'h4 || f_branch || !latched_align)
+						begin /* 当pc增4或对齐的时候请求读取 */
+							pc_4 <= pc_4 + 16'h4;
+						end
+						if(!align_wait && !latched_align)
+						begin
+							pc <= pc + pc_add;
+						end
+					end
+
+					
+					
 				
 					if(!stall_fetching || f_branch)
 						prev_ir <= HRDATA;
