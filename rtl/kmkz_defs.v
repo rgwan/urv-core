@@ -84,9 +84,14 @@
 `define CSR_ID_MSCRATCH 12'h340
 `define CSR_ID_MEPC 12'h341
 `define CSR_ID_MSTATUS 12'h300
+`define CSR_ID_MISA	12'h301
 `define CSR_ID_MCAUSE 12'h342
 `define CSR_ID_MIP 12'h344
 `define CSR_ID_MIE 12'h304
+
+`define CSR_VENDOR_ID	12'hf11
+`define CSR_ARCH_ID	12'hf12
+`define CSR_IMPL_ID	12'hf13
 
 `define CSR_OP_CSRRW 3'b001
 `define CSR_OP_CSRRS 3'b010

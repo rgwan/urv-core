@@ -81,7 +81,7 @@ module top;
    begin
    	#0  rst = 0;
    	#22.5 rst = 1;
-   	#2000000 $stop;
+   	#8000000 $stop;
    end
    initial begin
    	#6605 rxd = 0;
@@ -224,7 +224,7 @@ module top;
       .clk_i(clk_i),
       .rst_i(rst_i),
 
-      // instruction mem I/F
+	/* AHB Lite 指令 总线 */
 
 	.HADDR_I(HADDR_I),
 	.HBURST_I(HBURST_I),
@@ -252,6 +252,7 @@ module top;
       .dm_store_done_i(1'b1),
       .dm_load_done_i(1'b1),
       .dm_ready_i(dm_ready)
+      	
       );
 
    

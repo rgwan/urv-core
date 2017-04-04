@@ -93,14 +93,14 @@ module urv_exec
    output reg 	     w_valid_o,
    output reg [4:0]  w_rd_o,
    output reg [31:0] w_rd_value_o,
-   output reg 	     w_rd_write_o,
+   output  	     w_rd_write_o,
    output reg [31:0] w_dm_addr_o,
    output reg [1:0]  w_rd_source_o,
    output [31:0]     w_rd_shifter_o,
    output [31:0]     w_rd_multiply_o,
    
    
-   // Data memory I/F (address/store)
+   // AHB-Lite 数据总线
    output [31:0]     dm_addr_o,
    output [31:0]     dm_data_s_o,
    output [3:0]      dm_data_select_o,
@@ -149,6 +149,9 @@ module urv_exec
    wire [31:0] 	 csr_mie, csr_mip, csr_mepc, csr_mstatus,csr_mcause;
    wire [31:0] 	 csr_write_value;
    wire [31:0] 	 exception_address, exception_vector;
+   
+
+   
    reg [63:0] csr_instrs;
    
    reg invalid_ir;
@@ -433,6 +436,11 @@ module urv_exec
    
    
    // X/W pipeline registers
+   
+   reg w_rd_write;
+   
+   assign w_rd_write_o = w_rd_write;// & d_valid_i;
+   
    always@(posedge clk_i or negedge rst_i) 
      if (!rst_i) begin
 	f_branch_take   <= 0;
@@ -447,7 +455,7 @@ module urv_exec
 	w_rd_o <= d_rd_i;
 	w_rd_value_o <= rd_value;
 
-	w_rd_write_o <= d_rd_write_i && !x_kill_i && d_valid_i && !exception;
+	w_rd_write <= d_rd_write_i && !x_kill_i && !exception && d_valid_i;
 	w_load_o <= d_is_load_i && !x_kill_i && d_valid_i && !exception;
 	w_store_o <= d_is_store_i && !x_kill_i && d_valid_i && !exception;
 

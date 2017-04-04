@@ -96,12 +96,58 @@ void dump_memory(int address, int size)
 	}
 }
 
+
 void main()
 {
-	int i;
-	puts("System start\r\n");
-	dump_memory(0, 0x100);
-	printcounter();
+	volatile int i = 10, j = 10;
+	int vendor_id, impl_id, arch_id, isa;
+	puts("System start\r\nA * A equals:");
+	printhex(i * j);
+	
+	__asm__("csrr %0, 0xf11;" : "=r"(vendor_id));
+	puts("\r\nCPU vendor id:");
+	printhex(vendor_id >> 24);
+	printhex(vendor_id >> 16);
+	printhex(vendor_id >> 8);
+	printhex(vendor_id);
+	
+	putc(' ');
+	
+	putc(vendor_id >> 24);
+	putc(vendor_id >> 16);
+	putc(vendor_id >> 8);
+	putc(vendor_id);
+	
+
+	__asm__("csrr %0, 0xf13;" : "=r"(impl_id));
+	puts("\r\nCPU impl id:");
+	printhex(impl_id >> 24);
+	printhex(impl_id >> 16);
+	printhex(impl_id >> 8);
+	printhex(impl_id);
+	
+	putc(' ');
+	
+	putc(impl_id >> 24);
+	putc(impl_id >> 16);
+	putc(impl_id >> 8);
+	putc(impl_id);
+
+	__asm__("csrr %0, 0xf12;" : "=r"(arch_id));
+	puts("\r\nCPU arch id:");
+	printhex(arch_id >> 24);
+	printhex(arch_id >> 16);
+	printhex(arch_id >> 8);
+	printhex(arch_id);
+	
+	putc(' ');
+	
+	putc(arch_id >> 24);
+	putc(arch_id >> 16);
+	putc(arch_id >> 8);
+	putc(arch_id);
+			
+	printcrlf();
 	puts("Done\r\n");
 	
 }

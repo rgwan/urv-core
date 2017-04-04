@@ -44,9 +44,9 @@ module urv_csr
    
    output reg [31:0] x_rd_o,
    
-   input [39:0]      csr_time_i,
-   input [63:0]      csr_cycles_i,
-   input [63:0]		 csr_instrs_i,
+   input [39:0]		csr_time_i,
+   input [63:0]		csr_cycles_i,
+   input [63:0]		csr_instrs_i,
 
    // interrupt management
 
@@ -65,6 +65,11 @@ module urv_csr
    reg [31:0] 	csr_in1;
    reg [31:0] 	csr_in2;
    reg [31:0] 	csr_out;
+   
+   wire [31:0] cpu_vendor = 32'h414e4c47; /* Vendor 'ANLG' */
+   wire [31:0] cpu_arch = 32'h4b4d4b5a;   /* Arch: 'Kamikaze' */
+   wire [31:0] cpu_impl = 32'h5a303031;	  /* Impl: 'K0001' */
+   wire [31:0] cpu_misa = 32'b01100000000000000001000100000100; /* RV32IMC */
 
   
    always@*
@@ -81,6 +86,10 @@ module urv_csr
        `CSR_ID_MCAUSE: csr_in1 <= csr_mcause_i;
        `CSR_ID_MIP: csr_in1 <= csr_mip_i;
        `CSR_ID_MIE: csr_in1 <= csr_mie_i;
+       `CSR_VENDOR_ID: csr_in1 <= cpu_vendor;
+       `CSR_ARCH_ID: csr_in1 <= cpu_arch;
+       `CSR_IMPL_ID: csr_in1 <= cpu_impl;
+       `CSR_ID_MISA: csr_in1 <= cpu_misa;
        default: csr_in1 <= 32'h0;
      endcase // case (d_csr_sel_i)
 
