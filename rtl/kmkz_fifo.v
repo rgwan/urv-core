@@ -92,6 +92,10 @@ module kamikaze_fetch_fifo(
 	end
 	
 	reg align_wait;
+	reg valid_delay;
+	reg [3:0] prev_remains_data;
+	reg [31:0] prev_pc;
+	
 	always @(posedge clk_i or negedge rst_i)
 	begin
 		if(!rst_i)
@@ -122,6 +126,8 @@ module kamikaze_fetch_fifo(
 			ready_o <= 0;
 			
 			align_wait <= pc_reset_i[1];
+			valid_delay <= 0;
+			prev_pc <= 0;
 		end
 		else if(branch_i)
 		begin
@@ -172,19 +178,30 @@ module kamikaze_fetch_fifo(
 					pc_prev <= pc_mem;
 					
 				end
-				if((memory_ready_i && !fifo_full) && !(fetch_ready_i && !fifo_empty))
+				if((memory_ready_i && !fifo_full) && !(fetch_ready_i && !fifo_empty)) /* 只写 */
 				begin
 					remains_data <= remains_data + 2 - align_wait;
 					align_wait <= 0;
 				end
-				else if(!(memory_ready_i && !fifo_full) && (fetch_ready_i && !fifo_empty))
+				else if(!(memory_ready_i && !fifo_full) && (fetch_ready_i && !fifo_empty)) /* 只读 */
 				begin
 					remains_data <= remains_data - (compressed? 1: 2);
 				end
-				else if((memory_ready_i && !fifo_full) && (fetch_ready_i && !fifo_empty))
+				else if((memory_ready_i && !fifo_full) && (fetch_ready_i && !fifo_empty)) /* 又读又写 */
 				begin
 					remains_data <= remains_data + compressed;
 				end
+				
+				
+				
+				if(prev_pc != pc_o)
+					valid_delay <= 1;
+				else
+					valid_delay <= 0;
+					
+				prev_pc <= pc_o;
+				
+				prev_remains_data <= remains_data;
 				
 				if(!fifo_empty)
 				begin
@@ -194,6 +211,7 @@ module kamikaze_fetch_fifo(
 				begin
 					ready_o <= 0;
 				end
+				
 				if(fetch_ready_i && !fifo_empty)
 				begin
 					if(fifo_buffer[read_pointer][1:0] == 2'b11)

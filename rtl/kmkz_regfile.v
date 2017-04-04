@@ -50,6 +50,7 @@ bregmem regmem (
 endmodule
 
 */
+/*
 module urv_regmem
   (
    input 	     clk_i,
@@ -64,24 +65,24 @@ module urv_regmem
    input 	     we2_i
    );
    
-   wire [31:0]do;
+   wire [31:0]	ram_data_out;
    regfile_dp_m ram(	.di(d2_i),
    			.waddr(a2_i),
    			.wclk(clk_i),
    			.we(we2_i),
    			
    			.raddr(a1_i),
-   			.do(do));
+   			.do(ram_data_out));
    			
 
    
    always@(posedge clk_i)
      if(en1_i)
-       q1_o <= a1_i? do: 32'h0;
+       q1_o <= a1_i? ram_data_out: 32'h0;
    
 endmodule
 
-/*module urv_regmem
+module urv_regmem
   (
    input 	     clk_i,
    input 	     rst_i,
@@ -175,11 +176,14 @@ module urv_regfile
  );
 
 
-   wire [31:0] rs1_regfile;
-   wire [31:0] rs2_regfile;
+
    wire        write  = (w_rd_store_i && (w_rd_i != 0));
 
 	/* 这里应用2R1W同步RAM替换掉 */
+/* 使用 FPGA 时的配置，应用FPGA的DRAM/BRAM */
+/*
+   wire [31:0] rs1_regfile;
+   wire [31:0] rs2_regfile;
    urv_regmem bank0 
      (
       .clk_i(clk_i),
@@ -205,7 +209,65 @@ module urv_regfile
       .d2_i (w_rd_value_i),
       .we2_i (write)
       );
-      
+*/
+/* 应用ASIC时的配置 */
+	reg [31:0] rs1_regfile;
+	reg [31:0] rs2_regfile;
+	
+	reg	[31:0] regfile_ram [1:31];
+	always @(posedge clk_i or negedge rst_i)
+	begin
+		if(!rst_i)
+		begin
+			rs1_regfile <= 32'h0;
+			rs2_regfile <= 32'h0;
+		end
+		else
+		begin
+			if(!d_stall_i)
+			begin
+				rs1_regfile <= rf_rs1_i? regfile_ram[rf_rs1_i]: 32'h0;
+				rs2_regfile <= rf_rs2_i? regfile_ram[rf_rs2_i]: 32'h0;
+			end
+			if(write && w_rd_i)
+			begin
+				regfile_ram[w_rd_i] <= w_rd_value_i;
+			end
+		end
+	end
+	
+  	wire [31:0]cpureg_1 = regfile_ram[1];
+	wire [31:0]cpureg_2 = regfile_ram[2];
+	wire [31:0]cpureg_3 = regfile_ram[3];/* Debug用 */
+	wire [31:0]cpureg_4 = regfile_ram[4];
+	wire [31:0]cpureg_5 = regfile_ram[5];
+	wire [31:0]cpureg_6 = regfile_ram[6];
+	wire [31:0]cpureg_7 = regfile_ram[7];
+	wire [31:0]cpureg_8 = regfile_ram[8];
+	wire [31:0]cpureg_9 = regfile_ram[9];
+	wire [31:0]cpureg_10 = regfile_ram[10];
+	wire [31:0]cpureg_11 = regfile_ram[11];
+	wire [31:0]cpureg_12 = regfile_ram[12];
+	wire [31:0]cpureg_13 = regfile_ram[13];
+	wire [31:0]cpureg_14 = regfile_ram[14];
+	wire [31:0]cpureg_15 = regfile_ram[15];
+	wire [31:0]cpureg_16 = regfile_ram[16];
+	wire [31:0]cpureg_17 = regfile_ram[17];
+	wire [31:0]cpureg_18 = regfile_ram[18];
+	wire [31:0]cpureg_19 = regfile_ram[19];
+	wire [31:0]cpureg_20 = regfile_ram[20];
+	wire [31:0]cpureg_21 = regfile_ram[21];
+	wire [31:0]cpureg_22 = regfile_ram[22];
+	wire [31:0]cpureg_23 = regfile_ram[23];
+	wire [31:0]cpureg_24 = regfile_ram[24];
+	wire [31:0]cpureg_25 = regfile_ram[25];
+	wire [31:0]cpureg_26 = regfile_ram[26];
+	wire [31:0]cpureg_27 = regfile_ram[27];
+	wire [31:0]cpureg_28 = regfile_ram[28];
+	wire [31:0]cpureg_29 = regfile_ram[29];
+	wire [31:0]cpureg_30 = regfile_ram[30];
+	wire [31:0]cpureg_31 = regfile_ram[31];
+   /* register file RAM 分割线 */   
    /* 流水线结果前递 */   
    wire        rs1_bypass_x = w_bypass_rd_write_i && (w_rd_i == d_rs1_i) && (w_rd_i != 0);
    wire        rs2_bypass_x = w_bypass_rd_write_i && (w_rd_i == d_rs2_i) && (w_rd_i != 0);

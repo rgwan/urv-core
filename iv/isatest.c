@@ -101,9 +101,13 @@ void main()
 {
 	volatile int i = 10, j = 10;
 	int vendor_id, impl_id, arch_id, isa;
+	
+	puts("Hello world!\r\n");
 	puts("System start\r\nA * A equals:");
+	
 	printhex(i * j);
 	
+
 	__asm__("csrr %0, 0xf11;" : "=r"(vendor_id));
 	puts("\r\nCPU vendor id:");
 	printhex(vendor_id >> 24);
@@ -148,6 +152,7 @@ void main()
 	putc(arch_id);
 			
 	printcrlf();
+
 	puts("Done\r\n");
 	
 }

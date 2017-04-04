@@ -27,7 +27,7 @@
 module cmsdk_ahb_ram_beh #(
   parameter AW       = 16,// Address width
   parameter filename = "firmware.hex",
-  parameter WS_N     = 0, // First access wait state
+  parameter WS_N     = 1, // First access wait state
   parameter WS_S     = 0) // Subsequent access wait state
  (
   input  wire          HCLK,    // Clock
@@ -60,6 +60,11 @@ module cmsdk_ahb_ram_beh #(
   wire [AW-1:0] nxt_word_addr;  // Word aligned address
   integer       i;              // Loop counter
 
+  wire [7:0] ram_400 = ram_data[32'h400];
+  wire [7:0] ram_401 = ram_data[32'h401];
+  wire [7:0] ram_402 = ram_data[32'h402];
+  wire [7:0] ram_403 = ram_data[32'h403];
+  
   // Wait state control
   wire  [31:0]  nxt_waitstate_cnt;
   reg   [31:0]  reg_waitstate_cnt;

@@ -97,18 +97,21 @@ module top;
    end
 
    
-
+	reg HWRITE_prev;
+	reg [31:0] HADDR_prev;
 	wire trap;
 	always@(posedge clk_i)
 	begin
-		/*if(dm_write && io_sel)
+		if(HWRITE_prev && HADDR_prev == 32'h1000_0000)
 		begin
-			io_o <= dm_data_s[7:0];
+			io_o <= HWDATA_D[7:0];
 			$write("%c", io_o);
 			$fflush;
       			if(io_o == 8'hFF)
        				$finish;
-       		end*/
+       		end
+       		HWRITE_prev <= HWRITE_D;
+       		HADDR_prev <= HADDR_D;
 		if(trap)
 		begin
 			$write("\nTRAPPED!\n");
@@ -163,11 +166,13 @@ module top;
 	wire 		HREADY_D;
 	wire 		HRESP_D;
 	
+	wire		d_ram_HSEL = (HADDR_D != 32'h1000_0000);
+	
 	cmsdk_ahb_ram_beh d_ram
 	(
 	.HCLK(clk_i),    // Clock
 	.HRESETn(rst_i), // Reset
-	.HSEL(1'b1),    // Device select
+	.HSEL(d_ram_HSEL),    // Device select
 	.HADDR(HADDR_D),   // Address
 	.HTRANS(HTRANS_D),  // Transfer control
 	.HSIZE(HSIZE_D),   // Transfer size
