@@ -35,12 +35,23 @@ module urv_cpu
     parameter g_debug_breakpoints = 6
    ) 
    (
-   input 	 clk_i,
-   input 	 rst_i,
+	// 时钟与复位
+	input		CLK, /* 系统时钟、AHB时钟 */
+	input		nRST, /* CPU复位、AHB复位 */
 
-   input 	 irq_i,
+	// 调试系统
+	input		DBGU_RXD, /* 调试串口接收 */
+	output		DBGU_TXD, /* 调试串口发送 */
+
+	input		DBUG_nRST, /* 调试系统硬开关/复位 */
+
+	//中断系统与异常处理系统
+	input [31:0]	nIRQ, /* 32个中断输入，低电平有效 */
+	input 		nNMI, /* 不可屏蔽中断输入,低电平有效 */
+	output 		TRAP, /* 处理器挂起输出，由调试挂起/WFI/BREAK或异常指令触发 */
+	input [31:0]	STARTUP_BASE, /* 启动地址 */
    
-   // instruction mem I/F
+	/* AHB_LITE 指令总线 */
 	output [31:0]	HADDR_I,
 	output [2:0] 	HBURST_I,
 	output 		HMASTLOCK_I,
@@ -53,22 +64,21 @@ module urv_cpu
 	input [31:0] 	HRDATA_I,
 	input 		HREADY_I,
 	input 		HRESP_I,
-	
-	input [31:0]	STARTUP_BASE,
-	
-	output		TRAP,
 
-   // data mem I/F
-   output [31:0] dm_addr_o,
-   output [31:0] dm_data_s_o,
-   input [31:0]  dm_data_l_i,
-   output [3:0]  dm_data_select_o,
-   input 	 dm_ready_i,
+	/* AHB_LITE 数据总线 */
+	output [31:0]	HADDR_D,
+	output [2:0] 	HBURST_D,
+	output 		HMASTLOCK_D,
+	output [3:0]	HPROT_D,
+	output [2:0] 	HSIZE_D,
+	output [1:0] 	HTRANS_D,
+	output [31:0]	HWDATA_D,
+	output		HWRITE_D,
 
-   output 	 dm_store_o,
-   output 	 dm_load_o,
-   input 	 dm_load_done_i,
-   input 	 dm_store_done_i 
+	input [31:0]	HRDATA_D,
+	input		HREADY_D,
+	input		HRESP_D
+
    );
 
 
@@ -139,6 +149,7 @@ module urv_cpu
    wire 	 x2w_load;
    wire [1:0] 	 x2w_rd_source;
    wire 	 x2w_valid;
+   wire [31:0]	 x_HWDATA;
 
    // Register file signals
    wire [31:0] 	 x_rs2_value, x_rs1_value;
@@ -158,8 +169,8 @@ module urv_cpu
    
    kamikaze_fetch fetch
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .clk_i(CLK),
+      .rst_i(nRST),
       
       /* AHB lite 总线 */
 
@@ -196,8 +207,8 @@ module urv_cpu
 
    urv_decode decode
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .clk_i(CLK),
+      .rst_i(nRST),
 
       // pipe control
       .d_stall_i(d_stall),
@@ -248,8 +259,9 @@ module urv_cpu
    // Register File (RF)
    urv_regfile regfile
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .clk_i(CLK),
+      .rst_i(nRST),
+
 
       .d_stall_i(d_stall),
 
@@ -273,8 +285,9 @@ module urv_cpu
    // Execute 1/Memory stage (X1/M)
    urv_exec execute
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .clk_i(CLK),
+      .rst_i(nRST),
+
       
       .irq_i ( irq_i ),
 
@@ -331,14 +344,19 @@ module urv_cpu
       .w_rd_shifter_o ( x2w_rd_shifter),
       .w_rd_multiply_o ( x2w_rd_multiply),
 
-      // Data memory I/F
-      .dm_addr_o(dm_addr_o),
-      .dm_data_s_o(dm_data_s_o),
-      .dm_data_select_o(dm_data_select_o),
-      .dm_store_o(dm_store_o),
-      .dm_load_o(dm_load_o),
-      .dm_ready_i(dm_ready_i),
-
+      /* AHB_LITE 总线 */
+	      
+	.HADDR(HADDR_D),
+	.HBURST(HBURST_D),
+	.HMASTLOCK(HMASTLOCK_D),
+	.HPROT(HPROT_D),
+	.HSIZE(HSIZE_D),
+	.HTRANS(HTRANS_D),
+	.HWDATA(x_HWDATA),
+	.HWRITE(HWRITE_D),
+	
+	.HREADY(HREADY_D),
+	
       // CSR registers/timer stuff
       .csr_time_i (csr_time),
       .csr_cycles_i (csr_cycles),
@@ -351,8 +369,9 @@ module urv_cpu
    // Execute 2/Writeback stage
    urv_writeback writeback
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .clk_i(CLK),
+      .rst_i(nRST),
+
 
       // pipe control
       .w_stall_i(w_stall),
@@ -371,10 +390,12 @@ module urv_cpu
       .x_multiply_rd_value_i ( x2w_rd_multiply),
       .x_dm_addr_i(x2w_dm_addr),
 
-      // Data memory I/F
-      .dm_data_l_i(dm_data_l_i),
-      .dm_load_done_i(dm_load_done_i),
-      .dm_store_done_i(dm_store_done_i),
+      /* AHB_LITE 总线 */
+      .HREADY(HREADY_D),
+      .HWDATA(HWDATA_D),
+      .HRDATA(HRDATA_D),
+      .HWRITE(HWRITE_D),
+      .x_HWDATA(x_HWDATA),
       
       // to register file
       .rf_rd_value_o(rf_rd_value),
@@ -390,8 +411,8 @@ module urv_cpu
        ) 
    ctimer 
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .clk_i(CLK),
+      .rst_i(nRST),
 
       .csr_time_o(csr_time),
       .csr_cycles_o(csr_cycles),
@@ -402,8 +423,8 @@ module urv_cpu
    // pipeline invalidation logic after a branch
    reg 		 x2f_bra_d0, x2f_bra_d1;
 
-   always@(posedge clk_i or negedge rst_i)
-     if(!rst_i) begin
+   always@(posedge CLK or negedge nRST)
+     if(!nRST) begin
 	x2f_bra_d0 <= 0;
 	x2f_bra_d1 <= 0;
      end else if (!x_stall) begin

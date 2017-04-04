@@ -50,17 +50,13 @@ endmodule
 
 module top;
 
-   localparam mem_size=16384;   
-   localparam mem_addr_bits = 16;
   
    reg clk_i = 0;
    reg rst_i = 0;
    reg rst;
    reg [7:0]io_o;
  
-      reg [7:0]  mem[0:mem_size- 1];
-
-   
+  
    wire [31:0] 	  im_addr;
    reg [31:0] 	  im_data;
    reg 		  im_valid;
@@ -94,65 +90,25 @@ module top;
    end
    
    always #5 clk_i = !clk_i;
-   
-   initial begin
-   	 $readmemh("firmware.hex", mem);
-   end
-   
-   always@(posedge clk_i)
-     begin
-	im_data <= mem[im_addr[mem_addr_bits-1:2] ];
-	im_valid <= 1;
-     end
-     
+
    always @(posedge clk_i or negedge rst)
    begin
    	rst_i <= rst;
    end
-   wire mem_sel = !io_sel;
-   wire io_sel =  (dm_addr == 32'h1000_0000);
+
    
-   reg [31:0]mem_data_l;
-	
-   always@(posedge clk_i)
-     begin
-
-	if(dm_write && dm_data_select[0] && mem_sel)
-	  mem [{dm_addr[31:2], 2'b00} ] <= dm_data_s[7:0];
-	if(dm_write && dm_data_select[1] && mem_sel)
-	  mem [{dm_addr[31:2], 2'b00}  + 1] <= dm_data_s[15:8];
-	if(dm_write && dm_data_select[2] && mem_sel)
-	  mem [{dm_addr[31:2], 2'b00}  + 2] <= dm_data_s[23:16];
-	if(dm_write && dm_data_select[3] && mem_sel)
-	  mem [{dm_addr[31:2], 2'b00} + 3] <= dm_data_s[31:24];
-
-	mem_data_l[7:0] <= mem [{dm_addr[31:2], 2'b00}];
-	mem_data_l[15:8] <= mem [{dm_addr[31:2], 2'b00} + 1];
-	mem_data_l[23:16] <= mem [{dm_addr[31:2], 2'b00} + 2];
-	mem_data_l[31:24] <= mem [{dm_addr[31:2], 2'b00} + 3];
-	
-	
-	hrdata[7:0] <= mem [{HADDR_I[31:2], 2'b00}];
-	hrdata[15:8] <= mem [{HADDR_I[31:2], 2'b00} + 1];
-	hrdata[23:16] <= mem [{HADDR_I[31:2], 2'b00} + 2];
-	hrdata[31:24] <= mem [{HADDR_I[31:2], 2'b00} + 3];
-	
-	
-     end // always@ (posedge clk)
-     
-     wire test_3f4 = mem[16'h3f4];
 
 	wire trap;
 	always@(posedge clk_i)
 	begin
-		if(dm_write && io_sel)
+		/*if(dm_write && io_sel)
 		begin
 			io_o <= dm_data_s[7:0];
 			$write("%c", io_o);
 			$fflush;
       			if(io_o == 8'hFF)
        				$finish;
-       		end
+       		end*/
 		if(trap)
 		begin
 			$write("\nTRAPPED!\n");
@@ -160,30 +116,7 @@ module top;
 			$finish;
 		end
 	end
-    
-	wire [31:0] uart_data_o;
-   	wire uart_sel;
-   	wire dm_load;
-   	
-   	assign uart_sel = (dm_addr[31:16] == 16'h1001 && (dm_load || dm_write));
-	
-   simple_uart uart(.rst_i(rst),
-   	.txd_o(txd),
-   	.rxd_i(rxd),
-   	.clk_i(clk_i),
-   	.sel_i(uart_sel),
-   	.addr_i(dm_addr[3:2]),
-   	.data_i(dm_data_s),
-   	.data_o(uart_data_o),
-   	.we_i(dm_write));
-   	
-	reg uart_sel_d;
-	assign dm_data_l = uart_sel_d? uart_data_o: mem_data_l;
 
-	always @(posedge clk_i)
-	begin
-		uart_sel_d <= uart_sel;
-	end
 
 	wire [31:0]	HADDR_I;
 	wire [2:0] 	HBURST_I;
@@ -193,8 +126,6 @@ module top;
 	wire [1:0] 	HTRANS_I;
 	wire [31:0]	HWDATA_I;
 	wire 		HWRITE_I;
-
-	reg [31:0]	hrdata;
 	
 	wire [31:0] 	HRDATA_I;
 	wire 		HREADY_I;
@@ -216,13 +147,42 @@ module top;
 	.HREADY(HREADY_I),  // Transfer phase done
 	.HREADYOUT(HREADY_I), // Device ready
 	.HRDATA(HRDATA_I),  // Read data output
-	.HRESP(HRESP_i)
+	.HRESP(HRESP_I)
+	); 
+
+	wire [31:0]	HADDR_D;
+	wire [2:0] 	HBURST_D;
+	wire 		HMASTLOCK_D;
+	wire [3:0] 	HPROT_D;
+	wire [2:0] 	HSIZE_D;
+	wire [1:0] 	HTRANS_D;
+	wire [31:0]	HWDATA_D;
+	wire 		HWRITE_D;
+	
+	wire [31:0] 	HRDATA_D;
+	wire 		HREADY_D;
+	wire 		HRESP_D;
+	
+	cmsdk_ahb_ram_beh d_ram
+	(
+	.HCLK(clk_i),    // Clock
+	.HRESETn(rst_i), // Reset
+	.HSEL(1'b1),    // Device select
+	.HADDR(HADDR_D),   // Address
+	.HTRANS(HTRANS_D),  // Transfer control
+	.HSIZE(HSIZE_D),   // Transfer size
+	.HWRITE(HWRITE_D),  // Write control
+	.HWDATA(HWDATA_D),  // Write data
+	.HREADY(HREADY_D),  // Transfer phase done
+	.HREADYOUT(HREADY_D), // Device ready
+	.HRDATA(HRDATA_D),  // Read data output
+	.HRESP(HRESP_D)
 	); 
 
    urv_cpu DUT
      (
-      .clk_i(clk_i),
-      .rst_i(rst_i),
+      .CLK(clk_i),
+      .nRST(rst_i),
 
 	/* AHB Lite 指令 总线 */
 
@@ -242,16 +202,19 @@ module top;
 	.STARTUP_BASE(32'h0),
 	.TRAP(trap),
 	
-      // data mem I/F
-      .dm_addr_o(dm_addr),
-      .dm_data_s_o(dm_data_s),
-      .dm_data_l_i(dm_data_l),
-      .dm_data_select_o(dm_data_select),
-      .dm_store_o(dm_write),
-      .dm_load_o(dm_load),
-      .dm_store_done_i(1'b1),
-      .dm_load_done_i(1'b1),
-      .dm_ready_i(dm_ready)
+	/* AHB-Lite 数据总线 */
+	.HADDR_D(HADDR_D),
+	.HBURST_D(HBURST_D),
+	.HMASTLOCK_D(HMASTLOCK_D),
+	.HPROT_D(HPROT_D),
+	.HSIZE_D(HSIZE_D),
+	.HTRANS_D(HTRANS_D),
+	.HWDATA_D(HWDATA_D),
+	.HWRITE_D(HWRITE_D),
+	
+	.HRDATA_D(HRDATA_D),
+	.HREADY_D(HREADY_D),
+	.HRESP_D(HRESP_D)
       	
       );
 

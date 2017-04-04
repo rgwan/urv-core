@@ -53,6 +53,14 @@ module urv_writeback
    input 	     dm_load_done_i,
    input 	     dm_store_done_i,
    
+	input  [31:0]	HRDATA,
+	input  [31:0]	x_HWDATA,
+	
+	input		HREADY,
+	input		HWRITE,
+	
+	output reg [31:0]	HWDATA,
+   
    output [31:0]     rf_rd_value_o,
    output [4:0]      rf_rd_o,
    output 	     rf_rd_write_o
@@ -66,42 +74,52 @@ module urv_writeback
 	case (x_fun_i)
 	  `LDST_B:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00:  load_value <= {{24{dm_data_l_i[7]}}, dm_data_l_i[7:0] };
-	      2'b01:  load_value <= {{24{dm_data_l_i[15]}}, dm_data_l_i[15:8] };
-	      2'b10:  load_value <= {{24{dm_data_l_i[23]}}, dm_data_l_i[23:16] };
-	      2'b11:  load_value <= {{24{dm_data_l_i[31]}}, dm_data_l_i[31:24] };
+	      2'b00:  load_value <= {{24{HRDATA[7]}}, HRDATA[7:0] };
+	      2'b01:  load_value <= {{24{HRDATA[15]}}, HRDATA[15:8] };
+	      2'b10:  load_value <= {{24{HRDATA[23]}}, HRDATA[23:16] };
+	      2'b11:  load_value <= {{24{HRDATA[31]}}, HRDATA[31:24] };
 	      default: load_value <= 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 	  
 	  `LDST_BU:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00:  load_value <= {24'h0, dm_data_l_i[7:0] };
-	      2'b01:  load_value <= {24'h0, dm_data_l_i[15:8] };
-	      2'b10:  load_value <= {24'h0, dm_data_l_i[23:16] };
-	      2'b11:  load_value <= {24'h0, dm_data_l_i[31:24] };
+	      2'b00:  load_value <= {24'h0, HRDATA[7:0] };
+	      2'b01:  load_value <= {24'h0, HRDATA[15:8] };
+	      2'b10:  load_value <= {24'h0, HRDATA[23:16] };
+	      2'b11:  load_value <= {24'h0, HRDATA[31:24] };
 	      default: load_value <= 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 	  
 	  `LDST_H:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00, 2'b01: load_value <= {{16{dm_data_l_i[15]}}, dm_data_l_i[15:0] };
-	      2'b10, 2'b11: load_value <= {{16{dm_data_l_i[31]}}, dm_data_l_i[31:16] };
+	      2'b00, 2'b01: load_value <= {{16{dm_data_l_i[15]}}, HRDATA[15:0] };
+	      2'b10, 2'b11: load_value <= {{16{dm_data_l_i[31]}}, HRDATA[31:16] };
 	      default: load_value <= 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 
 	  `LDST_HU:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00, 2'b01:  load_value <= {16'h0, dm_data_l_i[15:0] };
-	      2'b10, 2'b11:  load_value <= {16'h0, dm_data_l_i[31:16] };
+	      2'b00, 2'b01:  load_value <= {16'h0, HRDATA[15:0] };
+	      2'b10, 2'b11:  load_value <= {16'h0, HRDATA[31:16] };
 	      default: load_value <= 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 	    
-	  `LDST_L: load_value <= dm_data_l_i;
+	  `LDST_L: load_value <= HRDATA;
 
 	  default: load_value <= 32'hx;
 	endcase // case (d_fun_i)
      end // always@ *
 
+	always @(posedge clk_i or negedge rst_i)
+	begin
+		if(!rst_i)
+			HWDATA <= 0;
+		else
+			if(HWRITE)
+				HWDATA <= x_HWDATA;
+				
+	end
+	
    reg rf_rd_write;
    reg [31:0] rf_rd_value;
       
@@ -118,7 +136,7 @@ module urv_writeback
    always@*
      if (w_stall_i)
        rf_rd_write <= 0;
-     else if (x_load_i && dm_load_done_i)
+     else if (x_load_i && HREADY)
        rf_rd_write <= x_valid_i;
      else
        rf_rd_write <= x_rd_write_i & x_valid_i;
@@ -127,6 +145,6 @@ module urv_writeback
    assign rf_rd_write_o = rf_rd_write;
    assign rf_rd_value_o = rf_rd_value;
    assign rf_rd_o = x_rd_i;
-   assign w_stall_req_o = x_valid_i && ((x_load_i && !dm_load_done_i) || (x_store_i && !dm_store_done_i));
+   assign w_stall_req_o = x_valid_i && ((x_load_i && !HREADY) || (x_store_i && !HREADY));
 
 endmodule // urv_writeback

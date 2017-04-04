@@ -41,7 +41,7 @@ module urv_exceptions
    input [4:0] 	 d_csr_imm_i,
    input [11:0]  d_csr_sel_i,
   
-   input 	 exp_irq_i,
+   input [31:0]	 exp_irq_i,
    input 	 exp_tick_i,
    input 	 exp_breakpoint_i,
    input 	 exp_unaligned_load_i,

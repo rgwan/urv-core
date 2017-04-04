@@ -83,7 +83,7 @@ module urv_exec
 
    output 	     w_load_hazard_o,
 
-   input 	     irq_i,
+   input [31:0]	     irq_i,
    
    // Writeback stage I/F
    output reg [2:0 ] w_fun_o,
@@ -101,12 +101,16 @@ module urv_exec
    
    
    // AHB-Lite 数据总线
-   output [31:0]     dm_addr_o,
-   output [31:0]     dm_data_s_o,
-   output [3:0]      dm_data_select_o,
-   output 	     dm_store_o,
-   output 	     dm_load_o,
-   input 	     dm_ready_i,
+   output [31:0]	HADDR,
+   output [2:0]		HBURST,
+   output		HMASTLOCK,
+   output [3:0]		HPROT,
+   output [2:0]		HSIZE,
+   output [1:0]		HTRANS,
+   output [31:0]	HWDATA,
+   output 		HWRITE,
+   
+   input		HREADY,
 
    input [39:0]      csr_time_i,
    input [63:0]      csr_cycles_i,
@@ -373,42 +377,6 @@ module urv_exec
 	  
 	endcase // case (d_fun_i)
      
-   
-   // generate store value/select
-   always@*
-     begin
-	case (d_fun_i)
-	  `LDST_B: 
-	    begin
-	       dm_data_s <= { rs2[7:0], rs2[7:0], rs2[7:0], rs2[7:0] };
-	       dm_select_s[0] <= (dm_addr [1:0] == 2'b00);
-	       dm_select_s[1] <= (dm_addr [1:0] == 2'b01);
-	       dm_select_s[2] <= (dm_addr [1:0] == 2'b10);
-	       dm_select_s[3] <= (dm_addr [1:0] == 2'b11);
-	    end
-	  
-	  `LDST_H:
-	    begin
-	       dm_data_s <= { rs2[15:0], rs2[15:0] };
-	       dm_select_s[0] <= (dm_addr [1] == 1'b0);
-	       dm_select_s[1] <= (dm_addr [1] == 1'b0);
-	       dm_select_s[2] <= (dm_addr [1] == 1'b1);
-	       dm_select_s[3] <= (dm_addr [1] == 1'b1);
-	    end
-
-	  `LDST_L:
-	    begin
-	       dm_data_s <= rs2;
-	       dm_select_s <= 4'b1111;
-	    end
-	  
-	  default:
-	    begin
-	       dm_data_s <= 32'h0;
-	       dm_select_s <= 4'h0;
-	    end
-	endcase // case (d_fun_i)
-     end
 
    //branch decision
    always@*
@@ -427,13 +395,65 @@ module urv_exec
    
    // generate load/store requests
 
-   assign dm_addr_o = dm_addr;
-   assign dm_data_s_o = dm_data_s;
-   assign dm_data_select_o = dm_select_s;
 
-   assign dm_load_o =  d_is_load_i & d_valid_i & !x_kill_i & !x_stall_i & !exception;
-   assign dm_store_o = d_is_store_i & d_valid_i & !x_kill_i & !x_stall_i & !exception;
+   assign dm_load =  d_is_load_i & d_valid_i & !x_kill_i & !x_stall_i & !exception;
+   assign dm_store = d_is_store_i & d_valid_i & !x_kill_i & !x_stall_i & !exception;
+/*
+   output [31:0]	HADDR,
+   output [2:0]		HBURST,
+   output		HMASTLOCK,
+   output [3:0]		HPROT,
+   output [2:0]		HSIZE,
+   output [1:0]		HTRANS,
+   output [31:0]	HWDATA,
+   output 		HWRITE,
    
+   input  [31:0]	HRDATA,
+   input		HREADY,
+   input		HRESP,
+*/   
+   /* AHB-Lite 总线接口 */
+   reg load_size;
+   
+   assign HADDR = (dm_load || dm_store)? dm_addr: 32'h8000_0000;
+   assign HBURST = 3'b00;
+   assign HMASTLOCK = 1'b0;
+   assign HPROT = 4'b0011;
+   assign HSIZE = load_size;
+   assign HTRANS = (dm_load || dm_store)? 2'b10: 2'b00;
+   assign HWDATA = dm_data_s;
+   assign HWRITE = dm_store;
+   
+   
+   // generate store value/select
+   always@*
+     begin
+	case (d_fun_i)
+	  `LDST_B: 
+	    begin
+		dm_data_s <= { rs2[7:0], rs2[7:0], rs2[7:0], rs2[7:0] };
+		load_size <= 0;
+	    end
+	  
+	  `LDST_H:
+	    begin
+		dm_data_s <= { rs2[15:0], rs2[15:0] };
+		load_size <= 1;
+	    end
+
+	  `LDST_L:
+	    begin
+	       dm_data_s <= rs2;
+	       load_size <= 2;
+	    end
+	  
+	  default:
+	    begin
+	       dm_data_s <= 32'h0;
+		load_size <= 0;
+	    end
+	endcase // case (d_fun_i)
+     end  
    
    // X/W pipeline registers
    
@@ -479,7 +499,7 @@ module urv_exec
      else if(divider_stall_req)
        x_stall_req_o <= 1;
    // stall if memory request pending, but memory not ready
-     else if ((d_is_load_i || d_is_store_i) && d_valid_i && !x_kill_i && !dm_ready_i)
+     else if ((d_is_load_i || d_is_store_i) && d_valid_i && !x_kill_i && !HREADY)
        x_stall_req_o <= 1;
      else
        x_stall_req_o <= 0;
