@@ -149,12 +149,14 @@ module top;
 		begin
 			io_o <= dm_data_s[7:0];
 			$write("%c", io_o);
+			$fflush;
       			if(io_o == 8'hFF)
        				$finish;
        		end
 		if(trap)
 		begin
-			$write("TRAPPED!\n");
+			$write("\nTRAPPED!\n");
+			$fflush;
 			$finish;
 		end
 	end
