@@ -81,7 +81,7 @@ module top;
    begin
    	#0  rst = 0;
    	#22.5 rst = 1;
-   	#200000 $stop;
+   	#2000000 $stop;
    end
    initial begin
    	#6605 rxd = 0;

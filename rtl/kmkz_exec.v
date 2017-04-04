@@ -456,7 +456,7 @@ module urv_exec
 	w_dm_addr_o <= dm_addr;
 	w_valid_o <= !exception; 
 	
-	if(!x_kill_i)
+	if(!x_kill_i && d_valid_i)
 		csr_instrs <= csr_instrs + 1;
      end // else: !if(rst_i)
 

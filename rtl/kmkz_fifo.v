@@ -106,7 +106,7 @@ module kamikaze_fetch_fifo(
 			fifo_buffer[7] <= 2'b00;
 			
 			write_pointer <= 0;
-			read_pointer <= 0;
+			read_pointer <= pc_reset_i[1];
 			fetch_start <= 0;
 			
 			remains_data <= 0;

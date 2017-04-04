@@ -39,6 +39,32 @@ void printcrlf()
 	putc('\r');
 	putc('\n');
 }
+void printcounter()
+{
+	int num_cycles, num_cyclesh, num_instr, num_instrh;
+	
+	__asm__("rdcycle %0; rdinstret %1;" : "=r"(num_cycles), "=r"(num_instr));
+	__asm__("rdcycleh %0; rdinstreth %1;" : "=r"(num_cyclesh), "=r"(num_instrh));
+	puts("\r\nSystem cycle counter: 0x");
+	printhex(num_cyclesh >> 24);
+	printhex(num_cyclesh >> 16);
+	printhex(num_cyclesh >> 8);
+	printhex(num_cyclesh & 0xff);
+	printhex(num_cycles >> 24);
+	printhex(num_cycles >> 16);
+	printhex(num_cycles >> 8);
+	printhex(num_cycles & 0xff);	
+	puts("\r\nSystem instruction counter: 0x");	;
+	printhex(num_instrh >> 24);
+	printhex(num_instrh >> 16);
+	printhex(num_instrh >> 8);
+	printhex(num_instrh & 0xff);
+	printhex(num_instr >> 24);
+	printhex(num_instr >> 16);
+	printhex(num_instr >> 8);
+	printhex(num_instr & 0xff);
+	printcrlf();			
+}
 void dump_memory(int address, int size)
 {
 	int i;
@@ -74,7 +100,8 @@ void main()
 {
 	int i;
 	puts("System start\r\n");
-	//dump_memory(0, 0x100);
+	dump_memory(0, 0x100);
+	printcounter();
 	puts("Done\r\n");
 	
 }

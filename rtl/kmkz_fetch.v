@@ -94,7 +94,7 @@ module kamikaze_fetch
 	
 	.branch_i(x_bra_i),
 	.pc_set_i(x_pc_bra_i),
-	.pc_reset_i(32'h0)
+	.pc_reset_i(STARTUP_BASE)
 	);
 	
 	always @(posedge clk_i or negedge rst_i)
