@@ -54,6 +54,7 @@ module urv_exec
 
    input 	     d_is_csr_i,
    input 	     d_is_eret_i,
+   input	     d_is_ebrk_i,
    input [4:0] 	     d_csr_imm_i,
    input [11:0]      d_csr_sel_i,
       
@@ -109,7 +110,11 @@ module urv_exec
 
    input [39:0]      csr_time_i,
    input [63:0]      csr_cycles_i,
-   input 	     timer_tick_i
+   input 	     timer_tick_i,
+   
+   /* 到系统控制/调试阶段 */
+   output	     x_invalid_ir_o
+   
    
    );
 
@@ -146,7 +151,9 @@ module urv_exec
    wire [31:0] 	 exception_address, exception_vector;
    reg [63:0] csr_instrs;
    
+   reg invalid_ir;
    
+   assign x_invalid_ir_o = invalid_ir;
    
    urv_csr csr_regs
      (
@@ -468,6 +475,20 @@ module urv_exec
        x_stall_req_o <= 1;
      else
        x_stall_req_o <= 0;
+       
+   
+    always @(posedge clk_i or negedge rst_i)
+    begin
+    	if(!rst_i)
+    	begin
+    		invalid_ir <= 0;
+    	end
+    	else if(!x_kill_i)
+    	begin
+    		if(d_is_ebrk_i)
+    			invalid_ir <= 1;
+    	end
+    end
 
 
 endmodule // urv_exec

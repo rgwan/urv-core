@@ -199,9 +199,9 @@ module top;
 	wire 		HRESP_I;
 
 
-	assign HREADY_I = 1'b1;
-	assign HRDATA_I = hrdata;
-	/*cmsdk_ahb_ram_beh i_ram
+	//assign HREADY_I = 1'b1;
+	//assign HRDATA_I = hrdata;
+	cmsdk_ahb_ram_beh i_ram
 	(
 	.HCLK(clk_i),    // Clock
 	.HRESETn(rst_i), // Reset
@@ -215,7 +215,7 @@ module top;
 	.HREADYOUT(HREADY_I), // Device ready
 	.HRDATA(HRDATA_I),  // Read data output
 	.HRESP(HRESP_i)
-	); */
+	); 
 
    urv_cpu DUT
      (

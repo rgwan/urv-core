@@ -55,6 +55,8 @@ module urv_cpu
 	input 		HRESP_I,
 	
 	input [31:0]	STARTUP_BASE,
+	
+	output		TRAP,
 
    // data mem I/F
    output [31:0] dm_addr_o,
@@ -123,6 +125,7 @@ module urv_cpu
    wire 	 d2x_is_csr, d2x_is_eret, d2x_csr_load_en;
    wire [31:0] 	 d2x_alu_op1, d2x_alu_op2;
    wire  	 d2x_use_op1, d2x_use_op2;
+   wire		 d2x_is_ebrk;
 
    // X1/M->X2/W interface
    wire [4:0] 	 x2w_rd;
@@ -145,6 +148,10 @@ module urv_cpu
    // misc stuff
    wire [39:0] 	 csr_time;
    wire [63:0]    csr_cycles;
+   
+   wire		x_invalid_ir;
+   
+   assign TRAP = x_invalid_ir;
    
    /* debug/system management stuff */
    reg [1:0] cpu_state; /* 00 = 正常运行，01 = 调试中断或自陷，10为等待中断输入（WFI） */
@@ -230,6 +237,7 @@ module urv_cpu
       .x_csr_sel_o (d2x_csr_sel),
       .x_csr_imm_o (d2x_csr_imm),
       .x_is_csr_o (d2x_is_csr),
+      .x_is_ebrk_o (d2x_is_ebrk),
       .x_is_eret_o (d2x_is_eret),
       .x_alu_op1_o(d2x_alu_op1),
       .x_alu_op2_o(d2x_alu_op2),
@@ -285,6 +293,7 @@ module urv_cpu
       .d_is_eret_i ( d2x_is_eret ),
       .d_csr_imm_i ( d2x_csr_imm ),
       .d_csr_sel_i (d2x_csr_sel),
+      .d_is_ebrk_i (d2x_is_ebrk),
       .d_pc_i(d2x_pc),
       .d_rd_i(d2x_rd),
       .d_fun_i(d2x_fun),
@@ -333,7 +342,10 @@ module urv_cpu
       // CSR registers/timer stuff
       .csr_time_i (csr_time),
       .csr_cycles_i (csr_cycles),
-      .timer_tick_i (sys_tick)
+      .timer_tick_i (sys_tick),
+      
+      /* 系统控制 */
+      .x_invalid_ir_o(x_invalid_ir)
    );
 
    // Execute 2/Writeback stage
@@ -400,9 +412,9 @@ module urv_cpu
      end
    
    // pipeline control
-   assign f_stall = x_stall_req || w_stall_req || d_stall_req;
-   assign x_stall = x_stall_req || w_stall_req;
-   assign d_stall = x_stall_req || w_stall_req;
+   assign f_stall = x_stall_req || w_stall_req || d_stall_req || TRAP;
+   assign x_stall = x_stall_req || w_stall_req || TRAP;
+   assign d_stall = x_stall_req || w_stall_req || TRAP;
    assign w_stall = 0;
 
    assign x_kill = x2f_bra || x2f_bra_d0 || x2f_bra_d1;

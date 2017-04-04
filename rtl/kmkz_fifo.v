@@ -153,7 +153,7 @@ module kamikaze_fetch_fifo(
 		end
 		else
 		begin
-			if(fetch_start == 0)
+			if(fetch_start == 0 && memory_ready_i)
 			begin
 				fetch_start <= 1;
 				pc_mem <= pc_mem + 4;

@@ -71,6 +71,7 @@ module urv_decode
  output reg 	   x_is_csr_o,
  output reg 	   x_is_eret_o,
  output reg	   x_is_wfi_o,
+ output reg	   x_is_ebrk_o,
  output reg [31:0] x_imm_o,
  output reg [31:0] x_alu_op1_o,
  output reg [31:0] x_alu_op2_o,
@@ -94,8 +95,6 @@ module urv_decode
    reg 	      x_valid;
    reg 	      x_is_shift;
    reg 	      x_rd_write;
-   
-   reg invalid_ir;
    
    assign x_rs1_o = x_rs1;
    assign x_rs2_o = x_rs2;
@@ -323,24 +322,33 @@ module urv_decode
    
 	
    // CSR/supervisor instructions
+   	
 	
 	always @(posedge clk_i or negedge rst_i)
 	begin
 		if(!rst_i)
 		begin
-			invalid_ir <= 0;
+			x_csr_imm_o <= 0;
+			x_csr_sel_o <= 0;
+			x_is_csr_o <= 0;
+			x_is_eret_o <= 0;
+			x_is_ebrk_o <= 0;
+			x_is_wfi_o <= 0;
 		end
 		else
+		begin
 			if (!d_stall_i)
-			  begin
-			     x_csr_imm_o <= f_ir_i[19:15];
-			     x_csr_sel_o <= f_ir_i[31:20];
-			     x_is_csr_o <= (d_opcode == `OPC_SYSTEM) && (d_fun != 0);
-			     x_is_eret_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] == 12'b000100000010);
-			     invalid_ir <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000000000001);
+			begin
+				x_csr_imm_o <= f_ir_i[19:15];
+				x_csr_sel_o <= f_ir_i[31:20];
+				x_is_csr_o <= (d_opcode == `OPC_SYSTEM) && (d_fun != 0);
+				x_is_eret_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] == 12'b000100000010);
+			     
+				x_is_ebrk_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000000000001);
 
-			     x_is_wfi_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000100000101);
-			  end
+				x_is_wfi_o <= (d_opcode == `OPC_SYSTEM) && (d_fun == 0) && (f_ir_i [31:20] ==  12'b000100000101);
+			end
+		end
 	end
    
    assign x_is_shift_o = x_is_shift;

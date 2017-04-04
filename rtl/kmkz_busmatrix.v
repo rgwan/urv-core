@@ -15,5 +15,4 @@
 	
 	Kamikaze I-Port (M, AHB-Lite),
 	Kamikaze D-Port (M, AHB-Lite),
-	Kamikaze S-Port (M, AHB-Lite)
 */
