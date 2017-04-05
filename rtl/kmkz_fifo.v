@@ -37,8 +37,10 @@ module kamikaze_fetch_fifo(
 	output reg [31:0]	ir_orig_o,
 	output reg [31:0]	pc_o,
 	input		fetch_ready_i,
+	input		fetch_kill_i,
 	output 	reg	ready_o,
 	output	reg	ir_comp_o,
+	output	reg	illegal_instr_o,
 	
 	
 	/* 控制信号 */
@@ -46,6 +48,7 @@ module kamikaze_fetch_fifo(
 	input branch_i, /* 清空FIFO */
 	input [31:0]	pc_set_i, /* 输入跳转地址 */
 	input [31:0]	pc_reset_i
+	
 	
 	);
 	
@@ -69,15 +72,17 @@ module kamikaze_fetch_fifo(
 	
 	reg fetch_start;
 	
-	wire fifo_full = remains_data == 8  || remains_data == 7;
+	wire fifo_full = remains_data == 7  || remains_data == 8;
 	wire fifo_empty = remains_data == 0 || remains_data == 1;
 	
 	reg compressed;
+	
 	
 	reg [31:0] pc_prev;
 	reg [31:0] pc_mem;
 	
 	wire [31:0] ir_t = {fifo_buffer[read_pointer_1], fifo_buffer[read_pointer]};
+	wire ir_valid_comb = !fifo_empty;
 	wire [31:0] expanded_ir;
 	
 	wire illegal_instr;
@@ -119,7 +124,7 @@ module kamikaze_fetch_fifo(
 			pc_o <= pc_reset_i;
 			pc_add <= 0;
 			
-			ir_o <= 2'b11;
+			ir_o <= 32'h0;
 			
 			ir_comp_o <= 0;
 			
@@ -128,18 +133,13 @@ module kamikaze_fetch_fifo(
 			align_wait <= pc_reset_i[1];
 			valid_delay <= 0;
 			prev_pc <= 0;
+			
+			illegal_instr_o <= 0;
+			
+			ir_orig_o <= 0;
 		end
 		else if(branch_i)
-		begin
-			fifo_buffer[0] <= 2'b00;
-			fifo_buffer[1] <= 2'b00;
-			fifo_buffer[2] <= 2'b00;
-			fifo_buffer[3] <= 2'b00;
-			fifo_buffer[4] <= 2'b00;
-			fifo_buffer[5] <= 2'b00;
-			fifo_buffer[6] <= 2'b00;
-			fifo_buffer[7] <= 2'b00;
-			
+		begin			
 			write_pointer <= 0;
 			read_pointer <= pc_set_i[1];
 			fetch_start <= 0;
@@ -150,12 +150,14 @@ module kamikaze_fetch_fifo(
 			pc_o <= pc_set_i;
 			pc_add <= 0;
 			
-			ir_o <= 2'b11;
+			ir_o <= 32'h0;
 			
 			ir_comp_o <= 0;
 			
 			ready_o <= 0;	
 			align_wait <= pc_set_i[1];
+			
+			illegal_instr_o <= 0;
 		end
 		else
 		begin
@@ -192,17 +194,12 @@ module kamikaze_fetch_fifo(
 					remains_data <= remains_data + compressed;
 				end
 				
-				
-				
-				if(prev_pc != pc_o)
-					valid_delay <= 1;
-				else
-					valid_delay <= 0;
+				illegal_instr_o <= illegal_instr;
 					
-				prev_pc <= pc_o;
 				
 				prev_remains_data <= remains_data;
 				
+				/*
 				if(!fifo_empty)
 				begin
 					ready_o <= 1;
@@ -210,6 +207,17 @@ module kamikaze_fetch_fifo(
 				else
 				begin
 					ready_o <= 0;
+				end
+				*/
+				/*if(prev_pc != pc_o && ready_o)
+				begin
+					ready_o <= 0;
+					prev_pc <= pc_o;
+				end*/
+				if(fifo_empty)
+				begin
+					ready_o <= 0;
+					//ir_o <= 32'h00000013;
 				end
 				
 				if(fetch_ready_i && !fifo_empty)
@@ -226,12 +234,15 @@ module kamikaze_fetch_fifo(
 						pc_add <= 2;
 						ir_comp_o <= 1;
 					end
+					ready_o <= !fetch_kill_i;
 					
 					ir_orig_o <= ir_t; /* Just for test */
 					ir_o <= expanded_ir;
 					pc_o <= pc_o + pc_add;
 					
 				end
+				//if(ready_o)
+				//	ready_o <= 0;
 			end
 		end
 		

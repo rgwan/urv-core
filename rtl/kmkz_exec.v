@@ -320,7 +320,7 @@ module urv_exec
       
       .d_rs1_i(rs1),
       .d_rs2_i(rs2),
-      .d_fun_i(d_fun),
+      .d_fun_i(d_fun_i),
       .w_rd_o (w_rd_multiply_o)
       );
 
@@ -413,7 +413,7 @@ module urv_exec
    input		HRESP,
 */   
    /* AHB-Lite 总线接口 */
-   reg [2:0]store_size;
+   reg [2:0] store_size;
    
    assign HADDR = (dm_load || dm_store)? dm_addr: 32'h8000_0000;
    assign HBURST = 3'b00;
@@ -432,25 +432,25 @@ module urv_exec
 	  `LDST_B: 
 	    begin
 		dm_data_s <= { rs2[7:0], rs2[7:0], rs2[7:0], rs2[7:0] };
-		store_size <= 0;
+		store_size <= 3'h0;
 	    end
 	  
 	  `LDST_H:
 	    begin
 		dm_data_s <= { rs2[15:0], rs2[15:0] };
-		store_size <= 1;
+		store_size <= 3'h1;
 	    end
 
 	  `LDST_L:
 	    begin
 	       dm_data_s <= rs2;
-	       store_size <= 2;
+	       store_size <= 3'h2;
 	    end
 	  
 	  default:
 	    begin
 	       dm_data_s <= 32'h0;
-		store_size <= 0;
+	       store_size <= 3'h0;
 	    end
 	endcase // case (d_fun_i)
      end  

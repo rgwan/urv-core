@@ -50,7 +50,7 @@ module kamikaze_fetch
 	
 	/* 指令输出 */
 	
-	output  	   f_valid_o,
+	output		f_valid_o,
 	output		f_ir_valid_o,
 	output  	f_is_compressed_o,
 	output  [31:0] f_ir_o,
@@ -71,9 +71,7 @@ module kamikaze_fetch
 	
 	wire prefetcher_ready;
 	
-	reg f_kill;
-	
-	assign f_valid_o = prefetcher_ready && !f_kill;
+	assign f_valid_o = prefetcher_ready;
 	
 	wire [31:0] ir;
 	
@@ -86,10 +84,11 @@ module kamikaze_fetch
 	.ir_i(HRDATA),
 	.memory_ready_i(HREADY),
 	
-	.ir_o(f_ir_o),
-	.pc_o(f_pc_o),
+	.ir_o(f_ir_o),//f_ir_o
+	.pc_o(f_pc_o),//f_pc_o
 	.ready_o(prefetcher_ready),
 	.fetch_ready_i(!f_stall_i),
+	.fetch_kill_i(f_kill_i),
 	.ir_comp_o(f_is_compressed_o),
 	
 	.branch_i(x_bra_i),
@@ -97,20 +96,6 @@ module kamikaze_fetch
 	.pc_reset_i(STARTUP_BASE)
 	);
 	
-	always @(posedge clk_i or negedge rst_i)
-	begin
-		if(!rst_i)
-		begin
-			f_kill <= 0;
-		end
-		else
-		begin
-			if(!f_stall_i)
-			begin
-				f_kill <= f_kill_i;
-			end
-		end
-	end
 endmodule // kamikaze_fetch 
 
  
