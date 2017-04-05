@@ -137,7 +137,10 @@ module top;
 
 	//assign HREADY_I = 1'b1;
 	//assign HRDATA_I = hrdata;
-	cmsdk_ahb_ram_beh i_ram
+	cmsdk_ahb_ram_beh  #( 
+			.WS_N(4),
+			.WS_S(4))
+	i_ram
 	(
 	.HCLK(clk_i),    // Clock
 	.HRESETn(rst_i), // Reset
@@ -168,7 +171,10 @@ module top;
 	
 	wire		d_ram_HSEL = (HADDR_D != 32'h1000_0000);
 	
-	cmsdk_ahb_ram_beh d_ram
+	cmsdk_ahb_ram_beh #( 
+			.WS_N(16),
+			.WS_S(8))
+	d_ram
 	(
 	.HCLK(clk_i),    // Clock
 	.HRESETn(rst_i), // Reset

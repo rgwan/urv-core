@@ -27,7 +27,7 @@
 module cmsdk_ahb_ram_beh #(
   parameter AW       = 16,// Address width
   parameter filename = "firmware.hex",
-  parameter WS_N     = 1, // First access wait state
+  parameter WS_N     = 0, // First access wait state
   parameter WS_S     = 0) // Subsequent access wait state
  (
   input  wire          HCLK,    // Clock

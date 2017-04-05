@@ -199,25 +199,9 @@ module kamikaze_fetch_fifo(
 				
 				prev_remains_data <= remains_data;
 				
-				/*
-				if(!fifo_empty)
-				begin
-					ready_o <= 1;
-				end
-				else
+				if(fifo_empty && fetch_ready_i) /* 在阻塞的时候保持指令 */
 				begin
 					ready_o <= 0;
-				end
-				*/
-				/*if(prev_pc != pc_o && ready_o)
-				begin
-					ready_o <= 0;
-					prev_pc <= pc_o;
-				end*/
-				if(fifo_empty)
-				begin
-					ready_o <= 0;
-					//ir_o <= 32'h00000013;
 				end
 				
 				if(fetch_ready_i && !fifo_empty)
@@ -241,8 +225,6 @@ module kamikaze_fetch_fifo(
 					pc_o <= pc_o + pc_add;
 					
 				end
-				//if(ready_o)
-				//	ready_o <= 0;
 			end
 		end
 		

@@ -177,7 +177,7 @@ module urv_regfile
 
 
 
-   wire        write  = (w_rd_store_i && (w_rd_i != 0));
+   wire        regfile_write  = (w_rd_store_i && (w_rd_i != 0));
 
 	/* 这里应用2R1W同步RAM替换掉 */
 /* 使用 FPGA 时的配置，应用FPGA的DRAM/BRAM */
@@ -194,7 +194,7 @@ module urv_regfile
 
       .a2_i(w_rd_i),
       .d2_i(w_rd_value_i),
-      .we2_i (write));
+      .we2_i (regfile_write));
    
    
    urv_regmem bank1
@@ -207,7 +207,7 @@ module urv_regfile
 
       .a2_i (w_rd_i),
       .d2_i (w_rd_value_i),
-      .we2_i (write)
+      .we2_i (regfile_write)
       );
 */
 /* 应用ASIC时的配置 */
@@ -229,7 +229,7 @@ module urv_regfile
 				rs1_regfile <= rf_rs1_i? regfile_ram[rf_rs1_i]: 32'h0;
 				rs2_regfile <= rf_rs2_i? regfile_ram[rf_rs2_i]: 32'h0;
 			end
-			if(write && w_rd_i)
+			if(regfile_write)
 			begin
 				regfile_ram[w_rd_i] <= w_rd_value_i;
 			end
@@ -238,8 +238,8 @@ module urv_regfile
 	
 	integer i;
 	initial begin
-		for (i = 1; i < 32; i = i+1)
-			regfile_ram[i] = 32'h0;
+		//for (i = 1; i < 32; i = i+1)
+		//	regfile_ram[i] = 32'h0;
 	end
   	wire [31:0]cpureg_1 = regfile_ram[1];
 	wire [31:0]cpureg_2 = regfile_ram[2];
@@ -285,15 +285,15 @@ module urv_regfile
           rs1_bypass_w <= 0;
 	  rs2_bypass_w <= 0;
        end else if(!d_stall_i) begin
-	  rs1_bypass_w <= write && (rf_rs1_i == w_rd_i);
-	  rs2_bypass_w <= write && (rf_rs2_i == w_rd_i);
+	  rs1_bypass_w <= regfile_write && (rf_rs1_i == w_rd_i);
+	  rs2_bypass_w <= regfile_write && (rf_rs2_i == w_rd_i);
        end
    
 
    reg [31:0] 	  bypass_w;
 
    always@(posedge clk_i)
-     if(write)
+     if(regfile_write)
        bypass_w <= w_rd_value_i; /* 来自 EX输出 */
 
    always@*
