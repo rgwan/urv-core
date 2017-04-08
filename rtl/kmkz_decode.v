@@ -115,7 +115,7 @@ module urv_decode
 
    reg 	x_is_mul;
    wire d_is_mul = (f_ir_i[25] && d_fun == `FUNC_MUL);
-   wire d_is_div = (f_ir_i[25] && d_fun == `FUNC_DIV && d_opcode == `OPC_OP);
+   wire d_is_div = (f_ir_i[25] && d_fun[2] == 1'b1 && d_opcode == `OPC_OP); /* 除法 */
 
    // hazard detect combinatorial logic
    always@*

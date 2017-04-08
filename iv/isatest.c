@@ -96,7 +96,21 @@ void dump_memory(int address, int size)
 	}
 }
 
-
+int isprime(int in)
+{
+	int j;
+	if(in <= 2)
+		return 1;
+		
+	for(j = 2; j < in; j++)
+	{
+		if(in % j == 0)
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
 void main()
 {
 	volatile int i = 10, j = 10;
@@ -115,7 +129,7 @@ void main()
 	
 	printhex(i / j);
 	
-	i = 73; j = 9;
+	i = 72; j = 8;
 	printhex(i % j);
 	
 	printcrlf();
@@ -181,6 +195,16 @@ void main()
 	putc(arch_id);
 			
 	printcrlf();
+	
+	puts("\r\nCalculating prime which small than 100(d):\r\n");
+	for(i = 0; i < 100; i++)
+	{
+		if(isprime(i))
+		{
+			printhex(i);
+			printcrlf();
+		}
+	}
 	
 	unsigned int num_cycles, num_instr;
 	unsigned int num_cyclesh, num_instrh;
