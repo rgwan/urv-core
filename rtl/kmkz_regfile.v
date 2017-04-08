@@ -238,8 +238,8 @@ module urv_regfile
 	
 	integer i;
 	initial begin
-		//for (i = 1; i < 32; i = i+1)
-		//	regfile_ram[i] = 32'h0;
+		for (i = 1; i < 32; i = i+1)
+			regfile_ram[i] = 32'h0;
 	end
   	wire [31:0]cpureg_1 = regfile_ram[1];
 	wire [31:0]cpureg_2 = regfile_ram[2];

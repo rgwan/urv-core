@@ -68,7 +68,7 @@ module urv_csr
    
    wire [31:0] cpu_vendor = 32'h414e4c47; /* Vendor 'ANLG' */
    wire [31:0] cpu_arch = 32'h4b4d4b5a;   /* Arch: 'Kamikaze' */
-   wire [31:0] cpu_impl = 32'h5a303031;	  /* Impl: 'K0001' */
+   wire [31:0] cpu_impl = 32'h5a483031;	  /* Impl: 'Kx01', if X = 'H', it means integrated in FPGA, if X = 'A', it means ASIC, if X = 'S', it means softcore */
    wire [31:0] cpu_misa = 32'b01100000000000000001000100000100; /* RV32IMC */
 
   

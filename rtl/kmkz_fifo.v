@@ -31,6 +31,7 @@ module kamikaze_fetch_fifo(
 	output reg [31:0]	pc_mem_o,
 	input  [31:0]	ir_i,
 	input		memory_ready_i, /* 存储器准备好信号 */
+	output		memory_request_o,
 	
 	/* 输出地址，输出数据 */
 	output reg [31:0]	ir_o,
@@ -52,7 +53,7 @@ module kamikaze_fetch_fifo(
 	
 	);
 	
-	reg [15:0] fifo_buffer [0:7];
+	reg [15:0] 	fifo_buffer [0:7];
 	reg [2:0]	write_pointer;
 	reg [2:0]	read_pointer;
 	reg [2:0]	read_pointer_1;
@@ -77,12 +78,12 @@ module kamikaze_fetch_fifo(
 	
 	reg compressed;
 	
+	assign memory_request_o = 1; /* 取指令临时措施，占住总线 */
 	
 	reg [31:0] pc_prev;
 	reg [31:0] pc_mem;
 	
 	wire [31:0] ir_t = {fifo_buffer[read_pointer_1], fifo_buffer[read_pointer]};
-	wire ir_valid_comb = !fifo_empty;
 	wire [31:0] expanded_ir;
 	
 	wire illegal_instr;
@@ -93,13 +94,9 @@ module kamikaze_fetch_fifo(
 		compressed = (fifo_buffer[read_pointer][1:0] == 2'b11)? 0: 1;
 		
 		pc_mem_o <= fifo_full? pc_prev: pc_mem;
-
 	end
 	
 	reg align_wait;
-	reg valid_delay;
-	reg [3:0] prev_remains_data;
-	reg [31:0] prev_pc;
 	
 	always @(posedge clk_i or negedge rst_i)
 	begin
@@ -131,12 +128,10 @@ module kamikaze_fetch_fifo(
 			ready_o <= 0;
 			
 			align_wait <= pc_reset_i[1];
-			valid_delay <= 0;
-			prev_pc <= 0;
-			
 			illegal_instr_o <= 0;
 			
 			ir_orig_o <= 0;
+			//memory_request_o <= 1;
 		end
 		else if(branch_i)
 		begin			
@@ -158,6 +153,7 @@ module kamikaze_fetch_fifo(
 			align_wait <= pc_set_i[1];
 			
 			illegal_instr_o <= 0;
+			//memory_request_o <= 1;
 		end
 		else
 		begin
@@ -168,6 +164,7 @@ module kamikaze_fetch_fifo(
 			end
 			else
 			begin
+				//memory_request_o <= 1;
 				if(memory_ready_i && !fifo_full)
 				begin
 				
@@ -175,10 +172,10 @@ module kamikaze_fetch_fifo(
 					
 					write_pointer = write_pointer + 2;
 					
-					pc_mem <= pc_mem + 4;
-					
 					pc_prev <= pc_mem;
 					
+					pc_mem <= pc_mem + 4;
+
 				end
 				if((memory_ready_i && !fifo_full) && !(fetch_ready_i && !fifo_empty)) /* 只写 */
 				begin
@@ -193,11 +190,6 @@ module kamikaze_fetch_fifo(
 				begin
 					remains_data <= remains_data + compressed;
 				end
-				
-				illegal_instr_o <= illegal_instr;
-					
-				
-				prev_remains_data <= remains_data;
 				
 				if(fifo_empty && fetch_ready_i) /* 在阻塞的时候保持指令 */
 				begin
@@ -223,6 +215,7 @@ module kamikaze_fetch_fifo(
 					ir_orig_o <= ir_t; /* Just for test */
 					ir_o <= expanded_ir;
 					pc_o <= pc_o + pc_add;
+					illegal_instr_o <= illegal_instr;
 					
 				end
 			end

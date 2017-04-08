@@ -159,6 +159,7 @@ module urv_exec
    reg [63:0] csr_instrs;
    
    reg invalid_ir;
+   reg unaligned_addr;
    
    assign x_invalid_ir_o = invalid_ir;
    
@@ -310,7 +311,7 @@ module urv_exec
       .w_rd_o(w_rd_shifter_o)
       );
 
-   wire divider_stall_req = 0;
+  // wire divider_stall_req = 0;
 
    urv_multiply multiplier 
      (
@@ -324,7 +325,7 @@ module urv_exec
       .w_rd_o (w_rd_multiply_o)
       );
 
-/*   wire divider_stall_req;
+   wire divider_stall_req;
    wire [31:0] rd_divide;
    
    urv_divide divider
@@ -346,19 +347,18 @@ module urv_exec
       .x_rd_o(rd_divide)
    );
 
- -----/\----- EXCLUDED -----/\----- */
 
    always@*
      case (d_rd_source_i)
        `RD_SOURCE_ALU: rd_value <= alu_result;
+       `RD_SOURCE_DIVIDE: rd_value <= rd_divide;
        `RD_SOURCE_CSR: rd_value <= rd_csr;
-       
-//       `RD_SOURCE_DIVIDE: rd_value <= rd_divide;
+
        default: rd_value <= 32'hx;
      endcase // case (x_rd_source_i)
    
 
-   reg unaligned_addr;
+   
    
    always@*
 	case (d_fun_i)
@@ -468,6 +468,7 @@ module urv_exec
 	w_store_o <= 0;
 	w_valid_o <= 0;
 	csr_instrs <= 0;
+	f_branch_target_o <= 0;
 	
      end else if (!x_stall_i) begin
 	f_branch_target_o <= branch_target;

@@ -64,16 +64,18 @@ module kamikaze_fetch
 	assign HBURST = 1'b0;
 	assign HMASTLOCK = 1'b0;
 	
-	assign HTRANS = 2'b10; /* 非顺序传输 */
+	assign HTRANS = memory_request_o? 2'b10: 2'b00; /* 非顺序传输 */
 	assign HPROT = 4'b0000; /* 指令传输 */
 	
-	assign HSIZE = 3'b010; /* 32bit 访问 */
+	assign HSIZE = memory_request_o? 3'b010: 3'b000; /* 32bit 访问 */
 	
 	wire prefetcher_ready;
 	
 	assign f_valid_o = prefetcher_ready;
 	
 	wire [31:0] ir;
+	
+	wire memory_request;
 	
 	kamikaze_fetch_fifo prefetcher
 	(
@@ -83,6 +85,7 @@ module kamikaze_fetch
 	.pc_mem_o(HADDR),
 	.ir_i(HRDATA),
 	.memory_ready_i(HREADY),
+	.memory_request_o(memory_request_o),
 	
 	.ir_o(f_ir_o),//f_ir_o
 	.pc_o(f_pc_o),//f_pc_o

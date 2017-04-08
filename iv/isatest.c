@@ -102,11 +102,40 @@ void main()
 	volatile int i = 10, j = 10;
 	int vendor_id, impl_id, arch_id, isa;
 	
-	puts("Hello world!\r\n");
-	puts("System start\r\nA * A equals:");
+	//puts("Hello world!\r\n");
+	puts("System start\r\nA * A equals and 72(10) / 8(10) and 73 % 9 equals:");
+	
+	printcrlf();
 	
 	printhex(i * j);
 	
+	printcrlf();
+	
+	i = 72; j = 8;
+	
+	printhex(i / j);
+	
+	i = 73; j = 9;
+	printhex(i % j);
+	
+	printcrlf();
+	
+	i = 1024; j = 5555;
+	
+	puts("1024 + 5555 (low 8bit) = ");
+	printhex(i+j);
+	
+	i = 0x55; j = 0xaa;
+	
+	printcrlf();
+	
+	printhex(i & j);
+	
+	printcrlf();
+	
+	printhex(i ^ j);
+	
+	printcrlf();
 
 	__asm__("csrr %0, 0xf11;" : "=r"(vendor_id));
 	puts("\r\nCPU vendor id:");
@@ -152,6 +181,30 @@ void main()
 	putc(arch_id);
 			
 	printcrlf();
+	
+	unsigned int num_cycles, num_instr;
+	unsigned int num_cyclesh, num_instrh;
+			__asm__("rdcycle %0; rdinstret %1;" : "=r"(num_cycles), "=r"(num_instr));
+			__asm__("rdcycleh %0; rdinstreth %1;" : "=r"(num_cyclesh), "=r"(num_instrh));
+			puts("System cycle counter\t\t: 0x");
+			printhex(num_cyclesh >> 24);
+			printhex(num_cyclesh >> 16);
+			printhex(num_cyclesh >> 8);
+			printhex(num_cyclesh & 0xff);
+			printhex(num_cycles >> 24);
+			printhex(num_cycles >> 16);
+			printhex(num_cycles >> 8);
+			printhex(num_cycles & 0xff);	
+			puts("\r\nSystem instruction counter\t: 0x");	;
+			printhex(num_instrh >> 24);
+			printhex(num_instrh >> 16);
+			printhex(num_instrh >> 8);
+			printhex(num_instrh & 0xff);
+			printhex(num_instr >> 24);
+			printhex(num_instr >> 16);
+			printhex(num_instr >> 8);
+			printhex(num_instr & 0xff);
+			printcrlf();
 
 	puts("Done\r\n");
 	

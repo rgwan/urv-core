@@ -138,8 +138,8 @@ module top;
 	//assign HREADY_I = 1'b1;
 	//assign HRDATA_I = hrdata;
 	cmsdk_ahb_ram_beh  #( 
-			.WS_N(4),
-			.WS_S(4))
+			.WS_N(1),
+			.WS_S(1))
 	i_ram
 	(
 	.HCLK(clk_i),    // Clock
@@ -172,8 +172,8 @@ module top;
 	wire		d_ram_HSEL = (HADDR_D != 32'h1000_0000);
 	
 	cmsdk_ahb_ram_beh #( 
-			.WS_N(16),
-			.WS_S(8))
+			.WS_N(0),
+			.WS_S(0))
 	d_ram
 	(
 	.HCLK(clk_i),    // Clock

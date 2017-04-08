@@ -61,6 +61,7 @@ module urv_decode
  output reg 	   x_is_signed_alu_op_o,
  output reg 	   x_is_add_o,
  output 	   x_is_shift_o,
+ output reg	   x_is_div_o,
  output reg 	   x_is_load_o,
  output reg 	   x_is_store_o,
  output reg 	   x_is_undef_o,
@@ -114,6 +115,7 @@ module urv_decode
 
    reg 	x_is_mul;
    wire d_is_mul = (f_ir_i[25] && d_fun == `FUNC_MUL);
+   wire d_is_div = (f_ir_i[25] && d_fun == `FUNC_DIV && d_opcode == `OPC_OP);
 
    // hazard detect combinatorial logic
    always@*
@@ -123,7 +125,7 @@ module urv_decode
 	    `OPC_LOAD:
 	      load_hazard <= 1;
 	    `OPC_OP:
-	      load_hazard <= x_is_shift | x_is_mul;
+	      load_hazard <= x_is_shift | x_is_mul | d_is_div;
 	    `OPC_OP_IMM:
 	      load_hazard <= x_is_shift;
 	    default:
@@ -186,7 +188,7 @@ module urv_decode
      if(!d_stall_i)
        x_shifter_sign_o <= f_ir_i[30];
 
-   wire[31:0] d_imm_i = { {21{ f_ir_i[31] }}, f_ir_i[30:25], f_ir_i[24:21], f_ir_i[20] };
+   wire [31:0] d_imm_i = { {21{ f_ir_i[31] }}, f_ir_i[30:25], f_ir_i[24:21], f_ir_i[20] };
    wire [31:0] d_imm_s = { {21{ f_ir_i[31] }}, f_ir_i[30:25], f_ir_i[11:8], f_ir_i[7] };
    wire [31:0] d_imm_b = { {20{ f_ir_i[31] }}, f_ir_i[7], f_ir_i[30:25], f_ir_i[11:8], 1'b0 };
    wire [31:0] d_imm_u = { f_ir_i[31], f_ir_i[30:20], f_ir_i[19:12], 12'h000 };
@@ -278,6 +280,7 @@ module urv_decode
 	  x_is_store_o <= ( d_opcode == `OPC_STORE && !load_hazard) ? 1'b1 : 1'b0;
 	  
 	  x_is_mul <= d_is_mul;
+	  x_is_div_o <= d_is_div;
 
 	  case (d_opcode)
 	    `OPC_BRANCH:
@@ -298,7 +301,7 @@ module urv_decode
 	  endcase // case (d_opcode)
 
 	  // all multiply/divide instructions except MUL
-	  x_is_undef_o <= (d_opcode == `OPC_OP && f_ir_i[25] && d_fun != `FUNC_MUL);
+	  x_is_undef_o <= 0;//(d_opcode == `OPC_OP && f_ir_i[25] && d_fun != `FUNC_MUL);
 	  
 	  if(d_is_shift)
 	    x_rd_source_o <= `RD_SOURCE_SHIFTER;
@@ -306,6 +309,8 @@ module urv_decode
 	    x_rd_source_o <= `RD_SOURCE_CSR;
 	  else if (d_opcode == `OPC_OP && !d_fun[2] && f_ir_i[25])
 	    x_rd_source_o <= `RD_SOURCE_MULTIPLY;
+	  else if (d_is_div)
+	    x_rd_source_o <= `RD_SOURCE_DIVIDE;
 	  else
 	    x_rd_source_o <= `RD_SOURCE_ALU;
 	  

@@ -136,6 +136,7 @@ module urv_cpu
    wire [31:0] 	 d2x_alu_op1, d2x_alu_op2;
    wire  	 d2x_use_op1, d2x_use_op2;
    wire		 d2x_is_ebrk;
+   wire 	 d2x_is_divide;
 
    // X1/M->X2/W interface
    wire [4:0] 	 x2w_rd;
@@ -241,6 +242,7 @@ module urv_cpu
       .x_is_add_o(d2x_is_add),
       .x_is_shift_o(d2x_is_shift),
       .x_is_load_o(d2x_is_load),
+      .x_is_div_o(d2x_is_divide),
       .x_is_store_o(d2x_is_store),
       .x_is_undef_o(d2x_is_undef),
       .x_rd_source_o(d2x_rd_source),
@@ -313,6 +315,7 @@ module urv_cpu
       .d_imm_i(d2x_imm),
       .d_is_signed_compare_i(d2x_is_signed_compare),
       .d_is_signed_alu_op_i(d2x_is_signed_alu_op),
+      .d_is_divide_i(d2x_is_divide),
       .d_is_add_i(d2x_is_add),
       .d_is_shift_i(d2x_is_shift),
       .d_is_load_i(d2x_is_load),
