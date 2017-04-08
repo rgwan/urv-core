@@ -141,8 +141,8 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
    
    urv_cpu DUT
      (
-      .clk_i(clk_i),
-      .rst_i(rst),
+      .CLK(clk_i),
+      .nRST(rst),
 
       // instruction mem I/F
 	.HADDR_I(im_addr),
@@ -159,15 +159,18 @@ module top(rst_i, clk_i, io_out, tap, io_sel, txd, rxd, uart_sel);
 	.HRESP_I(1'b1),
 
       // data mem I/F
-      .dm_addr_o(dm_addr),
-      .dm_data_s_o(dm_data_s),
-      .dm_data_l_i(dm_data_l),
-      .dm_data_select_o(dm_data_select),
-      .dm_store_o(dm_write),
-      .dm_load_o(),
-      .dm_store_done_i(1'b1),
-      .dm_load_done_i(1'b1),
-      .dm_ready_i(dm_ready)
+	.HADDR_D(dm_addr),
+	.HBURST_D(),
+	.HMASTLOCK_D(),
+	.HPROT_D(),
+	.HSIZE_D(),
+	.HTRANS_D(),
+	.HWDATA_D(),
+	.HWRITE_D(),
+	
+	.HRDATA_D(dm_data_l),
+	.HREADY_D(1'b1),
+	.HRESP_D(1'b1)
       );
 endmodule
   

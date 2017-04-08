@@ -25,7 +25,6 @@
             <File>../../rtl/kmkz_exceptions.v</File>
             <File>../../rtl/kmkz_exec.v</File>
             <File>../../rtl/kmkz_fetch.v</File>
-            <File>../../rtl/kmkz_iram.v</File>
             <File>../../rtl/kmkz_multiply.v</File>
             <File>../../rtl/kmkz_regfile.v</File>
             <File>../../rtl/kmkz_shifter.v</File>
@@ -63,8 +62,8 @@
     </Property>
     <Project_Settings>
         <Current_Step>0</Current_Step>
-        <SRC-Last-Read>2017-04-04 09:21:26</SRC-Last-Read>
-        <SLC-Last-Read>2017-04-04 09:21:30</SLC-Last-Read>
-        <SDC-Last-Read>2017-04-04 09:22:22</SDC-Last-Read>
+        <SRC-Last-Read>2017-04-08 11:36:48</SRC-Last-Read>
+        <SLC-Last-Read>2017-04-08 11:36:53</SLC-Last-Read>
+        <SDC-Last-Read>2017-04-08 11:38:47</SDC-Last-Read>
     </Project_Settings>
 </Project>

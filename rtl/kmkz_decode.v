@@ -114,7 +114,7 @@ module urv_decode
 	(d_opcode == `OPC_OP || d_opcode == `OPC_OP_IMM );
 
    reg 	x_is_mul;
-   wire d_is_mul = (f_ir_i[25] && d_fun == `FUNC_MUL);
+   wire d_is_mul = (f_ir_i[25] && d_fun[2] == 1'b0 && d_opcode == `OPC_OP);
    wire d_is_div = (f_ir_i[25] && d_fun[2] == 1'b1 && d_opcode == `OPC_OP); /* 除法 */
 
    // hazard detect combinatorial logic
@@ -303,14 +303,14 @@ module urv_decode
 	  // all multiply/divide instructions except MUL
 	  x_is_undef_o <= 0;//(d_opcode == `OPC_OP && f_ir_i[25] && d_fun != `FUNC_MUL);
 	  
-	  if(d_is_shift)
-	    x_rd_source_o <= `RD_SOURCE_SHIFTER;
+	  if(d_is_div)
+	    x_rd_source_o <= `RD_SOURCE_DIVIDE;
 	  else if (d_opcode == `OPC_SYSTEM)
 	    x_rd_source_o <= `RD_SOURCE_CSR;
 	  else if (d_opcode == `OPC_OP && !d_fun[2] && f_ir_i[25])
 	    x_rd_source_o <= `RD_SOURCE_MULTIPLY;
-	  else if (d_is_div)
-	    x_rd_source_o <= `RD_SOURCE_DIVIDE;
+	  else if (d_is_shift)
+	    x_rd_source_o <= `RD_SOURCE_SHIFTER;
 	  else
 	    x_rd_source_o <= `RD_SOURCE_ALU;
 	  

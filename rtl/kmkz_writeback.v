@@ -47,7 +47,7 @@ module urv_writeback
 
    input [31:0]      x_shifter_rd_value_i,
    input [31:0]      x_multiply_rd_value_i,
-   input [1:0] 	     x_rd_source_i,
+   input [2:0] 	     x_rd_source_i,
 
    input [31:0]      dm_data_l_i,
    input 	     dm_load_done_i,

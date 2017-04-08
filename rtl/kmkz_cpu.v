@@ -148,7 +148,7 @@ module urv_cpu
    wire [2:0] 	 x2w_fun;
    wire 	 x2w_store;
    wire 	 x2w_load;
-   wire [1:0] 	 x2w_rd_source;
+   wire [2:0] 	 x2w_rd_source;
    wire 	 x2w_valid;
    wire [31:0]	 x_HWDATA;
 

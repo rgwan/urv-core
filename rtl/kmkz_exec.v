@@ -95,7 +95,7 @@ module urv_exec
    output reg [31:0] w_rd_value_o,
    output  	     w_rd_write_o,
    output reg [31:0] w_dm_addr_o,
-   output reg [1:0]  w_rd_source_o,
+   output reg [2:0]  w_rd_source_o,
    output [31:0]     w_rd_shifter_o,
    output [31:0]     w_rd_multiply_o,
    

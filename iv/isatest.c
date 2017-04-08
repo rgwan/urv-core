@@ -113,11 +113,11 @@ int isprime(int in)
 }
 void main()
 {
-	volatile int i = 10, j = 10;
+	volatile unsigned int i = 10, j = 10;
 	int vendor_id, impl_id, arch_id, isa;
 	
 	//puts("Hello world!\r\n");
-	puts("System start\r\nA * A equals and 72(10) / 8(10) and 73 % 9 equals:");
+	puts("System start\r\nA * A equals and 72(10) / 8(10) and 76 % 9 equals:");
 	
 	printcrlf();
 	
@@ -129,7 +129,7 @@ void main()
 	
 	printhex(i / j);
 	
-	i = 72; j = 8;
+	i = 76; j = 9;
 	printhex(i % j);
 	
 	printcrlf();
@@ -195,6 +195,10 @@ void main()
 	putc(arch_id);
 			
 	printcrlf();
+	
+	i = 0x10;
+	printhex( i << 1);
+	printhex(i >> 1);
 	
 	puts("\r\nCalculating prime which small than 100(d):\r\n");
 	for(i = 0; i < 100; i++)

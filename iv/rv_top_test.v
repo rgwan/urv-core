@@ -138,8 +138,8 @@ module top;
 	//assign HREADY_I = 1'b1;
 	//assign HRDATA_I = hrdata;
 	cmsdk_ahb_ram_beh  #( 
-			.WS_N(1),
-			.WS_S(1))
+			.WS_N(0),
+			.WS_S(0))
 	i_ram
 	(
 	.HCLK(clk_i),    // Clock
