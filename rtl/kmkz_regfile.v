@@ -300,20 +300,20 @@ module urv_regfile
      begin
 	case ( {rs1_bypass_x, rs1_bypass_w } ) // synthesis parallel_case full_case
 	  2'b10, 2'b11:
-	    x_rs1_value_o <= w_bypass_rd_value_i;
+	    x_rs1_value_o = w_bypass_rd_value_i;
 	  2'b01:
-	    x_rs1_value_o <= bypass_w;
+	    x_rs1_value_o = bypass_w;
 	  default:
-	    x_rs1_value_o <= rs1_regfile;
+	    x_rs1_value_o = rs1_regfile;
 	endcase // case ( {rs1_bypass_x, rs1_bypass_w } )
 
 	case ( {rs2_bypass_x, rs2_bypass_w } ) // synthesis parallel_case full_case
 	  2'b10, 2'b11:
-	    x_rs2_value_o <= w_bypass_rd_value_i;
+	    x_rs2_value_o = w_bypass_rd_value_i;
 	  2'b01:
-	    x_rs2_value_o <= bypass_w;
+	    x_rs2_value_o = bypass_w;
 	  default:
-	    x_rs2_value_o <= rs2_regfile;	 
+	    x_rs2_value_o = rs2_regfile;	 
 	endcase // case ( {rs2_bypass_x, rs2_bypass_w } )
      end // always@ *
 

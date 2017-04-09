@@ -70,39 +70,39 @@ module urv_writeback
 	case (x_fun_i)
 	  `LDST_B:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00:  load_value <= {{24{HRDATA[7]}}, HRDATA[7:0] };
-	      2'b01:  load_value <= {{24{HRDATA[15]}}, HRDATA[15:8] };
-	      2'b10:  load_value <= {{24{HRDATA[23]}}, HRDATA[23:16] };
-	      2'b11:  load_value <= {{24{HRDATA[31]}}, HRDATA[31:24] };
-	      default: load_value <= 32'hx;
+	      2'b00:  load_value = {{24{HRDATA[7]}}, HRDATA[7:0] };
+	      2'b01:  load_value = {{24{HRDATA[15]}}, HRDATA[15:8] };
+	      2'b10:  load_value = {{24{HRDATA[23]}}, HRDATA[23:16] };
+	      2'b11:  load_value = {{24{HRDATA[31]}}, HRDATA[31:24] };
+	      default: load_value = 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 	  
 	  `LDST_BU:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00:  load_value <= {24'h0, HRDATA[7:0] };
-	      2'b01:  load_value <= {24'h0, HRDATA[15:8] };
-	      2'b10:  load_value <= {24'h0, HRDATA[23:16] };
-	      2'b11:  load_value <= {24'h0, HRDATA[31:24] };
-	      default: load_value <= 32'hx;
+	      2'b00:  load_value = {24'h0, HRDATA[7:0] };
+	      2'b01:  load_value = {24'h0, HRDATA[15:8] };
+	      2'b10:  load_value = {24'h0, HRDATA[23:16] };
+	      2'b11:  load_value = {24'h0, HRDATA[31:24] };
+	      default: load_value = 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 	  
 	  `LDST_H:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00, 2'b01: load_value <= {{16{HRDATA[15]}}, HRDATA[15:0] };
-	      2'b10, 2'b11: load_value <= {{16{HRDATA[31]}}, HRDATA[31:16] };
-	      default: load_value <= 32'hx;
+	      2'b00, 2'b01: load_value = {{16{HRDATA[15]}}, HRDATA[15:0] };
+	      2'b10, 2'b11: load_value = {{16{HRDATA[31]}}, HRDATA[31:16] };
+	      default: load_value = 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 
 	  `LDST_HU:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00, 2'b01:  load_value <= {16'h0, HRDATA[15:0] };
-	      2'b10, 2'b11:  load_value <= {16'h0, HRDATA[31:16] };
-	      default: load_value <= 32'hx;
+	      2'b00, 2'b01:  load_value = {16'h0, HRDATA[15:0] };
+	      2'b10, 2'b11:  load_value = {16'h0, HRDATA[31:16] };
+	      default: load_value = 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 	    
-	  `LDST_L: load_value <= HRDATA;
+	  `LDST_L: load_value = HRDATA;
 
-	  default: load_value <= 32'hx;
+	  default: load_value = 32'hx;
 	endcase // case (d_fun_i)
      end // always@ *
 
@@ -121,21 +121,21 @@ module urv_writeback
       
    always@*
      if( x_load_i )
-       rf_rd_value <= load_value;
+       rf_rd_value = load_value;
      else if ( x_rd_source_i == `RD_SOURCE_SHIFTER )
-       rf_rd_value <= x_shifter_rd_value_i;
+       rf_rd_value = x_shifter_rd_value_i;
      else if ( x_rd_source_i == `RD_SOURCE_MULTIPLY )
-       rf_rd_value <= x_multiply_rd_value_i;
+       rf_rd_value = x_multiply_rd_value_i;
      else
-       rf_rd_value <= x_rd_value_i;
+       rf_rd_value = x_rd_value_i;
 
    always@*
      if (w_stall_i)
-       rf_rd_write <= 0;
+       rf_rd_write = 0;
      else if (x_load_i && HREADY)
-       rf_rd_write <= x_valid_i;
+       rf_rd_write = x_valid_i;
      else
-       rf_rd_write <= x_rd_write_i & x_valid_i;
+       rf_rd_write = x_rd_write_i & x_valid_i;
 
 
    assign rf_rd_write_o = rf_rd_write;

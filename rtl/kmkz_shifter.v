@@ -56,9 +56,9 @@ module urv_shifter
    // stage 1
    always@*
      begin
-	shift_pre <= (d_fun_i == `FUNC_SL) ? `reverse_bits(d_rs1_i) : d_rs1_i;
-	shift_16 <= d_shamt_i[4] ? { {16{extend_sign}}, shift_pre[31:16] } : shift_pre;
-	shift_8 <= d_shamt_i[3] ? { {8{extend_sign}}, shift_16[31:8] } : shift_16;
+	shift_pre = (d_fun_i == `FUNC_SL) ? `reverse_bits(d_rs1_i) : d_rs1_i;
+	shift_16 = d_shamt_i[4] ? { {16{extend_sign}}, shift_pre[31:16] } : shift_pre;
+	shift_8 = d_shamt_i[3] ? { {8{extend_sign}}, shift_16[31:8] } : shift_16;
      end
 
    reg s2_extend_sign;
@@ -82,14 +82,14 @@ module urv_shifter
    // stage 2
    always@*
      begin
-	shift_4 <= s2_shift[2] ? { {4{s2_extend_sign}}, s1_out[31:4] } : s1_out;
-	shift_2 <= s2_shift[1] ? { {2{s2_extend_sign}}, shift_4[31:2] } : shift_4;
-	shift_1 <= s2_shift[0] ? { {1{s2_extend_sign}}, shift_2[31:1] } : shift_2;
-	shift_post <= (s2_func == `FUNC_SL) ? `reverse_bits(shift_1) : shift_1;
+	shift_4 = s2_shift[2] ? { {4{s2_extend_sign}}, s1_out[31:4] } : s1_out;
+	shift_2 = s2_shift[1] ? { {2{s2_extend_sign}}, shift_4[31:2] } : shift_4;
+	shift_1 = s2_shift[0] ? { {1{s2_extend_sign}}, shift_2[31:1] } : shift_2;
+	shift_post = (s2_func == `FUNC_SL) ? `reverse_bits(shift_1) : shift_1;
      end
 
    always@*
-     w_rd_o <= shift_post;
+     w_rd_o = shift_post;
 
 endmodule // urv_shifter
 

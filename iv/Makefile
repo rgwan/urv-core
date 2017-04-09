@@ -1,6 +1,6 @@
 SRCs = ../rtl/ ../rtl/kmkz_csr.v     ../rtl/kmkz_divide.v      ../rtl/kmkz_timer.v \
 ../rtl/kmkz_exceptions.v  ../rtl/kmkz_multiply.v  ../rtl/kmkz_writeback.v \
-../rtl/kmkz_busmatrix.v \
+ \
 ../rtl/kmkz_config.v  ../rtl/kmkz_decode.v  ../rtl/kmkz_exec.v        ../rtl/kmkz_regfile.v  ../rtl/kmkz_fifo.v \
 ../rtl/kmkz_cpu.v     ../rtl/kmkz_defs.v    ../rtl/kmkz_fetch.v       ../rtl/kmkz_shifter.v uart.v ../rtl/kmkz_compd.v ahb_ram.v
 	

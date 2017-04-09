@@ -1,4 +1,5 @@
 *.run
+vio.txt
 *~
 *.vcd
 *.ram
@@ -17,3 +18,4 @@ disasm.S
 *.timing
 *.mif
 rom2mif
+*Lint*

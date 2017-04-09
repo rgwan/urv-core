@@ -64,12 +64,12 @@ module urv_divide
 	always@*
 	begin
 		case(state) // synthesis full_case parallel_case
-			 0: begin alu_op1 <= 'hx; alu_op2 <= 'hx; end
-			 1: begin alu_op1 <= 0; alu_op2 <= d_rs1_i; end
-			 2: begin alu_op1 <= 0; alu_op2 <= d_rs2_i; end
-			 35: begin alu_op1 <= 0; alu_op2 <= q; end
-			 36: begin alu_op1 <= 0; alu_op2 <= r; end
-			 default: begin alu_op1 <= r_next; alu_op2 <= d; end
+			 0: begin alu_op1 = 'hx; alu_op2 = 'hx; end
+			 1: begin alu_op1 = 0; alu_op2 = d_rs1_i; end
+			 2: begin alu_op1 = 0; alu_op2 = d_rs2_i; end
+			 35: begin alu_op1 = 0; alu_op2 = q; end
+			 36: begin alu_op1 = 0; alu_op2 = r; end
+			 default: begin alu_op1 = r_next; alu_op2 = d; end
 		endcase // case (state)
 	end
 
@@ -90,15 +90,15 @@ module urv_divide
 	begin
 		  case (state) // synthesis full_case parallel_case
 			 1:
-		 alu_sub <= n_sign;
+		 alu_sub = n_sign;
 			 2:
-		 alu_sub <= d_sign;
+		 alu_sub = d_sign;
 			 35:
-		 alu_sub <= n_sign ^ d_sign;
+		 alu_sub = n_sign ^ d_sign;
 			 36:
-		 alu_sub <= n_sign;
+		 alu_sub = n_sign;
 			 default:
-		 alu_sub <= 1;
+		 alu_sub = 1;
 
 	endcase // case (state)
 	end
@@ -146,16 +146,16 @@ module urv_divide
 					d <= alu_result[31:0];
 
 				35:
-					x_rd_o <= alu_result; // quotient
+					x_rd_o <= alu_result[31:0]; // quotient
 
 				36:
-					x_rd_o <= alu_result; // remainder
+					x_rd_o <= alu_result[31:0]; // remainder
 
 				default: // 3..34: 32 divider iterations
 				begin
 			 
 					q <= { q[30:0], alu_ge };
-					r <= alu_ge ? alu_result : r_next;
+					r <= alu_ge ? alu_result[31:0] : r_next;
 			 
 				end
 		 	 endcase // case ( state )

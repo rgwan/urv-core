@@ -62,7 +62,7 @@ module kamikaze_fetch
 	
 	assign HWDATA = 32'b0;
 	assign HWRITE = 1'b0;
-	assign HBURST = 1'b0;
+	assign HBURST = 3'b0;
 	assign HMASTLOCK = 1'b0;
 	
 	assign HTRANS = memory_request? 2'b10: 2'b00; /* 非顺序传输 */

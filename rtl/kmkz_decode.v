@@ -57,7 +57,7 @@ module urv_decode
  output reg [2:0]  x_fun_o,
  output [4:0] 	   x_opcode_o,
  output reg 	   x_shifter_sign_o,
- output reg 	   x_is_signed_compare_o,
+// output reg 	   x_is_signed_compare_o,
  output reg 	   x_is_signed_alu_op_o,
  output reg 	   x_is_add_o,
  output 	   x_is_shift_o,
@@ -121,16 +121,16 @@ module urv_decode
        begin
 	  case (x_opcode)
 	    `OPC_LOAD:
-	      load_hazard <= 1;
+	      load_hazard = 1;
 	    `OPC_OP:
-	      load_hazard <= x_is_shift | x_is_mul | d_is_div;
+	      load_hazard = x_is_shift | x_is_mul | d_is_div;
 	    `OPC_OP_IMM:
-	      load_hazard <= x_is_shift;
+	      load_hazard = x_is_shift;
 	    default:
-	      load_hazard <= 0;
+	      load_hazard = 0;
 	  endcase // case (x_opcode)
        end else
-	 load_hazard <= 0;
+	 load_hazard = 0;
    
    reg 	inserting_nop;
 
@@ -201,13 +201,13 @@ module urv_decode
    // Immediate decode, comb part
    always@*
      case(d_opcode)
-       `OPC_LUI, `OPC_AUIPC: d_imm <= d_imm_u;
-       `OPC_OP_IMM, `OPC_LOAD: d_imm <= d_imm_i;
-       `OPC_STORE: d_imm <= d_imm_s;
-       `OPC_JAL: d_imm <= d_imm_j;
-       `OPC_JALR: d_imm <= d_imm_i;
-       `OPC_BRANCH: d_imm <= d_imm_b;
-       default: d_imm <= 32'hx;
+       `OPC_LUI, `OPC_AUIPC: d_imm = d_imm_u;
+       `OPC_OP_IMM, `OPC_LOAD: d_imm = d_imm_i;
+       `OPC_STORE: d_imm = d_imm_s;
+       `OPC_JAL: d_imm = d_imm_j;
+       `OPC_JALR: d_imm = d_imm_i;
+       `OPC_BRANCH: d_imm = d_imm_b;
+       default: d_imm = 32'hx;
      endcase // case (opcode)
 
    // Immediate decode, seq part

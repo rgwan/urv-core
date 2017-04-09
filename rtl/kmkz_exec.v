@@ -59,7 +59,7 @@ module urv_exec
    input [11:0]      d_csr_sel_i,
       
    input [31:0]      d_imm_i,
-   input 	     d_is_signed_compare_i,
+//   input 	     d_is_signed_compare_i,
    input 	     d_is_signed_alu_op_i,
    input 	     d_is_add_i,
    input 	     d_is_shift_i,
@@ -242,33 +242,33 @@ module urv_exec
    // branch condition decoding   
    always@*
      case (d_fun_i) // synthesis parallel_case full_case
-       `BRA_EQ: branch_condition_met <= cmp_equal;
-       `BRA_NEQ: branch_condition_met <= ~cmp_equal;
-       `BRA_GE: branch_condition_met <= ~cmp_lt | cmp_equal;
-       `BRA_LT: branch_condition_met <= cmp_lt;
-       `BRA_GEU: branch_condition_met <= ~cmp_lt | cmp_equal;
-       `BRA_LTU: branch_condition_met <= cmp_lt;
-       default: branch_condition_met <= 0;
+       `BRA_EQ: branch_condition_met = cmp_equal;
+       `BRA_NEQ: branch_condition_met = ~cmp_equal;
+       `BRA_GE: branch_condition_met = ~cmp_lt | cmp_equal;
+       `BRA_LT: branch_condition_met = cmp_lt;
+       `BRA_GEU: branch_condition_met = ~cmp_lt | cmp_equal;
+       `BRA_LTU: branch_condition_met = cmp_lt;
+       default: branch_condition_met = 0;
      endcase // case (d_fun_i)
 
    // generate load/store address
    always@*
-     dm_addr <=  d_imm_i + ( ( d_opcode_i == `OPC_JALR || d_opcode_i == `OPC_LOAD || d_opcode_i == `OPC_STORE) ? rs1 : d_pc_i );
+     dm_addr =  d_imm_i + ( ( d_opcode_i == `OPC_JALR || d_opcode_i == `OPC_LOAD || d_opcode_i == `OPC_STORE) ? rs1 : d_pc_i );
 
    // calculate branch target address   
    always@*
      if(d_is_eret_i )
-       branch_target <= exception_address;
+       branch_target = exception_address;
      else if ( exception )
-       branch_target <= exception_vector;
+       branch_target = exception_vector;
      else 
-       branch_target <= dm_addr;
+       branch_target = dm_addr;
 
    // decode ALU operands
    always@*
      begin
-	alu_op1 <= d_use_op1_i ? d_alu_op1_i : rs1;
-	alu_op2 <= d_use_op2_i ? d_alu_op2_i : rs2;
+	alu_op1 = d_use_op1_i ? d_alu_op1_i : rs1;
+	alu_op2 = d_use_op2_i ? d_alu_op2_i : rs2;
      end
 	
 
@@ -279,9 +279,9 @@ module urv_exec
 
    always@*
      if(d_is_add_i)
-       alu_addsub_result <= alu_addsub_op1 + alu_addsub_op2;
+       alu_addsub_result = alu_addsub_op1 + alu_addsub_op2;
      else
-       alu_addsub_result <= alu_addsub_op1 - alu_addsub_op2;
+       alu_addsub_result = alu_addsub_op1 - alu_addsub_op2;
 
    
    // the rest of the ALU
@@ -289,18 +289,18 @@ module urv_exec
      begin
 	case (d_fun_i)
 	  `FUNC_ADD:
-	    alu_result <= alu_addsub_result[31:0];
+	    alu_result = alu_addsub_result[31:0];
 	  `FUNC_XOR: 
-	    alu_result <= alu_op1 ^ alu_op2;
+	    alu_result = alu_op1 ^ alu_op2;
 	  `FUNC_OR: 
-	    alu_result <= alu_op1 | alu_op2;
+	    alu_result = alu_op1 | alu_op2;
 	  `FUNC_AND: 
-	    alu_result <= alu_op1 & alu_op2;
+	    alu_result = alu_op1 & alu_op2;
 	  `FUNC_SLT: 
-	    alu_result <= alu_addsub_result[32]?1:0;
+	    alu_result = alu_addsub_result[32]?1:0;
 	  `FUNC_SLTU: 
-	    alu_result <= alu_addsub_result[32]?1:0;
-	  default: alu_result <= 32'hx;
+	    alu_result = alu_addsub_result[32]?1:0;
+	  default: alu_result = 32'hx;
 	endcase // case (d_fun_i)
      end // always@ *
 
@@ -360,11 +360,11 @@ module urv_exec
 
    always@*
      case (d_rd_source_i)
-       `RD_SOURCE_ALU: rd_value <= alu_result;
-       `RD_SOURCE_DIVIDE: rd_value <= rd_divide;
-       `RD_SOURCE_CSR: rd_value <= rd_csr;
+       `RD_SOURCE_ALU: rd_value = alu_result;
+       `RD_SOURCE_DIVIDE: rd_value = rd_divide;
+       `RD_SOURCE_CSR: rd_value = rd_csr;
 
-       default: rd_value <= 32'hx;
+       default: rd_value = 32'hx;
      endcase // case (x_rd_source_i)
    
 
@@ -374,16 +374,16 @@ module urv_exec
 	case (d_fun_i)
 	  `LDST_B,
 	  `LDST_BU: 
-	    unaligned_addr <= 0;
+	    unaligned_addr = 0;
 	  
 	  `LDST_H,
 	    `LDST_HU:
-	    unaligned_addr <= (dm_addr[0]);
+	    unaligned_addr = (dm_addr[0]);
 	  
 	  `LDST_L:
-	    unaligned_addr <= (dm_addr[1:0] != 2'b00);
+	    unaligned_addr = (dm_addr[1:0] != 2'b00);
 	  default:
-	    unaligned_addr <= 0;
+	    unaligned_addr = 0;
 	  
 	endcase // case (d_fun_i)
      
@@ -391,15 +391,15 @@ module urv_exec
    //branch decision
    always@*
      if( exception || d_is_eret_i)
-       branch_take <= 1;
+       branch_take = 1;
      else
        case (d_opcode_i)
 	 `OPC_JAL, `OPC_JALR: 
-	   branch_take <= 1;
+	   branch_take = 1;
 	 `OPC_BRANCH:
-	   branch_take <= branch_condition_met;
+	   branch_take = branch_condition_met;
 	 default: 
-	   branch_take <= 0;
+	   branch_take = 0;
        endcase // case (d_opcode_i)
      
    
@@ -426,7 +426,7 @@ module urv_exec
    reg [2:0] store_size;
    
    assign HADDR = (dm_load || dm_store)? dm_addr: 32'h8000_0000;
-   assign HBURST = 3'b00;
+   assign HBURST = 3'b000;
    assign HMASTLOCK = 1'b0;
    assign HPROT = 4'b0011;
    assign HSIZE = dm_store? store_size: 3'h2;
@@ -441,26 +441,26 @@ module urv_exec
 	case (d_fun_i)
 	  `LDST_B: 
 	    begin
-		dm_data_s <= { rs2[7:0], rs2[7:0], rs2[7:0], rs2[7:0] };
-		store_size <= 3'h0;
+		dm_data_s = { rs2[7:0], rs2[7:0], rs2[7:0], rs2[7:0] };
+		store_size = 3'h0;
 	    end
 	  
 	  `LDST_H:
 	    begin
-		dm_data_s <= { rs2[15:0], rs2[15:0] };
-		store_size <= 3'h1;
+		dm_data_s = { rs2[15:0], rs2[15:0] };
+		store_size = 3'h1;
 	    end
 
 	  `LDST_L:
 	    begin
-	       dm_data_s <= rs2;
-	       store_size <= 3'h2;
+	       dm_data_s = rs2;
+	       store_size = 3'h2;
 	    end
 	  
 	  default:
 	    begin
-	       dm_data_s <= 32'h0;
-	       store_size <= 3'h0;
+	       dm_data_s = 32'h0;
+	       store_size = 3'h0;
 	    end
 	endcase // case (d_fun_i)
      end  
@@ -506,14 +506,14 @@ module urv_exec
    always@*
    // never stall on taken branch
      if(f_branch_take)
-       x_stall_req_o <= 0;
+       x_stall_req_o = 0;
      else if(divider_stall_req)
-       x_stall_req_o <= 1;
+       x_stall_req_o = 1;
    // stall if memory request pending, but memory not ready
      else if ((d_is_load_i || d_is_store_i) && d_valid_i && !x_kill_i && !HREADY)
-       x_stall_req_o <= 1;
+       x_stall_req_o = 1;
      else
-       x_stall_req_o <= 0;
+       x_stall_req_o = 0;
        
    
     always @(posedge clk_i or negedge rst_i)

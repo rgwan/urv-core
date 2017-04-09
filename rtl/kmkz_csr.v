@@ -78,29 +78,29 @@ module urv_csr
   
    always@*
      case(d_csr_sel_i) // synthesis full_case parallel_case
-       `CSR_ID_CYCLESL: csr_in1 <= csr_cycles_i[31:0];
-       `CSR_ID_CYCLESH: csr_in1 <= { csr_cycles_i[63:32] };
-       `CSR_ID_TIMEL: csr_in1 <= csr_time_i[31:0];
-       `CSR_ID_TIMEH: csr_in1 <= { 24'h0, csr_time_i[39:32] };
-       `CSR_ID_INSTRRETH: csr_in1 <= { csr_instrs_i[63:32] };
-       `CSR_ID_INSTRRETL: csr_in1 <= csr_instrs_i[31:0];
-       `CSR_ID_MSCRATCH: csr_in1 <= csr_mscratch;
-       `CSR_ID_MEPC: csr_in1 <= csr_mepc_i;
-       `CSR_ID_MSTATUS: csr_in1 <= csr_mstatus_i;
-       `CSR_ID_MCAUSE: csr_in1 <= csr_mcause_i;
-       `CSR_ID_MIP: csr_in1 <= csr_mip_i;
-       `CSR_ID_MIE: csr_in1 <= csr_mie_i;
-       `CSR_VENDOR_ID: csr_in1 <= cpu_vendor;
-       `CSR_ID_MTVEC: csr_in1 <= vector_base;
-       `CSR_ID_IRQCAUSE:csr_in1 <= csr_irq_cause_i;
-       `CSR_ARCH_ID: csr_in1 <= cpu_arch;
-       `CSR_IMPL_ID: csr_in1 <= cpu_impl;
-       `CSR_ID_MISA: csr_in1 <= cpu_misa;
-       default: csr_in1 <= 32'h0;
+       `CSR_ID_CYCLESL: csr_in1 = csr_cycles_i[31:0];
+       `CSR_ID_CYCLESH: csr_in1 = { csr_cycles_i[63:32] };
+       `CSR_ID_TIMEL: csr_in1 = csr_time_i[31:0];
+       `CSR_ID_TIMEH: csr_in1 = { 24'h0, csr_time_i[39:32] };
+       `CSR_ID_INSTRRETH: csr_in1 = { csr_instrs_i[63:32] };
+       `CSR_ID_INSTRRETL: csr_in1 = csr_instrs_i[31:0];
+       `CSR_ID_MSCRATCH: csr_in1 = csr_mscratch;
+       `CSR_ID_MEPC: csr_in1 = csr_mepc_i;
+       `CSR_ID_MSTATUS: csr_in1 = csr_mstatus_i;
+       `CSR_ID_MCAUSE: csr_in1 = csr_mcause_i;
+       `CSR_ID_MIP: csr_in1 = csr_mip_i;
+       `CSR_ID_MIE: csr_in1 = csr_mie_i;
+       `CSR_VENDOR_ID: csr_in1 = cpu_vendor;
+       `CSR_ID_MTVEC: csr_in1 = vector_base;
+       `CSR_ID_IRQCAUSE:csr_in1 = csr_irq_cause_i;
+       `CSR_ARCH_ID: csr_in1 = cpu_arch;
+       `CSR_IMPL_ID: csr_in1 = cpu_impl;
+       `CSR_ID_MISA: csr_in1 = cpu_misa;
+       default: csr_in1 = 32'h0;
      endcase // case (d_csr_sel_i)
 
    always@*
-     x_rd_o <= csr_in1;
+     x_rd_o = csr_in1;
 
    genvar 	i;
    
@@ -109,9 +109,9 @@ module urv_csr
 			`CSR_OP_CSRRWI,
 			`CSR_OP_CSRRSI,
 			`CSR_OP_CSRRCI:
-				csr_in2 <= {27'b0, d_csr_imm_i };
+				csr_in2 = {27'b0, d_csr_imm_i };
 			default:
-				csr_in2 <= d_rs1_i;
+				csr_in2 = d_rs1_i;
 		endcase // case (d_fun_i)
 
 	generate
@@ -122,15 +122,15 @@ module urv_csr
 				case(d_fun_i) // synthesis full_case parallel_case
 					`CSR_OP_CSRRWI, 
 					`CSR_OP_CSRRW:
-						csr_out[i] <= csr_in2[i];
+						csr_out[i] = csr_in2[i];
 					`CSR_OP_CSRRCI,
 					`CSR_OP_CSRRC:
-						csr_out[i] <= csr_in2[i] ? 1'b0 : csr_in1[i];
+						csr_out[i] = csr_in2[i] ? 1'b0 : csr_in1[i];
 					`CSR_OP_CSRRSI,
 					`CSR_OP_CSRRS:
-						csr_out[i] <= csr_in2[i] ? 1'b1 : csr_in1[i];
+						csr_out[i] = csr_in2[i] ? 1'b1 : csr_in1[i];
 					default:
-						csr_out[i] <= 1'bx;
+						csr_out[i] = 1'bx;
 				endcase // case (d_csr_op_i)
 		end // for (i=0;i<32;i=i+1)
       
