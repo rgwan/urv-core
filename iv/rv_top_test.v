@@ -55,6 +55,7 @@ module top;
    reg rst_i = 0;
    reg rst;
    reg [7:0]io_o;
+   reg [31:0] irq;
  
   
    wire [31:0] 	  im_addr;
@@ -75,8 +76,10 @@ module top;
    
    initial
    begin
-   	#0  rst = 0;
+   	#0  rst = 0; irq = 0;
    	#22.5 rst = 1;
+   	#5067.5 irq = 1;
+   	#10 irq = 0;
    	#8000000 $stop;
    end
    initial begin
@@ -194,6 +197,7 @@ module top;
      (
       .CLK(clk_i),
       .nRST(rst_i),
+      .IRQ(irq),
 
 	/* AHB Lite 指令 总线 */
 

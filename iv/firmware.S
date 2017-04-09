@@ -7,8 +7,9 @@ addi sp, sp, %lo(4*1024)
 nop
 /* call main */
 jal ra, main
-
-
+sbreak
+.org 24
+	j exti_handler
 /*
 li a1, 0x400
 li a2, 0xaa

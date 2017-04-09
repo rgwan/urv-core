@@ -49,10 +49,6 @@ module urv_writeback
    input [31:0]      x_multiply_rd_value_i,
    input [2:0] 	     x_rd_source_i,
 
-   input [31:0]      dm_data_l_i,
-   input 	     dm_load_done_i,
-   input 	     dm_store_done_i,
-   
 	input  [31:0]	HRDATA,
 	input  [31:0]	x_HWDATA,
 	
@@ -92,8 +88,8 @@ module urv_writeback
 	  
 	  `LDST_H:
 	    case ( x_dm_addr_i [1:0] )
-	      2'b00, 2'b01: load_value <= {{16{dm_data_l_i[15]}}, HRDATA[15:0] };
-	      2'b10, 2'b11: load_value <= {{16{dm_data_l_i[31]}}, HRDATA[31:16] };
+	      2'b00, 2'b01: load_value <= {{16{HRDATA[15]}}, HRDATA[15:0] };
+	      2'b10, 2'b11: load_value <= {{16{HRDATA[31]}}, HRDATA[31:16] };
 	      default: load_value <= 32'hx;
 	    endcase // case ( x_dm_addr_i [1:0] )
 

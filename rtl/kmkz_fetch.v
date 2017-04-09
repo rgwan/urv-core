@@ -51,7 +51,6 @@ module kamikaze_fetch
 	/* 指令输出 */
 	
 	output		f_valid_o,
-	output		f_ir_valid_o,
 	output  	f_is_compressed_o,
 	output  [31:0] f_ir_o,
 	output  [31:0] f_pc_o,
@@ -59,23 +58,26 @@ module kamikaze_fetch
 	input [31:0] 	   x_pc_bra_i,
 	input 		   x_bra_i
 );
+	wire memory_request;
+	
 	assign HWDATA = 32'b0;
 	assign HWRITE = 1'b0;
 	assign HBURST = 1'b0;
 	assign HMASTLOCK = 1'b0;
 	
-	assign HTRANS = memory_request_o? 2'b10: 2'b00; /* 非顺序传输 */
+	assign HTRANS = memory_request? 2'b10: 2'b00; /* 非顺序传输 */
 	assign HPROT = 4'b0000; /* 指令传输 */
 	
-	assign HSIZE = memory_request_o? 3'b010: 3'b000; /* 32bit 访问 */
+	assign HSIZE = memory_request? 3'b010: 3'b000; /* 32bit 访问 */
 	
 	wire prefetcher_ready;
+	wire prefetcher_illegal_instr;
 	
-	assign f_valid_o = prefetcher_ready;
+	assign f_valid_o = prefetcher_ready && (!prefetcher_illegal_instr);
 	
 	wire [31:0] ir;
 	
-	wire memory_request;
+	
 	
 	kamikaze_fetch_fifo prefetcher
 	(
@@ -85,7 +87,7 @@ module kamikaze_fetch
 	.pc_mem_o(HADDR),
 	.ir_i(HRDATA),
 	.memory_ready_i(HREADY),
-	.memory_request_o(memory_request_o),
+	.memory_request_o(memory_request),
 	
 	.ir_o(f_ir_o),//f_ir_o
 	.pc_o(f_pc_o),//f_pc_o
@@ -96,7 +98,8 @@ module kamikaze_fetch
 	
 	.branch_i(x_bra_i),
 	.pc_set_i(x_pc_bra_i),
-	.pc_reset_i(STARTUP_BASE)
+	.pc_reset_i(STARTUP_BASE),
+	.illegal_instr_o(prefetcher_illegal_instr)
 	);
 	
 endmodule // kamikaze_fetch 

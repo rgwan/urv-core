@@ -88,6 +88,8 @@
 `define CSR_ID_MCAUSE 12'h342
 `define CSR_ID_MIP 12'h344
 `define CSR_ID_MIE 12'h304
+`define CSR_ID_MTVEC 12'h305
+`define CSR_ID_IRQCAUSE 12'h306
 
 `define CSR_VENDOR_ID	12'hf11
 `define CSR_ARCH_ID	12'hf12

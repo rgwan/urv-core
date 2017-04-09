@@ -77,9 +77,7 @@ module urv_decode
  output reg [31:0] x_alu_op1_o,
  output reg [31:0] x_alu_op2_o,
  output reg 	   x_use_op1_o,
- output reg 	   x_use_op2_o,
- output reg [1:0]  x_op1_sel_o,
- output reg [1:0]  x_op2_sel_o
+ output reg 	   x_use_op2_o
 );
 
    wire [4:0] f_rs1 = f_ir_i[19:15];
@@ -307,7 +305,7 @@ module urv_decode
 	    x_rd_source_o <= `RD_SOURCE_DIVIDE;
 	  else if (d_opcode == `OPC_SYSTEM)
 	    x_rd_source_o <= `RD_SOURCE_CSR;
-	  else if (d_opcode == `OPC_OP && !d_fun[2] && f_ir_i[25])
+	  else if (d_is_mul)
 	    x_rd_source_o <= `RD_SOURCE_MULTIPLY;
 	  else if (d_is_shift)
 	    x_rd_source_o <= `RD_SOURCE_SHIFTER;

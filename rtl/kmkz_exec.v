@@ -47,7 +47,7 @@ module urv_exec
 
    input 	     d_valid_i,
 
-   input 	     d_load_hazard_i,
+   //input 	     d_load_hazard_i,
    
    input [4:0] 	     d_opcode_i,
    input 	     d_shifter_sign_i,
@@ -81,7 +81,7 @@ module urv_exec
    output reg [31:0] f_branch_target_o,
    output 	     f_branch_take_o,
 
-   output 	     w_load_hazard_o,
+ //  output 	     w_load_hazard_o,
 
    input [31:0]	     irq_i,
    
@@ -117,7 +117,9 @@ module urv_exec
    input 	     timer_tick_i,
    
    /* 到系统控制/调试阶段 */
-   output	     x_invalid_ir_o
+   output	     x_invalid_ir_o,
+   input [31:0]		startup_address,
+   output [31:0]	vector_base
    
    
    );
@@ -150,7 +152,7 @@ module urv_exec
    wire [31:0] 	 rd_div;
 
    wire 	 exception;
-   wire [31:0] 	 csr_mie, csr_mip, csr_mepc, csr_mstatus,csr_mcause;
+   wire [31:0] 	 csr_mie, csr_mip, csr_mepc, csr_mstatus,csr_mcause,csr_irq_cause;
    wire [31:0] 	 csr_write_value;
    wire [31:0] 	 exception_address, exception_vector;
    
@@ -190,7 +192,11 @@ module urv_exec
       .csr_mip_i(csr_mip),
       .csr_mie_i(csr_mie),
       .csr_mepc_i(csr_mepc),
-      .csr_mcause_i(csr_mcause)
+      .csr_mcause_i(csr_mcause),
+      .csr_irq_cause_i(csr_irq_cause),
+      
+      .startup_address(startup_address),
+      .vector_base(vector_base)
       );
 
    urv_exceptions exception_unit 
@@ -224,7 +230,11 @@ module urv_exec
       .csr_mip_o(csr_mip),
       .csr_mie_o(csr_mie),
       .csr_mepc_o(csr_mepc),
-      .csr_mcause_o(csr_mcause)
+      .csr_mcause_o(csr_mcause),
+      .csr_irq_cause_o(csr_irq_cause),
+      
+      .csr_mtvec(vector_base)
+      
 
       );
 

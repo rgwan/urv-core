@@ -211,7 +211,7 @@ module urv_multiply
       );
    
    always@*
-     w_rd_o <= yl_xl + {yl_xh[14:0], 17'h0} + {yh_xl[14:0], 17'h0};
+     w_rd_o <= yl_xl[31:0] + {yl_xh[14:0], 17'h0} + {yh_xl[14:0], 17'h0};
  
 endmodule // urv_multiply
 

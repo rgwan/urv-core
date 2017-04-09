@@ -59,7 +59,10 @@ module urv_exceptions
    output [31:0] csr_mip_o,
    output [31:0] csr_mie_o,
    output [31:0] csr_mepc_o,
-   output [31:0] csr_mcause_o
+   output [31:0] csr_mcause_o,
+   output [31:0] csr_irq_cause_o,
+   
+   input [31:0] csr_mtvec
 
    );
 
@@ -73,6 +76,7 @@ module urv_exceptions
    
    reg 		 exception;
    reg [3:0] 	 cause;
+   reg [31:0]	 irq_cause;
 
    reg [5:0] 	 except_vec_masked;
 
@@ -98,7 +102,7 @@ module urv_exceptions
 
    assign csr_mip_o = csr_mip;
    
-   
+   assign csr_irq_cause_o = irq_cause;
    
    always@(posedge clk_i or negedge rst_i)
      if (!rst_i)
@@ -127,8 +131,10 @@ module urv_exceptions
 	   if ( exp_tick_i )
 	     except_vec_masked[4] <= csr_mie[`EXCEPT_TIMER] & csr_ie;
 
-	   if( exp_irq_i )
+	   if( exp_irq_i != 32'h0 )
+	   begin
 	     except_vec_masked[5] <= csr_mie[`EXCEPT_IRQ] & csr_ie;
+	   end
 	end // else: !if(!x_stall_i && !x_kill_i && d_is_csr_i && d_csr_sel_i == `CSR_ID_MIP)
      end // else: !if(rst_i)
    
@@ -136,22 +142,41 @@ module urv_exceptions
      exception <= |except_vec_masked | exp_invalid_insn_i;
 
    reg exception_pending;
-
-   assign x_exception_vector_o = 'h8;
+   reg [4:0] exception_vector;
    
    always@*
      if(exp_invalid_insn_i || except_vec_masked[0])
+     begin
        cause <= `EXCEPT_ILLEGAL_INSN;
+       exception_vector <= 'h8;
+     end
      else if (except_vec_masked[1])
+     begin
        cause <= `EXCEPT_BREAKPOINT;
+       exception_vector <= 'hc;
+     end
      else if (except_vec_masked[2])
+     begin
        cause <= `EXCEPT_UNALIGNED_LOAD;
+       exception_vector <= 'h10;
+     end
      else if (except_vec_masked[3])
+     begin
        cause <= `EXCEPT_UNALIGNED_STORE;
+       exception_vector <= 'h10;
+     end
      else if (except_vec_masked[4])
+     begin
        cause <= `EXCEPT_TIMER;
+       exception_vector <= 'h14;
+     end
      else
+     begin
        cause <= `EXCEPT_IRQ;
+       exception_vector <= 'h18;
+     end
+       
+   assign x_exception_vector_o = csr_mtvec + exception_vector;
    
    always@(posedge clk_i or negedge rst_i)
      if(!rst_i) 
@@ -160,16 +185,18 @@ module urv_exceptions
 	  csr_mie <= 0;
 	  csr_ie <= 0;
 	  exception_pending <= 0;
+	  irq_cause <= 0;
 	  
        end else if(!x_stall_i && !x_kill_i) begin
 	  if ( d_is_eret_i )
 	    exception_pending <= 0;
 
-          if ( !exception_pending && exception )
-	    begin
+	if ( !exception_pending && exception )
+	begin
 	       csr_mepc <= x_exception_pc_i;
 	       csr_mcause <= cause;
 	       exception_pending <= 1;
+	       irq_cause <= exp_irq_i;
 	    end 
 
 	  if(d_is_csr_i) begin

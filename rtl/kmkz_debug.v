@@ -44,7 +44,8 @@ module urv_debug
 		/* 到CSR */
 		output [11:0]	csr_addr_o,
 		output		csr_write_o,
-		output [31:0]	csr_
+		output [31:0]	csr_wdata_o,
+		input [31:0]	csr_rdata_i,
 		
 		/* AHB slave */
 		/* 地址 0x8000_0000 */
@@ -62,6 +63,8 @@ module urv_debug
 		output [31:0]	HREADYOUT,
 		output [31:0]	HRESP
 	);
+	wire HSEL = (HADDR[31:16] == 16'h8000);
+	
 	
 endmodule
    

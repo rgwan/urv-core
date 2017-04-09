@@ -1,5 +1,6 @@
 #define GPIO_A_ODR (*(volatile char*)0x10000000)
 
+#define ALIGN_TEST (*(volatile int*)0x10000002)
 void *memcpy(void *dest, const void *src, int n)
 {
 	while (n) 
@@ -111,10 +112,31 @@ int isprime(int in)
 	}
 	return 1;
 }
+
+void align_test()
+{
+	GPIO_A_ODR = 'P';
+	ALIGN_TEST = 0x00;
+}
+void exti_handler()
+{
+	//puts("FRUP\r\n");
+	int mip = 0;
+	GPIO_A_ODR = 'I';
+	GPIO_A_ODR = '\n';
+	__asm__("csrw mip, %0;" :: "r"(mip));
+	//while(1);
+	__asm__("sret");
+}
 void main()
 {
-	volatile unsigned int i = 10, j = 10;
+	volatile int i = 10, j = 10;
 	int vendor_id, impl_id, arch_id, isa;
+	register int mtvec, mstatus, mie;
+	mstatus = 1;
+	__asm__("csrw mstatus, %0;" :: "r"(mstatus));
+	mie = 1 << 10;
+	__asm__("csrw mie, %0;" :: "r"(mie));
 	
 	//puts("Hello world!\r\n");
 	puts("System start\r\nA * A equals and 72(10) / 8(10) and 76 % 9 equals:");
@@ -129,7 +151,7 @@ void main()
 	
 	printhex(i / j);
 	
-	i = 76; j = 9;
+	i = 76; j = -9;
 	printhex(i % j);
 	
 	printcrlf();
@@ -193,6 +215,18 @@ void main()
 	putc(arch_id >> 16);
 	putc(arch_id >> 8);
 	putc(arch_id);
+
+	//mtvec = 4;
+	//__asm__("csrw 0x305, %0;" :: "r"(mtvec));
+	//mtvec = 8;
+		
+	__asm__("csrr %0, 0x305;" : "=r"(mtvec));
+	puts("\r\nCPU mtvec:");
+	printhex(mtvec >> 24);
+	printhex(mtvec >> 16);
+	printhex(mtvec >> 8);
+	printhex(mtvec);
+
 			
 	printcrlf();
 	
@@ -209,6 +243,7 @@ void main()
 			printcrlf();
 		}
 	}
+	align_test();
 	
 	unsigned int num_cycles, num_instr;
 	unsigned int num_cyclesh, num_instrh;

@@ -56,7 +56,11 @@ module urv_csr
    input [31:0]      csr_mip_i,
    input [31:0]      csr_mie_i,
    input [31:0]      csr_mepc_i,
-   input [31:0]      csr_mcause_i
+   input [31:0]      csr_mcause_i,
+   input [31:0]		csr_irq_cause_i,
+   
+   input [31:0]		startup_address,
+   output reg [31:0]	vector_base
 
    );
    
@@ -87,6 +91,8 @@ module urv_csr
        `CSR_ID_MIP: csr_in1 <= csr_mip_i;
        `CSR_ID_MIE: csr_in1 <= csr_mie_i;
        `CSR_VENDOR_ID: csr_in1 <= cpu_vendor;
+       `CSR_ID_MTVEC: csr_in1 <= vector_base;
+       `CSR_ID_IRQCAUSE:csr_in1 <= csr_irq_cause_i;
        `CSR_ARCH_ID: csr_in1 <= cpu_arch;
        `CSR_IMPL_ID: csr_in1 <= cpu_impl;
        `CSR_ID_MISA: csr_in1 <= cpu_misa;
@@ -97,51 +103,55 @@ module urv_csr
      x_rd_o <= csr_in1;
 
    genvar 	i;
-
    
-   always@*
-     case (d_fun_i)
-       `CSR_OP_CSRRWI,
-       `CSR_OP_CSRRSI,
-       `CSR_OP_CSRRCI:
-	 csr_in2 <= {27'b0, d_csr_imm_i };
-       default:
-	 csr_in2 <= d_rs1_i;
-     endcase // case (d_fun_i)
+	always@*
+		case (d_fun_i)
+			`CSR_OP_CSRRWI,
+			`CSR_OP_CSRRSI,
+			`CSR_OP_CSRRCI:
+				csr_in2 <= {27'b0, d_csr_imm_i };
+			default:
+				csr_in2 <= d_rs1_i;
+		endcase // case (d_fun_i)
 
-   generate
-
+	generate
+		for (i=0;i<32;i=i+1) 
+		begin : gen_csr_bits
+		
+			always@*
+				case(d_fun_i) // synthesis full_case parallel_case
+					`CSR_OP_CSRRWI, 
+					`CSR_OP_CSRRW:
+						csr_out[i] <= csr_in2[i];
+					`CSR_OP_CSRRCI,
+					`CSR_OP_CSRRC:
+						csr_out[i] <= csr_in2[i] ? 1'b0 : csr_in1[i];
+					`CSR_OP_CSRRSI,
+					`CSR_OP_CSRRS:
+						csr_out[i] <= csr_in2[i] ? 1'b1 : csr_in1[i];
+					default:
+						csr_out[i] <= 1'bx;
+				endcase // case (d_csr_op_i)
+		end // for (i=0;i<32;i=i+1)
       
-      for (i=0;i<32;i=i+1) 
-	begin : gen_csr_bits
-
-	   always@*
-	     case(d_fun_i) // synthesis full_case parallel_case
-	       `CSR_OP_CSRRWI, 
-	       `CSR_OP_CSRRW:
-		 csr_out[i] <= csr_in2[i];
-	       `CSR_OP_CSRRCI,
-	       `CSR_OP_CSRRC:
-		 csr_out[i] <= csr_in2[i] ? 1'b0 : csr_in1[i];
-	       `CSR_OP_CSRRSI,
-	       `CSR_OP_CSRRS:
-		 csr_out[i] <= csr_in2[i] ? 1'b1 : csr_in1[i];
-	       default:
-		 csr_out[i] <= 32'hx;
-	     endcase // case (d_csr_op_i)
-	end // for (i=0;i<32;i=i+1)
-      
-      endgenerate
+	endgenerate
    
    
-   always@(posedge clk_i or negedge rst_i)
-     if(!rst_i) 
-       csr_mscratch <= 0;
-     else if(!x_stall_i && !x_kill_i && d_is_csr_i) 
-       case (d_csr_sel_i)
-	 `CSR_ID_MSCRATCH: 
-	   csr_mscratch <= csr_out;
-       endcase // case (d_csr_sel_i)
+	always@(posedge clk_i or negedge rst_i)
+	begin
+		if(!rst_i)
+		begin
+			csr_mscratch <= 0;
+			vector_base <= startup_address;
+		end
+     		else if(!x_stall_i && !x_kill_i && d_is_csr_i) 
+     		begin
+			case (d_csr_sel_i)
+				`CSR_ID_MSCRATCH: csr_mscratch <= csr_out;
+				`CSR_ID_MTVEC: vector_base <= csr_out;
+			endcase // case (d_csr_sel_i)
+		end
+	end
    
 
    assign x_csr_write_value_o = csr_out;
